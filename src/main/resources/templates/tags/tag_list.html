@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/public_layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<h2>Tag List</h2>
+		<a th:href="@{/tags/add}">Add Tag</a>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>No.</th>
+					<th>Name</th>
+					<th>Description</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+
+				<tr th:each="t,state:${tags}">
+					<td th:text="${state.count}"></td>
+					<td th:text="${t.name}"></td>
+					<td th:text="${t.description}"></td>
+					<td><a th:href="@{/tags/edit/{id}(id=${t.id})}">Update_Tag
+					</a> <a th:href="@{/tags/delete/{id}(id=${t.id})}">Delete_Tag </a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</body>
+</html>
