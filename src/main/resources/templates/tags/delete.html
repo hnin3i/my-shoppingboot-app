@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<h2>Delete Tag Form</h2>
+	<div>
+		<dl>
+			<dt>Tag Name</dt>
+    		<dd th:text="${tag.name}"></dd>
+    		<dt>Tag Description</dt>
+    		<dd th:text="${tag.description}"></dd>			
+		</dl>
+	</div>
+	<form method="post" th:action="@{/tags/delete}" th:object="${tag}" >
+		<input type="hidden" th:field="${tag.id}"/>		
+		<input type="submit" value="Delete Confrim"/>
+		<div>
+			<a th:href="@{/tags}">Cancel</a>
+		</div>
+	</form>
+	
+</body>
+</html>

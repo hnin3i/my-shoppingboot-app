@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="UTF-8">
+<title layout:title-pattern="$CONTENT_TITLE - BlogApp">
+	BlogApp
+</title>
+
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<style>
+        body { min-height: 100vh; display: flex; flex-direction: column; }
+        .wrapper { flex: 1; display: flex; }
+        .sidebar { width: 250px; min-height: calc(100vh - 56px); }
+        .main-content { flex: 1; min-width: 0; }
+    </style>
+</head>
+<body>
+	<div th:replace="~{fragments/header::header}"></div>
+	 <!-- Main Content -->
+	 <div class="wrapper">
+	 	<aside class="sidebar bg-light border-end p-3" th:replace="~{fragments/sidebar::sidebar}"></aside>
+	 	<main class="main-content p-4" layout:fragment="content">
+            <!-- Default or overridden content goes here -->
+        </main>
+	 </div>
+	
+		
+	<div th:replace="~{fragments/footer::footer}"></div>
+	
+	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>	
+</body>
+</html>
