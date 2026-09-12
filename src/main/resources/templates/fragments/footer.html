@@ -1,12 +1,59 @@
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	
-	<footer class="footer bg-dark text-white text-center py-3 mt-auto" 
-		th:fragment="footer">
-		<div class="container">
-			<small>&copy; 2026 JWD-69 ACE Inspiration. All rights reserved.</small>
-		</div>
-	   		
-		
-	</footer>
+<footer th:fragment="footer" class="shop-footer mt-auto">
+    <div class="container-fluid px-4 px-lg-5 py-5">
+        <div class="row g-5 footer-links">
+            <section class="col-12 col-sm-6 col-lg-3">
+                <h2>Shop</h2>
+                <a th:href="@{/products}">All Products</a>
+                <a th:href="@{/categories}">Categories</a>
+                <a th:href="@{/products?new=true}">New Arrivals</a>
+                <a th:href="@{/cart}">Shopping Cart</a>
+            </section>
 
+            <section class="col-12 col-sm-6 col-lg-3">
+                <h2>My Account</h2>
+                <a th:href="@{/login}">Sign In</a>
+                <a th:href="@{/register}">Create Account</a>
+                <a th:href="@{/orders}">My Orders</a>
+                <a th:href="@{/profile}">My Profile</a>
+            </section>
+
+            <section class="col-12 col-sm-6 col-lg-3">
+                <h2>Help</h2>
+                <a href="#">Customer Service</a>
+                <a href="#">Shipping &amp; Delivery</a>
+                <a href="#">Returns &amp; Refunds</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Contact Us</a>
+            </section>
+
+            <section class="col-12 col-sm-6 col-lg-3 footer-member">
+                <h2>Become a member</h2>
+                <p>Create an account to track orders and shop faster.</p>
+                <a class="footer-underline" th:href="@{/register}">CREATE ACCOUNT</a>
+            </section>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="row gy-4 align-items-end footer-bottom">
+            <div class="col-lg-6">
+                <a class="footer-brand" th:href="@{/}">BLACKJACK</a>
+                <p class="mb-0 footer-copy">© 2026 BlackJack. All rights reserved.</p>
+            </div>
+            <div class="col-lg-6">
+                <h2 class="footer-payment-title">Payments</h2>
+                <div class="payment-badges" aria-label="Payment options">
+                    <span class="payment-badge payment-cod">COD</span>
+                    <span class="payment-badge payment-visa">VISA</span>
+                    <span class="payment-badge payment-mastercard"><i></i><i></i></span>
+                    <span class="payment-badge payment-paypal">PayPal</span>
+                    <span class="payment-badge payment-kpay">KPay</span>
+                </div>
+                <small>Choose your available payment method securely during checkout.</small>
+            </div>
+        </div>
+    </div>
+</footer>
 </html>

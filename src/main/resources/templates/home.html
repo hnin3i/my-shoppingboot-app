@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/public_layout}">
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <title>Home</title>
 </head>
 <body>
-	<h2>Start ShoppingApp</h2>
+    <section layout:fragment="content" class="text-center py-5">
+        <p class="text-uppercase text-muted mb-2">New collection</p>
+        <h1 class="display-4 fw-bold">BlackJack Shopping</h1>
+        <p class="lead">Your product showcase will go here.</p>
+    </section>
 </body>
 </html>

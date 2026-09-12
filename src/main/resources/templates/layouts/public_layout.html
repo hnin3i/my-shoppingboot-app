@@ -3,22 +3,24 @@
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
 <meta charset="UTF-8">
-<title layout:title-pattern="$CONTENT_TITLE - BlogApp">
-	BlogApp
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title layout:title-pattern="$CONTENT_TITLE - BlackJack">
+	BlackJack
 </title>
 
 <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+<link rel="stylesheet" th:href="@{/css/app.css}">
 
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 	<div th:replace="~{fragments/header::header}"></div>
 	 <!-- Main Content -->
-	<main class="container mt-4" layout:fragment="content">
+	<main class="container my-4 flex-grow-1" layout:fragment="content">
 	
 	
 	</main>
 		
-	
+	<div th:replace="~{fragments/footer::footer}"></div>
 	<script th:src="@{/js/bootstrap.bundle.min.js}"></script>	
 </body>
 </html>
