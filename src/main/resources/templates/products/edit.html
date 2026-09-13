@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/admin_layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<style>
+	.error{
+	 	color:red;
+	}
+</style>
+<body>
+<div layout:fragment="content">
+	<h2>Edit Post Form</h2>
+	<form method="post" th:action="@{/posts/edit}" th:object="${post}" >
+		<input type="hidden" th:field="${post.id}"/>
+		<div>
+			<label>Title:</label>
+			<input type="text" th:field="${post.title}"  />
+			<span class="error"
+				th:if="${#fields.hasErrors('title')}"
+				th:errors="*{title}">
+			</span>
+		</div>
+		<div>
+			<label>Content:</label>
+			<textarea rows="5" cols="100" th:field="${post.content}"></textarea>
+		</div>
+		<div>
+			<label>Status:</label>
+			<span th:each="s:${avaliableStatus}">
+				<input type="radio"
+					th:field="${post.status}"
+					th:value="${s}"
+				/>
+				<label th:text="${s}"></label>
+			</span>
+		</div>
+		<div>
+			<label>Category:</label>
+			<select th:field="${post.category_id}">
+				<option value="0">---select one</option>
+				<option th:each="c:${avaliableCategories}" 
+					th:value="${c.id}"
+					th:text="${c.name}"></option>
+			</select>
+			<span class="error"
+				th:if="${#fields.hasErrors('category_id')}"
+				th:errors="*{category_id}">
+			</span>
+		</div>
+		<div>
+			<label>Tags:</label>
+			<span th:each="t:${avaliableTags}">
+				<input type="checkbox"
+					th:field="*{tagIds}"
+					th:value="${t.id}"
+				/>
+				<label th:text="${t.name}"></label>
+			</span>
+		</div>
+		<input type="submit" value="EditPost"/>
+	</form>
+	</div>
+</body>
+</html>

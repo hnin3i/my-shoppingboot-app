@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/public_layout}">
+<head>
+<meta charset="UTF-8">
+<title>register</title>
+</head>
+<body>
+	<section layout:fragment="content">
+	<h2>Register</h2>
+	 <form th:action="@{/register}" th:object="${user}" method="post">
+	  <div class="text-danger"  th:text="${error}" >
+        </div>
+	  <div class="col-md-7">
+        <div class="form-group">
+            <label class="form-label">UserName:</label>
+            <input class="form-control" type="text" th:field="*{username}">
+            <div class="text-danger"
+            	th:if="${#fields.hasErrors('username')}" 
+            	th:errors="*{username}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Email:</label>
+            <input class="form-control"type="email" th:field="*{email}">
+            <div class="text-danger"
+            	th:if="${#fields.hasErrors('email')}" 
+            	th:errors="*{email}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Phone:</label>
+            <input class="form-control"type="text" th:field="*{phone}">          
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" th:field="*{password}">
+            <div class="text-danger"
+            	th:if="${#fields.hasErrors('password')}" 
+            	th:errors="*{password}">
+            </div>
+        </div>
+        <div>
+            <label>Confirm Password:</label>
+            <input type="password" th:field="*{confirmPassword}">
+            <div class="text-danger"
+            	th:if="${#fields.hasErrors('confirmPassword')}" 
+            	th:errors="*{confirmPassword}">
+            </div>
+        </div>
+         
+        <div>
+            <button class="btn btn-primary" type="submit">Register</button>
+            <a th:href="@{/login}">Login</a>
+        </div>
+       </div>
+    </form>
+   </section>
+</body>
+</html>
