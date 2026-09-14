@@ -1,21 +1,101 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="sidebar">
-	<div class="bg-light border-end h-100">
-		<div class="list-group rounded-0">
-			<a href="/blogapp/dashboard"class="list-group-item list-group-item-action"> 
-				Dashboard 
-			</a> 
-			<a href="/admin/posts" class="list-group-item list-group-item-action">
-				Post 
-			</a> 
-			<a href="/categories" class="list-group-item list-group-item-action"> 
-				Category 
-			</a>
-			 <a href="/tags" class="list-group-item list-group-item-action"> 
-			 	Tag
-			</a>
-		</div>
-	</div>
-</div>
+<!-- Sidebar -->
+<aside class="admin-sidebar" th:fragment="sidebar">
+
+    <!-- Logo -->
+    <div class="sidebar-logo">
+ 	   <span>BLACKJACK</span>
+    </div>
+
+
+    <!-- Main Menu -->
+    <div class="sidebar-section-title">
+        ADMIN
+    </div>
+
+    <ul class="sidebar-menu">
+
+        <!-- Dashboard -->
+        <li>
+            <a th:href="@{/admin/dashboard}"
+               class="sidebar-link active">
+
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+
+        <!-- Products -->
+        <li>
+            <a th:href="@{/admin/products}"
+               class="sidebar-link">
+
+                <i class="bi bi-bag-fill"></i>
+                <span>Products</span>
+            </a>
+        </li>
+
+
+        <!-- Categories -->
+        <li>
+            <a th:href="@{/admin/categories}"
+               class="sidebar-link">
+
+                <i class="bi bi-tags-fill"></i>
+                <span>Categories</span>
+            </a>
+        </li>
+
+
+        <!-- Stock -->
+        <li>
+            <a th:href="@{/admin/stock}"
+               class="sidebar-link">
+
+                <i class="bi bi-box-seam-fill"></i>
+                <span>Stock</span>
+            </a>
+        </li>
+
+
+        <!-- Orders -->
+        <li>
+            <a th:href="@{/admin/orders}"
+               class="sidebar-link">
+
+                <i class="bi bi-cart-check-fill"></i>
+                <span>Orders</span>
+            </a>
+        </li>
+
+
+        <!-- Users -->
+        <li>
+            <a th:href="@{/admin/users}"
+               class="sidebar-link">
+
+                <i class="bi bi-people-fill"></i>
+                <span>Users</span>
+            </a>
+        </li>
+
+    </ul>
+
+
+    <!-- Bottom -->
+    <div class="sidebar-bottom">
+
+        <a th:href="@{/logout}" class="sidebar-link logout-link">
+
+            <i class="bi bi-box-arrow-right"></i>
+            <span>Logout</span>
+
+        </a>
+
+    </div>
+
+</aside>
+
 </html>
