@@ -29,7 +29,7 @@ public class CategoryController {
 	@GetMapping("/categories")
 	public String categoryList(Model model) {
 		
-		System.out.println("categorysize...." + categoryService.findAll().size());
+		//System.out.println("categorysize...." + categoryService.findAll().size());//Testing
 
 		model.addAttribute("categories", categoryService.findAll());
 
@@ -52,7 +52,9 @@ public class CategoryController {
 // CREATE
 	@PostMapping("/categories/add")
 	public String addCategory(
+
 	        @ModelAttribute("category") CategoryModel category,
+
 	        @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
 	    if (!imageFile.isEmpty()) {
@@ -107,6 +109,7 @@ public class CategoryController {
 
 // UPDATE
 	@PostMapping("/categories/edit")
+
 	public String editCategory(@ModelAttribute("category") CategoryModel category) {
 
 		this.categoryService.edit(category.getId(), category);
@@ -127,7 +130,9 @@ public class CategoryController {
 
 // DELETE CONFIRM
 	@PostMapping("/categories/delete")
+
 	public String deleteConfirm(@ModelAttribute("category") CategoryModel category) {
+
 
 		this.categoryService.delete(category.getId());
 
