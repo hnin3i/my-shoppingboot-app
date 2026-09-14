@@ -28,8 +28,9 @@ public class CategoryController {
 // LIST
 	@GetMapping("/categories")
 	public String categoryList(Model model) {
-		
-		//System.out.println("categorysize...." + categoryService.findAll().size());//Testing
+
+		// System.out.println("categorysize...." +
+		// categoryService.findAll().size());//Testing
 
 		model.addAttribute("categories", categoryService.findAll());
 
@@ -53,36 +54,35 @@ public class CategoryController {
 	@PostMapping("/categories/add")
 	public String addCategory(
 
-	        @ModelAttribute("category") CategoryModel category,
+			@ModelAttribute("category") CategoryModel category,
 
-	        @RequestParam("imageFile") MultipartFile imageFile) throws IOException {
+			@RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
-	    if (!imageFile.isEmpty()) {
+		if (!imageFile.isEmpty()) {
 
-	        String fileName = imageFile.getOriginalFilename();
+			String fileName = imageFile.getOriginalFilename();
 
-	        String uploadPath =
-	                "D:/shopping/shoppingapp/src/main/resources/static/images/categories/";
+			String uploadPath = "D:/shopping/shoppingapp/src/main/resources/static/images/categories/";
 
-	        File uploadDir = new File(uploadPath);
+			File uploadDir = new File(uploadPath);
 
-	        if (!uploadDir.exists()) {
-	            uploadDir.mkdirs();
-	        }
+			if (!uploadDir.exists()) {
+				uploadDir.mkdirs();
+			}
 
-	        File file = new File(uploadPath + fileName);
+			File file = new File(uploadPath + fileName);
 
-	        imageFile.transferTo(file);
+			imageFile.transferTo(file);
 
-	        category.setImage(fileName);
-	    }
-	    category.setCreatedUserId("1");
-	    
-	    category.setUpdatedUserId("1");
+			category.setImage(fileName);
+		}
+		category.setCreatedUserId("1");
 
-	    this.categoryService.add(category);
+		category.setUpdatedUserId("1");
 
-	    return "redirect:/categories";
+		this.categoryService.add(category);
+
+		return "redirect:/categories";
 	}
 
 // DETAIL
@@ -100,22 +100,52 @@ public class CategoryController {
 	@GetMapping("/categories/edit/{id}")
 	public String editCategory(@PathVariable String id, Model model) {
 
-		CategoryModel category = this.categoryService.findById(id);
+	    CategoryModel category = this.categoryService.findById(id);
 
-		model.addAttribute("category", category);
+	    model.addAttribute("category", category);
 
-		return "categories/edit";
+	    return "categories/edit";
 	}
-
-// UPDATE
+	
 	@PostMapping("/categories/edit")
+	public String editCategory(@ModelAttribute("category") CategoryModel category,
+			@RequestParam("imageFile") MultipartFile imageFile) throws IOException {
 
-	public String editCategory(@ModelAttribute("category") CategoryModel category) {
+		if (!imageFile.isEmpty()) {
+
+			String fileName = imageFile.getOriginalFilename();
+
+			String uploadPath = "D:/shopping/shoppingapp/src/main/resources/static/images/categories/";
+
+			File uploadDir = new File(uploadPath);
+
+			if (!uploadDir.exists()) {
+				uploadDir.mkdirs();
+			}
+
+			File file = new File(uploadPath + fileName);
+
+			imageFile.transferTo(file);
+
+			category.setImage(fileName);
+		}
+
+		category.setUpdatedUserId("1");
 
 		this.categoryService.edit(category.getId(), category);
 
 		return "redirect:/categories";
 	}
+
+//// UPDATE
+//	@PostMapping("/categories/edit")
+//
+//	public String editCategory(@ModelAttribute("category") CategoryModel category) {
+//
+//		this.categoryService.edit(category.getId(), category);
+//
+//		return "redirect:/categories";
+//	}
 
 // DELETE
 	@GetMapping("/categories/delete/{id}")
@@ -132,7 +162,6 @@ public class CategoryController {
 	@PostMapping("/categories/delete")
 
 	public String deleteConfirm(@ModelAttribute("category") CategoryModel category) {
-
 
 		this.categoryService.delete(category.getId());
 

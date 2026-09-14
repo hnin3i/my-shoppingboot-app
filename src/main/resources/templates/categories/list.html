@@ -1,9 +1,13 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+
 <meta charset="UTF-8">
+
 <title>Category List</title>
+
 </head>
 
 <body>
@@ -18,28 +22,42 @@
 	<table border="1">
 
 		<thead>
+
 			<tr>
+				<th>No</th>
 				<th>Name</th>
 				<th>Description</th>
 				<th>Image</th>
 				<th>Status</th>
 				<th>Action</th>
 			</tr>
+
 		</thead>
 
 		<tbody>
 
-			<tr th:each="category : ${categories}">
+			<tr th:each="category, status : ${categories}">
 
+				<!-- No -->
+				<td th:text="${status.count}">1</td>
+
+				<!-- Name -->
 				<td th:text="${category.name}">Name</td>
 
+				<!-- Description -->
 				<td th:text="${category.description}">Description</td>
 
-				<td th:text="${category.image}">Image</td>
+				<!-- Image -->
+				<td><img th:if="${category.image != null}"
+					th:src="@{'/images/categories/' + ${category.image}}" width="100">
 
-				<td th:text="${category.isActive == 1 ? 'Active' : 'Inactive'}">
 				</td>
 
+				<!-- Status -->
+				<td th:text="${category.isActive == 1 ? 'Active' : 'Inactive'}">
+					Active</td>
+
+				<!-- Action -->
 				<td><a th:href="@{/categories/detail/{id}(id=${category.id})}">
 						Detail </a> | <a th:href="@{/categories/edit/{id}(id=${category.id})}">
 						Edit </a> | <a th:href="@{/categories/delete/{id}(id=${category.id})}">
@@ -52,4 +70,5 @@
 	</table>
 
 </body>
+
 </html>
