@@ -1,12 +1,26 @@
 package ai.shoppingapp.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import ai.shoppingapp.model.Role;
+import ai.shoppingapp.service.UserService;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
+    private final UserService userService;
+
+    public AdminController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/dashboard")
     public String dashboard() {
@@ -34,7 +48,22 @@ public class AdminController {
     }
 
     @GetMapping("/users")
-    public String users() {
-        return "admin/users/login";
+    public String users(Model model) {
+        model.addAttribute("users", userService.findAll());
+        model.addAttribute("activePage", "users");
+        return "admin/users/list";
+    }
+
+    @PostMapping("/users/{id}/role")
+    public String changeUserRole(@PathVariable String id,
+                                  @RequestParam Role role,
+                                  RedirectAttributes redirectAttributes) {
+        int result = userService.changeRole(id, role);
+        if (result > 0) {
+            redirectAttributes.addFlashAttribute("success", "User role updated.");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Could not update user role.");
+        }
+        return "redirect:/admin/users";
     }
 }
