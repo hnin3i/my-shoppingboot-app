@@ -24,18 +24,16 @@ public class WebConfig implements WebMvcConfigurer{
 
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns(
-                		"route"           	
+                		"products/**"           	
                 );
 
         registry.addInterceptor(adminInterceptor)
                 .addPathPatterns(
-                		"route"
+                		"admin/**"
                 );
         
     }
         
-
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
