@@ -31,9 +31,40 @@ public class UserRepository {
 		List<User> entities = this.jdbcTemplate.query(sql, new UserMapper(), id);
 		return entities.isEmpty() ? null : entities.get(0);
 	}
-
-	public int updateRole(String id, String role) {
-		String sql = "UPDATE users SET role = ?, updated_at = NOW() WHERE id = ?";
-		return this.jdbcTemplate.update(sql, role, id);
+	public User findByEmail(String email) {
+		String sql="SELECT * FROM users WHERE email=?";				
+		List<User> entites=this.jdbcTemplate.query(sql, new UserMapper(),email);
+		
+		return entites.isEmpty()?null:entites.get(0);
 	}
+	public int save(User entity) {
+		 String sql = "INSERT INTO users (id,username,email,phone,password,role,photo,status) "
+		 		+ "VALUES (?, ?,?,?,?,?,?,?)";
+		 return this.jdbcTemplate.update(sql,
+				 entity.getId(),
+				 entity.getName(),
+				 entity.getEmail(),
+				 entity.getPhone(),
+				 entity.getPassword(),
+				 entity.getRole(),
+				 entity.getProfile()
+				 );
+	}
+	public int changePassword(String id,String password) {
+		 String sql = "UPDATE users SET password = ? WHERE id = ?";
+		 return jdbcTemplate.update(sql, password,id);
+	}
+	public int changeProfile(String id,String username,String phone,byte[]photo) {
+		 String sql = "UPDATE users SET username = ?,phone=?,photo=? WHERE id = ?";
+		 return jdbcTemplate.update(sql, username,phone,photo,id);
+	}
+	public int changeUserName(String id,String username) {
+		 String sql = "UPDATE users SET username = ? WHERE id = ?";
+		 return jdbcTemplate.update(sql, username,id);
+	}
+	public int changePhoto(String id,String profile) {
+		 String sql = "UPDATE users SET profile = ? WHERE id = ?";
+		 return jdbcTemplate.update(sql, profile,id);
+	}
+
 }

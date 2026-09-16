@@ -1,13 +1,14 @@
 package ai.shoppingapp.interceptor;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import ai.shoppingapp.model.Role;
-import ai.shoppingapp.model.UserDto;
+import ai.shoppingapp.model.UserModel;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
+@Component
 public class AdminInterceptor implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(
@@ -22,7 +23,7 @@ public class AdminInterceptor implements HandlerInterceptor{
 			return false;
 			
 		}
-		UserDto user = (UserDto) session.getAttribute("loggedInUser");
+		UserModel user = (UserModel) session.getAttribute("loggedInUser");
 		if (!(user.getRole().equals(Role.ADMIN))) {
 			return false;
 		}

@@ -54,16 +54,5 @@ public class AdminController {
         return "admin/users/list";
     }
 
-    @PostMapping("/users/{id}/role")
-    public String changeUserRole(@PathVariable String id,
-                                  @RequestParam Role role,
-                                  RedirectAttributes redirectAttributes) {
-        int result = userService.changeRole(id, role);
-        if (result > 0) {
-            redirectAttributes.addFlashAttribute("success", "User role updated.");
-        } else {
-            redirectAttributes.addFlashAttribute("error", "Could not update user role.");
-        }
-        return "redirect:/admin/users";
-    }
+  
 }
