@@ -1,5 +1,10 @@
 package ai.shoppingapp.exception;
 
-public class AccessDeniedException {
+public class AccessDeniedException extends RuntimeException {
+	
+	private static final long serialVersionUID = 1L;
 
+	 public AccessDeniedException(String message) {
+	        super(message);
+	    }
 }
