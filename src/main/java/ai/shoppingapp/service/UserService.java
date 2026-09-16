@@ -55,11 +55,6 @@ public class UserService {
 	}
 	
 	
-
-	public int changeRole(String id, Role role) {
-		return this.userRepo.updateRole(id, role.toString());
-	}
-
 	private UserModel toModel(User entity) {
 		UserModel model = new UserModel();
 		model.setId(entity.getId());

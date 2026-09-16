@@ -62,13 +62,9 @@ public class UserRepository {
 		 String sql = "UPDATE users SET username = ? WHERE id = ?";
 		 return jdbcTemplate.update(sql, username,id);
 	}
-	public int changePhoto(String id,byte[]photo) {
+	public int changePhoto(String id,String profile) {
 		 String sql = "UPDATE users SET profile = ? WHERE id = ?";
-		 return jdbcTemplate.update(sql, photo,id);
+		 return jdbcTemplate.update(sql, profile,id);
 	}
 
-	public int updateRole(String id, String role) {
-		String sql = "UPDATE users SET role = ?, updated_at = NOW() WHERE id = ?";
-		return this.jdbcTemplate.update(sql, role, id);
-	}
 }
