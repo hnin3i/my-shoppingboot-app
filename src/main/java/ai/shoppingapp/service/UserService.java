@@ -33,6 +33,11 @@ public class UserService {
 		if (entity == null) return null;
 		return toModel(entity);
 	}
+	public UserModel findByEmail(String email) {
+		User entity = this.userRepo.findByEmail(email);
+		if (entity == null) return null;
+		return toModel(entity);
+	}
 	
 	public int register(RegisterModel model) {
 		if (userRepo.findByEmail(model.getEmail()) != null) {
@@ -65,8 +70,8 @@ public class UserService {
 		if (role != null) model.setRole(Role.valueOf(role));
 		model.setAddress(entity.getAddress());
 		model.setProfile(entity.getProfile());
-		model.setCreated_at(entity.getCreated_at());
-		model.setUpdated_at(entity.getUpdated_at());
+		model.setCreated_at(entity.getCreatedAt());
+		model.setUpdated_at(entity.getUpdatedAt());
 		return model;
 	}
 	private  User toEntity(RegisterModel model) {

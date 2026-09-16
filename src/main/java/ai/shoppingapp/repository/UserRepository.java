@@ -54,6 +54,10 @@ public class UserRepository {
 		 String sql = "UPDATE users SET password = ? WHERE id = ?";
 		 return jdbcTemplate.update(sql, password,id);
 	}
+	public int changePasswordByEmail(String email, String password) {
+	    String sql = "UPDATE users SET password = ? WHERE email = ?";
+	    return jdbcTemplate.update(sql, password, email);
+	}
 	public int changeProfile(String id,String username,String phone,byte[]photo) {
 		 String sql = "UPDATE users SET username = ?,phone=?,photo=? WHERE id = ?";
 		 return jdbcTemplate.update(sql, username,phone,photo,id);
