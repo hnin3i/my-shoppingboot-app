@@ -28,7 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
                     "/css/**",
                     "/js/**",
                     "/images/**",
-                    "/favicon.ico",
+//                    "/favicon.ico",
                     "/error",
 
                     // Public Storefront Pages
