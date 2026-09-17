@@ -254,3 +254,24 @@ body {
 	background: #574fe0;
 	color: white;
 }
+
+.pagination .page-link {
+	width: 36px;
+	height: 36px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #eeeeee;
+	color: #555;
+	background: white;
+}
+
+.pagination .page-link:hover {
+	background: #6c63ff;
+	color: #FFEFE3;
+}
+
+.pagination .page-item.disabled .page-link {
+	color: #ccc;
+	background: #fafafa;
+}
