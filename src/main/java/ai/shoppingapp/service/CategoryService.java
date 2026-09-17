@@ -56,7 +56,20 @@ public class CategoryService {
 
 		return this.repo.delete(id);
 	}
+	
+// CHECK DUPLICATE NAME FOR CREATE
+	public boolean existsByName(String name) {
 
+	    return this.repo.existsByName(name);
+	}
+
+
+// CHECK DUPLICATE NAME FOR UPDATE
+	public boolean existsByName(String name, String id) {
+
+	    return this.repo.existsByName(name, id);
+	}
+	
 // Entity → DTO
 	private CategoryModel toDto(Category entity) {
 

@@ -41,7 +41,11 @@ public class WebConfig implements WebMvcConfigurer{
 
         registry.addResourceHandler("/images/categories/**")
                 .addResourceLocations(
-                        "file:///D:/Shopping/shoppingapp/src/main/resources/static/images/categories/"
+                        "file:///D:/Shopping/shoppingapp/src/main/resources/template/images/product/"
                 );
+        registry.addResourceHandler("/images/user/**")
+        .addResourceLocations(
+                "file:///D:/Shopping/shoppingapp/src/main/resources/template/images/user/"
+        );
     }
 }
