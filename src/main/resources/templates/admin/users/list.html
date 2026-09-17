@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
@@ -22,123 +23,412 @@
 
 <body>
 
-	<!-- Sidebar -->
 	<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-
-	<!-- Main -->
 	<div class="admin-main">
 
-		<!-- Topbar -->
 		<div class="admin-topbar">
 
 			<div class="search-box">
+
 				<i class="bi bi-search"></i> <input type="text"
-					placeholder="Search user...">
+					placeholder="Search user..." id="topSearch">
+
 			</div>
 
+
 			<div class="admin-profile">
+
 				<div class="admin-avatar">A</div>
+
 				<div>
 					<strong>Admin</strong>
 				</div>
+
 			</div>
 
 		</div>
 
-
-		<!-- Content -->
 		<div class="admin-content">
 
-			<!-- Flash messages -->
-			<div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-			<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-			<!-- Page Header -->
-			<div class="d-flex justify-content-between align-items-center mb-4">
+			<!-- Flash Messages -->
 
-				<div>
-					<div class="page-title">Users</div>
-					<div class="page-subtitle">Manage registered users and their roles</div>
-				</div>
+			<div th:if="${success}"
+				class="alert alert-success alert-dismissible fade show" role="alert">
+
+				<i class="bi bi-check-circle me-2"></i> <span th:text="${success}">
+					User created successfully. </span>
+
+				<button type="button" class="btn-close" data-bs-dismiss="alert">
+				</button>
 
 			</div>
 
 
-			<!-- User Card -->
+			<div th:if="${error}"
+				class="alert alert-danger alert-dismissible fade show" role="alert">
+
+				<i class="bi bi-exclamation-circle me-2"></i> <span
+					th:text="${error}"> Something went wrong. </span>
+
+				<button type="button" class="btn-close" data-bs-dismiss="alert">
+				</button>
+
+			</div>
+
+
+			<div class="d-flex justify-content-between align-items-center mb-4">
+
+				<div>
+
+					<div class="page-title">Users</div>
+
+					<div class="page-subtitle">Manage registered users and their
+						roles</div>
+
+				</div>
+
+
+				<!-- ADD USER -->
+
+				<button type="button" class="btn btn-purple" data-bs-toggle="modal"
+					data-bs-target="#addUserModal">
+
+					<i class="bi bi-plus-lg me-1"></i> Add User
+
+				</button>
+
+			</div>
+
+
 			<div class="admin-card">
+
+
+				<!-- Card Header -->
 
 				<div class="d-flex justify-content-between align-items-center mb-3">
 
-					<div class="admin-card-title mb-0">User List</div>
-
 					<div>
-						<input type="text" class="form-control"
-							placeholder="Search user..." style="width: 220px;">
+
+						<div class="admin-card-title mb-1">User List</div>
+
+						<div class="user-count">
+							<span id="userCount">6</span> users
+						</div>
+
+					</div>
+
+
+					<!-- SEARCH -->
+
+					<div class="position-relative">
+
+						<i class="bi bi-search position-absolute"
+							style="left: 12px; top: 50%; transform: translateY(-50%); color: #999;">
+						</i> <input type="text" id="userSearch" class="form-control ps-5"
+							placeholder="Search user..." style="width: 240px;">
+
 					</div>
 
 				</div>
 
 
-				<!-- Table -->
 				<div class="table-responsive">
 
-					<table class="admin-table">
+					<table class="admin-table" id="userTable">
 
 						<thead>
+
 							<tr>
+
 								<th>Name</th>
+
 								<th>Email</th>
+
 								<th>Phone</th>
+
 								<th>Role</th>
+
 								<th>Joined</th>
+
 								<th class="text-end">Action</th>
+
 							</tr>
+
 						</thead>
+
 
 						<tbody>
 
-							<tr th:each="user : ${users}">
 
-								<td><strong th:text="${user.name}">Name</strong></td>
+							<!-- =================================================
+                             SAMPLE USER 1
+                        ================================================== -->
 
-								<td th:text="${user.email}">email@example.com</td>
-
-								<td th:text="${user.phone} ?: '-'">-</td>
+							<tr>
 
 								<td>
-									<span class="status"
-										th:classappend="${user.role.name() == 'ADMIN'} ? ' status-success' : ' status-warning'"
-										th:text="${user.role}"> ROLE </span>
+
+									<div class="user-name-wrapper">
+
+										<div class="user-avatar">J</div>
+
+										<strong> Jessica Smith </strong>
+
+									</div>
+
 								</td>
 
-								<td th:text="${user.created_at != null} ? ${user.created_at.toLocalDate()} : '-'">2026-01-01</td>
+								<td>jessica@gmail.com</td>
+
+								<td>09 421 234 567</td>
+
+								<td><span class="role-badge role-customer"> <i
+										class="bi bi-person"></i> Customer
+
+								</span></td>
+
+								<td>2026-09-01</td>
 
 								<td class="text-end">
 
-									<form th:action="@{'/admin/users/' + ${user.id} + '/role'}"
-										method="post" class="d-inline-flex gap-1 justify-content-end">
+									<button class="btn btn-sm btn-outline-primary me-1">
+										<i class="bi bi-pencil"></i>
+									</button>
 
-										<select name="role" class="form-select form-select-sm"
-											style="width: auto;">
-											<option value="CUSTOMER"
-												th:selected="${user.role.name() == 'CUSTOMER'}">Customer</option>
-											<option value="ADMIN"
-												th:selected="${user.role.name() == 'ADMIN'}">Admin</option>
-										</select>
-
-										<button type="submit" class="btn btn-sm btn-outline-secondary">
-											<i class="bi bi-check-lg"></i>
-										</button>
-
-									</form>
+									<button class="btn btn-sm btn-outline-danger">
+										<i class="bi bi-trash"></i>
+									</button>
 
 								</td>
 							</tr>
 
-							<tr th:if="${#lists.isEmpty(users)}">
-								<td colspan="6" class="text-center text-muted">No users found.</td>
+
+
+							<!-- =================================================
+                             SAMPLE USER 2
+                        ================================================== -->
+
+							<tr>
+
+								<td>
+
+									<div class="user-name-wrapper">
+
+										<div class="user-avatar">E</div>
+
+										<strong> Emily Johnson </strong>
+
+									</div>
+
+								</td>
+
+								<td>emily@gmail.com</td>
+
+								<td>09 785 345 621</td>
+
+								<td><span class="role-badge role-customer"> <i
+										class="bi bi-person"></i> Customer
+
+								</span></td>
+
+								<td>2026-08-28</td>
+
+								<td class="text-end">
+
+									<button class="btn btn-sm btn-outline-primary me-1">
+										<i class="bi bi-pencil"></i>
+									</button>
+
+									<button class="btn btn-sm btn-outline-danger">
+										<i class="bi bi-trash"></i>
+									</button>
+
+								</td>
+
 							</tr>
+
+
+
+							<!-- =================================================
+                             SAMPLE USER 3 - ADMIN
+                        ================================================== -->
+
+							<tr>
+
+								<td>
+
+									<div class="user-name-wrapper">
+
+										<div class="user-avatar">A</div>
+
+										<strong> Admin </strong>
+
+									</div>
+
+								</td>
+
+								<td>admin@blackjack.com</td>
+
+								<td>09 555 123 456</td>
+
+								<td><span class="role-badge role-admin"> <i
+										class="bi bi-shield-check"></i> Admin
+
+								</span></td>
+
+								<td>2026-08-20</td>
+
+								<td class="text-end">
+
+									<button class="btn btn-sm btn-outline-primary me-1">
+										<i class="bi bi-pencil"></i>
+									</button>
+
+									<button class="btn btn-sm btn-outline-danger">
+										<i class="bi bi-trash"></i>
+									</button>
+
+								</td>
+
+							</tr>
+
+
+
+							<!-- =================================================
+                             SAMPLE USER 4
+                        ================================================== -->
+
+							<tr>
+
+								<td>
+
+									<div class="user-name-wrapper">
+
+										<div class="user-avatar">S</div>
+
+										<strong> Sophia Lee </strong>
+
+									</div>
+
+								</td>
+
+								<td>sophia@gmail.com</td>
+
+								<td>09 667 890 321</td>
+
+								<td><span class="role-badge role-customer"> <i
+										class="bi bi-person"></i> Customer
+
+								</span></td>
+
+								<td>2026-08-15</td>
+
+								<td class="text-end">
+
+									<button class="btn btn-sm btn-outline-primary me-1">
+										<i class="bi bi-pencil"></i>
+									</button>
+
+									<button class="btn btn-sm btn-outline-danger">
+										<i class="bi bi-trash"></i>
+									</button>
+
+								</td>
+
+							</tr>
+
+
+
+							<!-- =================================================
+                             SAMPLE USER 5
+                        ================================================== -->
+
+							<tr>
+
+								<td>
+
+									<div class="user-name-wrapper">
+
+										<div class="user-avatar">O</div>
+
+										<strong> Olivia Brown </strong>
+
+									</div>
+
+								</td>
+
+								<td>olivia@gmail.com</td>
+
+								<td>09 734 123 890</td>
+
+								<td><span class="role-badge role-customer"> <i
+										class="bi bi-person"></i> Customer
+
+								</span></td>
+
+								<td>2026-08-10</td>
+
+								<td class="text-end">
+
+									<button class="btn btn-sm btn-outline-primary me-1">
+										<i class="bi bi-pencil"></i>
+									</button>
+
+									<button class="btn btn-sm btn-outline-danger">
+										<i class="bi bi-trash"></i>
+									</button>
+
+								</td>
+
+							</tr>
+
+
+
+							<!-- =================================================
+                             SAMPLE USER 6
+                        ================================================== -->
+
+							<tr>
+
+								<td>
+
+									<div class="user-name-wrapper">
+
+										<div class="user-avatar">M</div>
+
+										<strong> Mia Wilson </strong>
+
+									</div>
+
+								</td>
+
+								<td>mia@gmail.com</td>
+
+								<td>09 456 789 123</td>
+
+								<td><span class="role-badge role-customer"> <i
+										class="bi bi-person"></i> Customer
+
+								</span></td>
+
+								<td>2026-08-05</td>
+
+								<td class="text-end">
+
+									<button class="btn btn-sm btn-outline-primary me-1">
+										<i class="bi bi-pencil"></i>
+									</button>
+
+									<button class="btn btn-sm btn-outline-danger">
+										<i class="bi bi-trash"></i>
+									</button>
+
+								</td>
+
+							</tr>
+
 
 						</tbody>
 
@@ -153,10 +443,187 @@
 	</div>
 
 
-	<!-- Bootstrap JS -->
+
+	<!-- =========================================================
+     ADD USER MODAL
+========================================================= -->
+
+	<div class="modal fade" id="addUserModal" tabindex="-1"
+		aria-labelledby="addUserModalLabel" aria-hidden="true">
+
+		<div class="modal-dialog modal-dialog-centered">
+
+			<div class="modal-content">
+
+
+				<!-- Modal Header -->
+
+				<div class="modal-header">
+
+					<div>
+
+						<h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
+
+						<small class="text-muted"> Create a new customer or admin
+							account </small>
+
+					</div>
+
+					<button type="button" class="btn-close" data-bs-dismiss="modal">
+					</button>
+
+				</div>
+
+
+
+				<!-- Modal Body -->
+
+				<div class="modal-body">
+
+					<form id="addUserForm">
+
+
+						<!-- Name -->
+
+						<div class="mb-3">
+
+							<label class="form-label"> Full Name </label> <input type="text"
+								name="name" class="form-control" placeholder="Enter full name"
+								required>
+
+						</div>
+
+
+
+						<!-- Email -->
+
+						<div class="mb-3">
+
+							<label class="form-label"> Email </label> <input type="email"
+								name="email" class="form-control"
+								placeholder="Enter email address" required>
+
+						</div>
+
+
+
+						<!-- Phone -->
+
+						<div class="mb-3">
+
+							<label class="form-label"> Phone </label> <input type="text"
+								name="phone" class="form-control" placeholder="09 xxx xxx xxx">
+
+						</div>
+
+
+
+						<!-- Password -->
+
+						<div class="mb-3">
+
+							<label class="form-label"> Password </label> <input
+								type="password" name="password" class="form-control"
+								placeholder="Enter password" required>
+
+						</div>
+
+
+
+						<!-- Role -->
+
+						<div class="mb-3">
+
+							<label class="form-label"> Role </label> <select name="role"
+								class="form-select">
+
+								<option value="CUSTOMER" selected>Customer</option>
+
+								<option value="ADMIN">Admin</option>
+
+							</select>
+
+							<div class="form-text">Customer can shop and manage their
+								account. Admin can manage the store.</div>
+
+						</div>
+
+
+					</form>
+
+				</div>
+
+
+
+				<!-- Modal Footer -->
+
+				<div class="modal-footer">
+
+					<button type="button" class="btn btn-light" data-bs-dismiss="modal">
+
+						Cancel</button>
+
+					<button type="submit" form="addUserForm" class="btn btn-purple">
+
+						<i class="bi bi-person-plus me-1"></i> Create User
+
+					</button>
+
+				</div>
+
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
+		
+	</script>
+
+
+
+	<script>
+		const searchInput = document.getElementById("userSearch");
+
+		const table = document.getElementById("userTable");
+
+		searchInput.addEventListener("input", function() {
+
+			const keyword = this.value.toLowerCase();
+
+			const rows = table.querySelectorAll("tbody tr");
+
+			let visibleCount = 0;
+
+			rows.forEach(function(row) {
+
+				const text = row.innerText.toLowerCase();
+
+				if (text.includes(keyword)) {
+
+					row.style.display = "";
+
+					visibleCount++;
+
+				} else {
+
+					row.style.display = "none";
+
+				}
+
+			});
+
+			document.getElementById("userCount").textContent = visibleCount;
+
+		});
+	</script>
+
 
 </body>
+
 </html>
