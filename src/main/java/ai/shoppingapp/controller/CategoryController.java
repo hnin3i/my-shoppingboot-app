@@ -13,129 +13,142 @@ import ai.shoppingapp.service.CategoryService;
 @Controller
 public class CategoryController {
 
-	private final CategoryService categoryService;
+    private final CategoryService categoryService;
 
-	public CategoryController(CategoryService categoryService) {
-		this.categoryService = categoryService;
-	}
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
-// LIST
-	@GetMapping("/categories")
-	public String categoryList(Model model) {
+    // LIST
+    @GetMapping("/admin/categories")
+    public String categoryList(Model model) {
 
-		model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("categories", categoryService.findAll());
 
-		return "categories/list";
-	}
+        return "admin/categories/list";
+    }
 
-// CREATE FORM
-	@GetMapping("/categories/add")
-	public String addCategory(Model model) {
+    // CREATE FORM
+    @GetMapping("/admin/categories/add")
+    public String addCategory(Model model) {
 
-		CategoryModel newCategory = new CategoryModel();
+        CategoryModel newCategory = new CategoryModel();
 
-		newCategory.setIsActive(1);
+        newCategory.setIsActive(1);
 
-		model.addAttribute("category", newCategory);
+        model.addAttribute("category", newCategory);
 
-		return "categories/add";
-	}
+        return "admin/categories/add";
+    }
 
-// CREATE
-	@PostMapping("/categories/add")
-	public String addCategory(
-	        @ModelAttribute("category") CategoryModel category,
-	        Model model) {
+    // CREATE
+    @PostMapping("/admin/categories/add")
+    public String addCategory(
+            @ModelAttribute("category") CategoryModel category,
+            Model model) {
 
-	    boolean exists =
-	            this.categoryService.existsByName(category.getName());
+        boolean exists =
+                categoryService.existsByName(category.getName());
 
-	    if (exists) {
+        if (exists) {
 
-	        model.addAttribute("error",
-	                "Category name already exists!");
+            model.addAttribute(
+                    "error",
+                    "Category name already exists!"
+            );
 
-	        return "categories/add";
-	    }
+            return "admin/categories/add";
+        }
 
-	    category.setCreatedUserId("1");
-	    category.setUpdatedUserId("1");
+        category.setCreatedUserId("1");
+        category.setUpdatedUserId("1");
 
-	    this.categoryService.add(category);
+        categoryService.add(category);
 
-	    return "redirect:/categories";
-	}
+        return "redirect:/admin/categories";
+    }
 
-// DETAIL
-	@GetMapping("/categories/detail/{id}")
-	public String categoryDetail(@PathVariable String id, Model model) {
+    // DETAIL
+    @GetMapping("/admin/categories/detail/{id}")
+    public String categoryDetail(
+            @PathVariable String id,
+            Model model) {
 
-		CategoryModel category = this.categoryService.findById(id);
+        CategoryModel category =
+                categoryService.findById(id);
 
-		model.addAttribute("category", category);
+        model.addAttribute("category", category);
 
-		return "categories/detail";
-	}
+        return "admin/categories/detail";
+    }
 
-// EDIT FORM
-	@GetMapping("/categories/edit/{id}")
-	public String editCategory(@PathVariable String id, Model model) {
+    // EDIT FORM
+    @GetMapping("/admin/categories/edit/{id}")
+    public String editCategory(
+            @PathVariable String id,
+            Model model) {
 
-		CategoryModel category = this.categoryService.findById(id);
+        CategoryModel category =
+                categoryService.findById(id);
 
-		model.addAttribute("category", category);
+        model.addAttribute("category", category);
 
-		return "categories/edit";
-	}
+        return "admin/categories/edit";
+    }
 
-// UPDATE
-	@PostMapping("/categories/edit")
-	public String editCategory(
-	        @ModelAttribute("category") CategoryModel category,
-	        Model model) {
+    // UPDATE
+    @PostMapping("/admin/categories/edit")
+    public String editCategory(
+            @ModelAttribute("category") CategoryModel category,
+            Model model) {
 
-	    boolean exists = this.categoryService.existsByName(
-	            category.getName(),
-	            category.getId()
-	    );
+        boolean exists =
+                categoryService.existsByName(
+                        category.getName(),
+                        category.getId()
+                );
 
-	    if (exists) {
+        if (exists) {
 
-	        model.addAttribute(
-	                "error",
-	                "Category name already exists!"
-	        );
+            model.addAttribute(
+                    "error",
+                    "Category name already exists!"
+            );
 
-	        return "categories/edit";
-	    }
+            return "admin/categories/edit";
+        }
 
-	    category.setUpdatedUserId("1");
+        category.setUpdatedUserId("1");
 
-	    this.categoryService.edit(
-	            category.getId(),
-	            category
-	    );
+        categoryService.edit(
+                category.getId(),
+                category
+        );
 
-	    return "redirect:/categories";
-	}
+        return "redirect:/admin/categories";
+    }
 
-// DELETE
-	@GetMapping("/categories/delete/{id}")
-	public String deleteCategory(@PathVariable String id, Model model) {
+    // DELETE FORM
+    @GetMapping("/admin/categories/delete/{id}")
+    public String deleteCategory(
+            @PathVariable String id,
+            Model model) {
 
-		CategoryModel category = this.categoryService.findById(id);
+        CategoryModel category =
+                categoryService.findById(id);
 
-		model.addAttribute("category", category);
+        model.addAttribute("category", category);
 
-		return "categories/delete";
-	}
+        return "admin/categories/delete";
+    }
 
-// DELETE CONFIRM
-	@PostMapping("/categories/delete")
-	public String deleteConfirm(@ModelAttribute("category") CategoryModel category) {
+    // DELETE CONFIRM
+    @PostMapping("/admin/categories/delete")
+    public String deleteConfirm(
+            @ModelAttribute("category") CategoryModel category) {
 
-		this.categoryService.delete(category.getId());
+        categoryService.delete(category.getId());
 
-		return "redirect:/categories";
-	}
+        return "redirect:/admin/categories";
+    }
 }

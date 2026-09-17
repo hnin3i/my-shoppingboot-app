@@ -34,24 +34,20 @@
 	<div class="admin-main">
 
 		<!-- Topbar -->
-		<!-- Topbar -->
-<div class="admin-topbar">
+		<div class="admin-topbar">
 
-    <!-- Admin Profile -->
-    <div class="admin-profile"
-         style="margin-left: auto;">
+			<!-- Admin Profile -->
+			<div class="admin-profile" style="margin-left: auto;">
 
-        <div class="admin-avatar">
-            A
-        </div>
+				<div class="admin-avatar">A</div>
 
-        <div>
-            <strong>Admin</strong>
-        </div>
+				<div>
+					<strong>Admin</strong>
+				</div>
 
-    </div>
+			</div>
 
-</div>
+		</div>
 
 
 		<!-- Content -->
@@ -75,7 +71,7 @@
 
 
 				<!-- Form -->
-				<form th:action="@{/categories/add}" th:object="${category}"
+				<form th:action="@{/admin/categories/add}" th:object="${category}"
 					method="post" enctype="multipart/form-data">
 
 
@@ -158,7 +154,7 @@
 						</button>
 
 
-						<a th:href="@{/categories}" class="btn btn-secondary"> <i
+						<a th:href="@{/admin/categories}" class="btn btn-secondary"> <i
 							class="bi bi-x-lg"></i> Cancel
 
 						</a>
@@ -167,7 +163,7 @@
 
 
 				</form>
-				
+
 
 			</div>
 
