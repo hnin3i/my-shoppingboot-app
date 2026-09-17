@@ -8,7 +8,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create Category - BLACKJACK Admin</title>
+<title>Edit Category - BLACKJACK Admin</title>
 
 <!-- Bootstrap -->
 <link
@@ -33,26 +33,22 @@
 	<!-- Main -->
 	<div class="admin-main">
 
+
 		<!-- Topbar -->
-		<!-- Topbar -->
-<div class="admin-topbar">
+		<div class="admin-topbar">
 
-    <!-- Admin Profile -->
-    <div class="admin-profile"
-         style="margin-left: auto;">
+			<!-- Admin Profile -->
+			<div class="admin-profile" style="margin-left: auto;">
 
-        <div class="admin-avatar">
-            A
-        </div>
+				<div class="admin-avatar">A</div>
 
-        <div>
-            <strong>Admin</strong>
-        </div>
+				<div>
+					<strong>Admin</strong>
+				</div>
 
-    </div>
+			</div>
 
-</div>
-
+		</div>
 
 		<!-- Content -->
 		<div class="admin-content">
@@ -63,7 +59,9 @@
 
 				<div>
 
-					<div class="page-title">Create Category</div>
+					<div class="page-title">Edit Category</div>
+
+					<div class="page-subtitle">Update category information</div>
 
 				</div>
 
@@ -73,18 +71,20 @@
 			<!-- Category Card -->
 			<div class="admin-card">
 
-
-				<!-- Form -->
-				<form th:action="@{/categories/add}" th:object="${category}"
-					method="post" enctype="multipart/form-data">
+				<form th:action="@{/categories/edit}" th:object="${category}"
+					method="post">
 
 
-					<!-- Error Alert -->
+					<!-- Error Message -->
 					<div th:if="${error}" style="color: red; margin-bottom: 15px;">
 
 						<strong>Error:</strong> <span th:text="${error}"></span>
 
 					</div>
+
+
+					<!-- ID -->
+					<input type="hidden" th:field="*{id}">
 
 
 					<!-- Name -->
@@ -123,25 +123,21 @@
 
 
 					<!-- Status -->
-					<div class="mb-3">
+					<div class="mb-3 row">
 
-						<label class="form-label"> Status : </label>
+						<label for="status" class="col-sm-2 col-form-label">
 
+							Status : </label>
 
-						<div class="form-check">
+						<div class="col-sm-5">
 
-							<input class="form-check-input" type="radio"
-								th:field="*{isActive}" value="1" id="radioDefault1"> <label
-								class="form-check-label" for="radioDefault1"> Active </label>
+							<select class="form-select" id="status" th:field="*{isActive}">
 
-						</div>
+								<option value="1">Active</option>
 
+								<option value="0">Inactive</option>
 
-						<div class="form-check">
-
-							<input class="form-check-input" type="radio"
-								th:field="*{isActive}" value="0" id="radioDefault2"> <label
-								class="form-check-label" for="radioDefault2"> Inactive </label>
+							</select>
 
 						</div>
 
@@ -153,7 +149,7 @@
 
 						<button type="submit" class="btn btn-primary me-2">
 
-							<i class="bi bi-plus-lg"></i> Add Category
+							<i class="bi bi-check-lg"></i> Update
 
 						</button>
 
@@ -165,9 +161,7 @@
 
 					</div>
 
-
 				</form>
-				
 
 			</div>
 
