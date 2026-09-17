@@ -61,7 +61,7 @@ public class WebConfig implements WebMvcConfigurer {
 //                .addResourceLocations("classpath:/static/images/");
 
         // External category image upload path if needed
-        registry.addResourceHandler("/images/categories/**")
-                .addResourceLocations("file:///D:/Shopping/shoppingapp/src/main/resources/static/images/categories/");
+        registry.addResourceHandler("/images/categories/**");
+
     }
 }

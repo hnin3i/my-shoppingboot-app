@@ -21,7 +21,7 @@ public class CategoryRepository {
 // LIST
 	public List<Category> findAll() {
 
-		String sql = "SELECT *FROM categories WHERE is_active = 1 ORDER BY created_at DESC";
+		String sql = "SELECT *FROM categories ORDER BY created_at DESC";
 
 		List<Category> entities = this.jdbcTemplate.query(sql, new CategoryMapper());
 
@@ -86,4 +86,43 @@ public class CategoryRepository {
 
 		return this.jdbcTemplate.update(sql, id);
 	}
+
+//CHECK DUPLICATE NAME FOR CREATE
+public boolean existsByName(String name) {
+
+ String sql = """
+         SELECT COUNT(*)
+         FROM categories
+         WHERE name = ?
+         """;
+
+ Integer count = jdbcTemplate.queryForObject(
+         sql,
+         Integer.class,
+         name
+ );
+
+ return count != null && count > 0;
+}
+
+
+//CHECK DUPLICATE NAME FOR UPDATE
+public boolean existsByName(String name, String id) {
+
+ String sql = """
+         SELECT COUNT(*)
+         FROM categories
+         WHERE name = ?
+         AND id != ?
+         """;
+
+ Integer count = jdbcTemplate.queryForObject(
+         sql,
+         Integer.class,
+         name,
+         id
+ );
+
+ return count != null && count > 0;
+}
 }
