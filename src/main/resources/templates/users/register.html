@@ -72,6 +72,28 @@
             background-color: var(--accent-red);
             color: #ffffff;
         }
+        /* Button loading & fade transitions */
+		.btn-action, .auth-link, .btn-outline-action {
+    		transition: opacity 0.25s ease, background-color 0.2s ease, color 0.2s ease;
+		}
+		.faded {
+    		opacity: 0.35 !important;
+    		pointer-events: none !important;
+		}
+		.btn-spinner {
+    		display: inline-block;
+    		width: 1rem;
+    		height: 1rem;
+    		border: 2px solid currentColor;
+    		border-right-color: transparent;
+    		border-radius: 50%;
+    		animation: spinner-border 0.75s linear infinite;
+    		vertical-align: -0.125em;
+    		margin-right: 0.5rem;
+		}		
+		@keyframes spinner-border {
+    		to { transform: rotate(360deg); }
+		}
         .form-label {
             font-size: 0.75rem;
             text-transform: uppercase;
@@ -178,18 +200,28 @@ function togglePassword(inputId, iconId) {
     }
 }
 
-document.getElementById('registerForm').addEventListener('submit', function(e) {
-    const pw = document.getElementById('password').value;
-    const cpw = document.getElementById('confirmPassword').value;
-    const mismatchMsg = document.getElementById('passwordMismatch');
-
-    if (pw !== cpw) {
-        e.preventDefault();
-        mismatchMsg.classList.remove('d-none');
-    } else {
-        mismatchMsg.classList.add('d-none');
-    }
-});
+		document.getElementById('registerForm').addEventListener('submit', function(e) {
+		    const pw = document.getElementById('password').value;
+		    const cpw = document.getElementById('confirmPassword').value;
+		    const mismatchMsg = document.getElementById('passwordMismatch');
+		
+		    if (pw !== cpw) {
+		        e.preventDefault();
+		        mismatchMsg.classList.remove('d-none');
+		        return;
+		    }
+		    mismatchMsg.classList.add('d-none');
+		
+		    // Trigger button loading & fade out other actions
+		    const submitBtn = this.querySelector('button[type="submit"]');
+		    submitBtn.disabled = true;
+		    submitBtn.innerHTML = '<span class="btn-spinner"></span> Creating account...';
+		
+		    document.querySelectorAll('.auth-link').forEach(el => el.classList.add('faded'));
+		
+		    // Submit programmatically since button is now disabled
+		    this.submit();
+		});
 </script>
 
 </body>
