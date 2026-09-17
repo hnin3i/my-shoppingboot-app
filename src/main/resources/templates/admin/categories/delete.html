@@ -100,7 +100,7 @@
 				</button>
 
 
-				<a th:href="@{/categories}" class="btn btn-secondary"> <i
+				<a th:href="@{/admin/categories}" class="btn btn-secondary"> <i
 					class="bi bi-arrow-left"></i> Cancel
 
 				</a>
@@ -172,8 +172,8 @@
 
 
 					<!-- Delete Form -->
-					<form th:action="@{/categories/delete}" th:object="${category}"
-						method="post">
+					<form th:action="@{/admin/categories/delete}"
+						th:object="${category}" method="post">
 
 						<input type="hidden" th:field="*{id}">
 
