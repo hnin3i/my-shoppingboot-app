@@ -128,6 +128,19 @@ public class AuthController {
 
         return "redirect:/login?verified=true";
     }
+    
+    @PostMapping("/verify-otp/resend")
+    public String resendOtp(@RequestParam("email") String email, 
+                            org.springframework.web.servlet.mvc.support.RedirectAttributes redirectAttributes) {
+        boolean resent = emailVerificationService.resendOtp(email);
+
+        if (!resent) {
+            redirectAttributes.addFlashAttribute("error", "Registration session expired. Please register again.");
+            return "redirect:/register";
+        }
+
+        return "redirect:/verify-otp?email=" + email + "&resent=true";
+    }
 
     // ==========================================
     // FORGOT & RESET PASSWORD WITH OTP

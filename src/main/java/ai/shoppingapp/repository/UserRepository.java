@@ -38,16 +38,15 @@ public class UserRepository {
 		return entites.isEmpty()?null:entites.get(0);
 	}
 	public int save(User entity) {
-		 String sql = "INSERT INTO users (id,username,email,phone,password,role,photo,status) "
-		 		+ "VALUES (?, ?,?,?,?,?,?,?)";
+		 String sql = "INSERT INTO users (id,name,email,phone,password,address) "
+		 		+ "VALUES (?, ?,?,?,?,?)";
 		 return this.jdbcTemplate.update(sql,
 				 entity.getId(),
 				 entity.getName(),
 				 entity.getEmail(),
 				 entity.getPhone(),
 				 entity.getPassword(),
-				 entity.getRole(),
-				 entity.getProfile()
+				 entity.getAddress()
 				 );
 	}
 	public int changePassword(String id,String password) {
