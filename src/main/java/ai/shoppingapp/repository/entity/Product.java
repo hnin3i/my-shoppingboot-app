@@ -5,32 +5,42 @@ import java.time.LocalDateTime;
 public class Product {
 	
 	private String id;
+	private String category_id;
 	private String name;
 	private String description;
-	private String categories_id;
 	private double price;
+	private String image;
+	private boolean is_active;
 	private LocalDateTime created_at;
 	private LocalDateTime update_at;
-	private String image;
+	
 	private String created_user_id;
 	private String updated_user_id;
-	private boolean is_active;
+	private boolean is_discount;
+	private int discount_product;
+	private LocalDateTime discount_duration;
+	
 	
 	public Product() {}
-	public Product(String id,String name,String description,String categories_id,double price,
-			LocalDateTime created_at,LocalDateTime update_at,String image,String created_user_id,
-			String updated_user_id,boolean is_active) {
+	public Product(String id,String category_id,String name,String description,double price,String image,
+			boolean is_active,LocalDateTime created_at,LocalDateTime update_at,String created_user_id,
+			String updated_user_id,boolean is_discount,int discount_product,LocalDateTime discount_duration) {
 		this.id=id;
+		this.category_id=category_id;
 		this.name=name;
 		this.description=description;
-		this.categories_id=categories_id;
 		this.price=price;
+		this.image=image;
+		this.is_active=is_active;
 		this.created_at=created_at;
 		this.update_at=update_at;
-		this.image=image;
+		
 		this.created_user_id=created_user_id;
 		this.updated_user_id=updated_user_id;
-		this.is_active=is_active;
+		this.is_discount=is_discount;
+		this.discount_product=discount_product;
+		this.discount_duration=discount_duration;
+		
 	}
 	public String getId() {
 		return id;
@@ -50,11 +60,12 @@ public class Product {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public String getCategories_id() {
-		return categories_id;
+	
+	public String getCategory_id() {
+		return category_id;
 	}
-	public void setCategories_id(String categories_id) {
-		this.categories_id = categories_id;
+	public void setCategory_id(String category_id) {
+		this.category_id = category_id;
 	}
 	public double getPrice() {
 		return price;
@@ -97,6 +108,24 @@ public class Product {
 	}
 	public void setIs_active(boolean is_active) {
 		this.is_active = is_active;
+	}
+	public boolean isIs_discount() {
+		return is_discount;
+	}
+	public void setIs_discount(boolean is_discount) {
+		this.is_discount = is_discount;
+	}
+	public int getDiscount_product() {
+		return discount_product;
+	}
+	public void setDiscount_product(int discount_product) {
+		this.discount_product = discount_product;
+	}
+	public LocalDateTime getDiscount_duration() {
+		return discount_duration;
+	}
+	public void setDiscount_duration(LocalDateTime discount_duration) {
+		this.discount_duration = discount_duration;
 	}
 	
 	
