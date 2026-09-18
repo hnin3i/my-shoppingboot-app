@@ -38,7 +38,7 @@ public class UserRepository {
 		return entites.isEmpty()?null:entites.get(0);
 	}
 	public int save(User entity) {
-		 String sql = "INSERT INTO users (id,username,email,phone,password,address) "
+		 String sql = "INSERT INTO users (id,name,email,phone,password,address) "
 		 		+ "VALUES (?, ?,?,?,?,?)";
 		 return this.jdbcTemplate.update(sql,
 				 entity.getId(),

@@ -41,6 +41,8 @@ public class WebConfig implements WebMvcConfigurer {
                     "/home",
                     "/products/**",
                     "/categories/**",
+                    "/user/**",
+                    "/user/orders",
 
                     // Public Auth Pages
                     "/login",

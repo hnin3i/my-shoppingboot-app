@@ -83,7 +83,7 @@ public class AuthController {
     @GetMapping("/register")
     public String registerPage(Model model) {
         model.addAttribute("user", new RegisterModel());
-        return "users/register";
+        return "user/register";
     }
 
     @PostMapping("/register")

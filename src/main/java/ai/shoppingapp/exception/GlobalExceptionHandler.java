@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleBadRequest(Exception ex, Model model) {
         populateErrorModel(model, 400, "Bad Request", ex.getMessage(), false);
-        return "error/error";
+        return "/error";
     }
 
     // 401 - UNAUTHORIZED (Must log in)
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public String handleUnauthorized(UnauthorizedException ex, Model model) {
         populateErrorModel(model, 401, "Login Required", ex.getMessage(), true);
-        return "error/error";
+        return "/error";
     }
 
     // 403 - FORBIDDEN (Admin / Role mismatch)
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public String handleAccessDenied(AccessDeniedException ex, Model model) {
         populateErrorModel(model, 403, "Access Denied", ex.getMessage(), true);
-        return "error/error";
+        return "/error";
     }
 
     // 404 - RESOURCE NOT FOUND
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
         populateErrorModel(model, 404, "Not Found", 
             ex instanceof ResourceNotFoundException ? ex.getMessage() : "The requested page or item does not exist.", 
             false);
-        return "error/error";
+        return "/error";
     }
 
     // 409 - CONFLICT (Duplicate email, stock clash)
@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public String handleConflict(DuplicateResourceException ex, Model model) {
         populateErrorModel(model, 409, "Conflict Detected", ex.getMessage(), false);
-        return "error/error";
+        return "/error";
     }
 
     // 413 - PAYLOAD TOO LARGE (Image uploads)
@@ -64,7 +64,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.PAYLOAD_TOO_LARGE)
     public String handleMaxUpload(MaxUploadSizeExceededException ex, Model model) {
         populateErrorModel(model, 413, "File Too Large", "Uploaded image exceeds the maximum permitted file size.", false);
-        return "error/error";
+        return "/error";
     }
 
     // 500 - DATABASE ERRORS
@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
     public String handleDatabaseError(DataAccessException ex, Model model) {
         log.error("Database error occurred: ", ex);
         populateErrorModel(model, 500, "Database Error", "A database query or persistence operation failed. Please try again.", false);
-        return "error/error";
+        return "/error";
     }
 
     // 500 - GENERAL INTERNAL SERVER ERROR
@@ -82,14 +82,14 @@ public class GlobalExceptionHandler {
     public String handleGeneralException(Exception ex, Model model) {
         log.error("Unhandled exception occurred: ", ex);
         populateErrorModel(model, 500, "Server Error", "An unexpected system error occurred. Our team has been notified.", false);
-        return "error/error";
+        return "/error";
     }
  // 404 - No record found in Database
     @ExceptionHandler(org.springframework.dao.EmptyResultDataAccessException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleEmptyResult(EmptyResultDataAccessException ex, Model model) {
         populateErrorModel(model, 404, "Not Found", "The requested record does not exist.", false);
-        return "error/error";
+        return "/error";
     }
     
 
