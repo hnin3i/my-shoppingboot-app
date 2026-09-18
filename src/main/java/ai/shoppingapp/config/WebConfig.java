@@ -29,8 +29,11 @@ public class WebConfig implements WebMvcConfigurer {
                     "/css/**",
                     "/js/**",
                     "/images/**",
-//                    "/favicon.ico",
-                    "/error",
+
+                    //Errors
+                    "/not-authorized",
+                    "/errors",
+                    "/errors/**",
 
                     // Public Storefront Pages
                     "/",
@@ -43,7 +46,12 @@ public class WebConfig implements WebMvcConfigurer {
                     "/register",
                     "/verify-otp",
                     "/forgot-password",
-                    "/reset-password"
+                    "/reset-password",
+                    
+                    //Order History
+                    "/order-history",
+                    "/details"
+                    
                 );
 
         // 2. Admin Interceptor - protects admin routes

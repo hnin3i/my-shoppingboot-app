@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ai.shoppingapp.model.OrderHistoryDto;
 import ai.shoppingapp.model.OrderDetailsDto;
 import ai.shoppingapp.model.OrderSummaryDto;
+import ai.shoppingapp.model.UserModel;
 import ai.shoppingapp.service.OrderHistoryService;
 import jakarta.servlet.http.HttpSession;
 
@@ -24,10 +25,12 @@ public class OrderHistoryController {
     
     @GetMapping("/order-history")
     public String showOrderHistory(HttpSession session, Model model) {
-        String userId = (String) session.getAttribute("userId");
+    	UserModel user = (UserModel) session.getAttribute("loggedInUser");
+        if (user == null) {
+            return "errors/not-authorized";
+        }
 
-        if (userId == null) userId = "U002";
-        
+        String userId = user.getId();
         List<OrderHistoryDto> orders = orderService.getOrderHistory(userId);
         model.addAttribute("orders", orders);
         return "OrderHistory/order_history";
@@ -35,13 +38,15 @@ public class OrderHistoryController {
     
     @PostMapping("/details")
     public String showOrderDetails(@RequestParam("orderId") String orderId, HttpSession session, Model model) {
-        String userId = (String) session.getAttribute("userId");
-        
-        if (userId == null) userId = "U002";
-        
+    	UserModel user = (UserModel) session.getAttribute("loggedInUser");
+        if (user == null) {
+            return "errors/not-authorized";
+        }
+
+        String userId = user.getId();
         List<OrderDetailsDto> items = orderService.getOrderDetails(userId, orderId);
         OrderSummaryDto summary = orderService.getOrderSummary(userId, orderId);
-        
+
         model.addAttribute("items", items);
         model.addAttribute("summary", summary);
         return "OrderHistory/order_details";

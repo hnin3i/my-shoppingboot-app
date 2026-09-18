@@ -10,5 +10,9 @@ public class HomeController {
 	public String home() {
 		return "home";
 	}
+	@GetMapping("/errors/not-authorized")
+	public String notAuthorized() {
+	    return "errors/not-authorized";
+	}
 	
 }
