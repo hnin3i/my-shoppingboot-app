@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/public_layout}">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+
+
+
+    .size-btn {
+      height: 40px;
+      border-radius: 0;
+      font-weight: 600;
+    }
+  .size-btn.selected {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #ffffff !important;
+}
+
+
+  
+</style>
+</head>
+<body class="bg-black text-white p-4">
+<section layout:fragment="content" class="py-5">
+  <div class="container">
+  <div class="row g-5">
+  <div class="col-md-6">
+<div class="product-card" data-id="101" data-name="T-Shirt" data-price="15000">
+  <h3 class="fw-bold">T-Shirt</h3>
+  <p class="fs-5">Price: 15,000 MMK</p>
+  
+  <!-- Variant Selection -->
+ 
+
+  <div>
+        
+        <div class="variant-size">
+        
+        <div class="d-flex gap-2 mb-4" id="size-options">
+        <label class="form-label d-block">
+        Size:
+    </label>
+        <button value="XS" class="btn btn-outline-light size-btn" onclick="selectSize(this, 'XS')">XS</button>
+        <button value="S" class="btn btn-outline-light size-btn" onclick="selectSize(this, 'S')">S</button>
+        <button value="M" class="btn btn-outline-light size-btn" onclick="selectSize(this, 'M')">M</button>
+        <button value="L" class="btn btn-outline-light size-btn selected" onclick="selectSize(this, 'L')">L</button>
+        <button value="XL"class="btn btn-outline-light size-btn" onclick="selectSize(this, 'XL')">XL</button>
+    </div>
+    </div>
+    
+  </div>
+
+  <!-- Add to Cart Button -->
+  <button class="add-to-cart-btn btn btn-light w-100 py-3 fw-bold rounded-0" onclick="handleAddToCart(this)">Add to Cart</button>
+</div>
+</div>
+
+
+
+<!-- Cart Preview / UI Section -->
+ <div class="col-md-6  border-secondary ps-md-5">
+  <h2>Shopping Cart (<span id="cart-count">0</span>)</h2>
+  <div id="cart-items-list"></div>
+  <h3>Total: <span id="cart-total">0</span> MMK</h3>
+  <button  onclick="cart.clearCart()">Clear Cart</button>
+</div>
+</div>
+</div>
+
+ <script src="/js/shopping-cart.js"></script>
+<script>
+    // 1. Instance
+const cart = new ShoppingCart();
+let selectedSize = 'L'; // Default selected size
+
+    function selectSize(btn, size) {
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedSize = size;
+    }
+
+
+
+// 2. After Add to Cart Button  Function
+function handleAddToCart(buttonElement) {
+  const card = buttonElement.closest('.product-card');
+  const productId=card.dataset.id;
+  const stockId='STK-'+productId+'-'+selectedSize;
+  
+  const product = {
+    stockId:stockId,
+    productId:productId,
+    productName:card.dataset.name,
+    name:card.dataset.name,
+    price:Number(card.dataset.price),
+    maxQty:10
+  };
+
+  const variants = { size: selectedSize };
+
+  // Add Cart 
+  
+  const res=cart.addItem(product, 1, variants);
+  if(res && res.message){
+	  console.log(res.message);
+  }
+}
+
+// 3. UI  Update Function
+function renderCartUI() {
+  const items = cart.getItems();
+  const countSpan = document.getElementById('cart-count');
+  const totalSpan = document.getElementById('cart-total');
+  const listContainer = document.getElementById('cart-items-list');
+
+  // Edit Total count ,Total price 
+  countSpan.textContent = cart.getTotalCount();
+  totalSpan.textContent = cart.getTotalPrice().toLocaleString();
+
+  // Render Item List Render 
+  if(listContainer){
+	  listContainer.innerHTML = items.map((item, index) => `
+	    <div class="cart-item">
+	      <span>${item.name} (${item.variants? item.variants.size:''}) - ${item.price.toLocaleString()} MMK x ${item.quantity}</span>
+	      <button onclick="cart.updateQuantity('${item.stockId}', ${item.quantity+1})">+</button>
+	      <button onclick="cart.updateQuantity('${item.stockId}', ${item.quantity-1})">-</button>
+	      <button onclick="cart.removeItem('${item.stockId}')">Delete</button>
+	    </div>
+	  `).join('');
+  }
+  
+}
+
+// 4. Auto Update Listener to UI
+window.addEventListener('cartUpdated', () => {
+  renderCartUI();
+});
+
+// After Page  doing load  show old Cart UI 
+document.addEventListener('DOMContentLoaded', () => {
+  renderCartUI();
+});
+</script>
+
+</section>
+
+</body>
+</html>
