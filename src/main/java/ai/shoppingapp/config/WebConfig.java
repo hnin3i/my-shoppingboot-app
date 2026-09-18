@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+
     private final LoginInterceptor loginInterceptor;
     private final AdminInterceptor adminInterceptor;
 
@@ -57,11 +58,10 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/static/css/");
         registry.addResourceHandler("/js/**")
                 .addResourceLocations("classpath:/static/js/");
-//        registry.addResourceHandler("/images/**")
-//                .addResourceLocations("classpath:/static/images/");
 
-        // External category image upload path if needed
-        registry.addResourceHandler("/images/categories/**");
-
-    }
+		registry.addResourceHandler("/images/categories/**")
+				.addResourceLocations("file:///D:/Shopping/shoppingapp/src/main/resources/template/images/product/");
+		registry.addResourceHandler("/images/user/**")
+				.addResourceLocations("file:///D:/Shopping/shoppingapp/src/main/resources/template/images/user/");
+	}
 }

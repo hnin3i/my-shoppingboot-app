@@ -37,10 +37,10 @@ public class AdminController {
         return "admin/products/list";
     }
 
-    @GetMapping("/categories")
-    public String categories() {
-        return "admin/categories/list";
-    }
+//    @GetMapping("/categories")
+//    public String categories() {
+//        return "admin/categories/list";
+//    }
 
     @GetMapping("/orders")
     public String orders() {

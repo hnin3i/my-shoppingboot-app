@@ -147,7 +147,8 @@ public class EmailVerificationService {
             jakarta.mail.internet.MimeMessage mimeMessage = mailSender.createMimeMessage();
             org.springframework.mail.javamail.MimeMessageHelper helper = 
                     new org.springframework.mail.javamail.MimeMessageHelper(mimeMessage, true, "UTF-8");
-
+            
+            helper.setFrom("blackjack.clothing0@gmail.com", "BlackJack");
             helper.setTo(to);
             helper.setSubject(subject);
 
