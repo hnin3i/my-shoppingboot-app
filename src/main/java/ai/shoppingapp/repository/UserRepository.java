@@ -49,21 +49,14 @@ public class UserRepository {
 				 entity.getAddress()
 				 );
 	}
-	public int changePassword(String id,String password) {
-		 String sql = "UPDATE users SET password = ? WHERE id = ?";
-		 return jdbcTemplate.update(sql, password,id);
-	}
+
 	public int changePasswordByEmail(String email, String password) {
 	    String sql = "UPDATE users SET password = ? WHERE email = ?";
 	    return jdbcTemplate.update(sql, password, email);
 	}
-	public int changeProfile(String id,String username,String phone,byte[]photo) {
-		 String sql = "UPDATE users SET username = ?,phone=?,photo=? WHERE id = ?";
-		 return jdbcTemplate.update(sql, username,phone,photo,id);
-	}
-	public int changeUserName(String id,String username) {
-		 String sql = "UPDATE users SET username = ? WHERE id = ?";
-		 return jdbcTemplate.update(sql, username,id);
+	public int changeProfile(String id,String name,String phone,String photo) {
+		 String sql = "UPDATE users SET name = ?,phone=?,profile=? WHERE id = ?";
+		 return jdbcTemplate.update(sql, name,phone,photo,id);
 	}
 	public int changePhoto(String id,String profile) {
 		 String sql = "UPDATE users SET profile = ? WHERE id = ?";
