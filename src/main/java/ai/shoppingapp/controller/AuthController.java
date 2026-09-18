@@ -39,7 +39,7 @@ public class AuthController {
     @GetMapping("/login")
     public String loginPage(Model model) {
         model.addAttribute("user", new LoginModel());
-        return "users/login";
+        return "user/login";
     }
 
     @PostMapping("/login")
@@ -49,7 +49,7 @@ public class AuthController {
                         HttpServletRequest request,
                         Model model) {
         if (bindingResult.hasErrors()) {
-            return "users/login";
+            return "user/login";
         }
 
         UserModel loginUser = userService.login(user);
@@ -62,7 +62,7 @@ public class AuthController {
         }
 
         model.addAttribute("error", "Invalid email or password");
-        return "users/login";
+        return "user/login";
     }
 
     @GetMapping("/logout")
@@ -91,14 +91,14 @@ public class AuthController {
                            BindingResult bindingResult,
                            Model model) {
         if (bindingResult.hasErrors()) {
-            return "users/register";
+            return "user/register";
         }
 
         // Check if email is already taken by an active user
         UserModel existingUser = userService.findByEmail(registerUser.getEmail());
         if (existingUser != null) {
             model.addAttribute("error", "Email already exists");
-            return "users/register";
+            return "user/register";
         }
 
         // Generate cryptographic 6-digit OTP and send verification email
@@ -111,7 +111,7 @@ public class AuthController {
     @GetMapping("/verify-otp")
     public String showOtpPage(@RequestParam("email") String email, Model model) {
         model.addAttribute("email", email);
-        return "users/verify-otp";
+        return "user/verify-otp";
     }
 
     @PostMapping("/verify-otp")
@@ -123,7 +123,7 @@ public class AuthController {
         if (!"SUCCESS".equals(result)) {
             model.addAttribute("error", result);
             model.addAttribute("email", email);
-            return "users/verify-otp";
+            return "user/verify-otp";
         }
 
         return "redirect:/login?verified=true";
@@ -148,7 +148,7 @@ public class AuthController {
 
     @GetMapping("/forgot-password")
     public String showForgotPasswordPage() {
-        return "users/forgot-password";
+        return "user/forgot-password";
     }
 
     @PostMapping("/forgot-password")
@@ -156,7 +156,7 @@ public class AuthController {
         UserModel user = userService.findByEmail(email);
         if (user == null) {
             model.addAttribute("error", "No account found with this email address.");
-            return "users/forgot-password";
+            return "user/forgot-password";
         }
 
         passwordResetService.sendForgotPasswordOtp(email); // Updated here
@@ -166,7 +166,7 @@ public class AuthController {
     @GetMapping("/reset-password")
     public String showResetPasswordPage(@RequestParam("email") String email, Model model) {
         model.addAttribute("email", email);
-        return "users/reset-password";
+        return "user/reset-password";
     }
 
     @PostMapping("/reset-password")
@@ -178,7 +178,7 @@ public class AuthController {
         if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("error", "Passwords do not match.");
             model.addAttribute("email", email);
-            return "users/reset-password";
+            return "user/reset-password";
         }
 
         // Call passwordResetService instead of emailVerificationService
@@ -187,7 +187,7 @@ public class AuthController {
         if (!"SUCCESS".equals(result)) {
             model.addAttribute("error", result);
             model.addAttribute("email", email);
-            return "users/reset-password";
+            return "user/reset-password";
         }
 
         return "redirect:/login?resetSuccess=true"; // This return was missing

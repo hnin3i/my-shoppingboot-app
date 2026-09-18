@@ -103,13 +103,11 @@
         </p>
 
         <!-- Dynamic Action Buttons -->
-        <div class="action-group">
-
-            <a th:href="@{/}" 
-               class="btn-brand-primary">
-                Back to Storefront
-            </a>
-        </div>
-    </div>
+		<div class="action-group">
+			<a href="javascript:void(0);"
+				onclick="if (window.history.length > 1) { window.history.back(); } else { window.location.href = '/'; }"
+				class="btn-brand-primary"> Go Back </a>
+		</div>
+	</div>
 </body>
 </html>
