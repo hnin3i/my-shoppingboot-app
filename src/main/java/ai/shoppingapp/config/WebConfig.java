@@ -32,6 +32,7 @@ public class WebConfig implements WebMvcConfigurer {
 
                     //Errors
                     "/not-authorized",
+                    "/error/**",
                     "/errors",
                     "/errors/**",
 

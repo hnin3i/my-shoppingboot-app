@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="(${status != null and status != 999 ? status : 404}) + ' - ' + (${title != null ? title : 'Not Found'}) + ' | BlackJack'">Error | BlackJack</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #111111;
+            color: #f3f4f6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+            padding: 24px;
+        }
+
+        .error-card {
+            background: #18181b;
+            border: 1px solid #27272a;
+            border-radius: 0px;
+            max-width: 480px;
+            width: 100%;
+            padding: 48px 36px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        .error-badge {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #e11d48;
+            line-height: 1;
+            margin-bottom: 16px;
+            letter-spacing: -0.05em;
+        }
+
+        .error-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+
+        .error-desc {
+            font-size: 0.95rem;
+            color: #a1a1aa;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            word-wrap: break-word;
+        }
+
+        .action-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn-brand-primary {
+            display: block;
+            background-color: #e11d48;
+            color: #ffffff;
+            border: none;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 0px;
+            text-decoration: none;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn-brand-primary:hover {
+            background-color: #be123c;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <!-- Error Badge: Filters out status 999 and nulls -->
+        <div class="error-badge" 
+             th:text="${status != null and status != 999 ? status : 404}">
+            404
+        </div>
+
+        <!-- Error Title: Checks custom title or default Spring error phrase -->
+        <h1 class="error-title" 
+            th:text="${title != null ? title : (error != null ? error : 'Page Not Found')}">
+            Page Not Found
+        </h1>
+
+        <!-- Error Description: Displays detailed message if present -->
+        <p class="error-desc" 
+           th:text="${message != null and !message.isEmpty() and status != 999 ? message : 'The requested page or resource does not exist.'}">
+            The requested page or resource does not exist.
+        </p>
+
+        <!-- Dynamic Action Buttons -->
+        <div class="action-group">
+
+            <a th:href="@{/}" 
+               class="btn-brand-primary">
+                Back to Storefront
+            </a>
+        </div>
+    </div>
+</body>
+</html>

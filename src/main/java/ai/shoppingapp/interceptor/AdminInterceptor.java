@@ -26,7 +26,7 @@ public class AdminInterceptor implements HandlerInterceptor{
 		
 		UserModel user = (UserModel) session.getAttribute("loggedInUser");
 		if (!(user.getRole().equals(Role.ADMIN))) {
-			response.sendRedirect("/errors/not-authorized");
+			response.sendRedirect("/error/error");
 		}
 		
 		return true;
