@@ -92,9 +92,9 @@ function handleAddToCart(buttonElement) {
   const stockId='STK-'+productId+'-'+selectedSize;
   
   const product = {
-    stockId:stockId,
-    productId:productId,
-    productName:card.dataset.name,
+    stockId,
+    productId,
+    name:card.dataset.name,
     name:card.dataset.name,
     price:Number(card.dataset.price),
     maxQty:10
