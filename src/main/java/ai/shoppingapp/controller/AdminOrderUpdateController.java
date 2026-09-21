@@ -26,7 +26,6 @@ public class AdminOrderUpdateController {
         this.service = service;
     }
     
- // ၁။ Order စာရင်း အားလုံးနှင့် Filter စစ်ထားသော စာရင်းများ ထုတ်ပြမည့် Page
     @GetMapping
     public String showOrderListPage(
             @RequestParam(value = "orderStatus", required = false) String orderStatus,
@@ -39,10 +38,9 @@ public class AdminOrderUpdateController {
         model.addAttribute("selectedOrderStatus", orderStatus);
         model.addAttribute("selectedPaymentStatus", paymentStatus);
         
-        return "admin/order-list";
+        return "admin/orders/order-list";
     }
 
-    // ၂။ Order တစ်ခု၏ အသေးစိတ်နှင့် Payment Slip စစ်ဆေးမည့် Page -> http://localhost:8080/admin/orders/{orderId}
     @PostMapping("/detail")
     public String showOrderDetailPage(@RequestParam("orderId") String orderId, Model model) {
         AdminOrderDetailDto orderDetail = service.getOrderDetail(orderId);
@@ -52,10 +50,9 @@ public class AdminOrderUpdateController {
         model.addAttribute("allPaymentStatuses", PaymentStatus.values());
         model.addAttribute("updateDto", new AdminPaymentUpdateDto());
 
-        return "admin/order-detail";
+        return "admin/orders/order-detail";
     }
-
-    // ၃။ Status ပြောင်းလဲရန် Submit လုပ်လိုက်လျှင် အလုပ်လုပ်မည့် POST Route
+    
     @PostMapping("/update-status")
     public String updateOrderStatus(@ModelAttribute("updateDto") AdminPaymentUpdateDto updateDto,
                                     RedirectAttributes redirectAttributes) {
