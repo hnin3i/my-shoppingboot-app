@@ -3,8 +3,10 @@ package ai.shoppingapp.model;
 public class StockModel {
 
 	private String id;
+	private String productId;
+	private String colour;
+	private String size;
 	private int stockQty;
-	private String productsId;
 	private String productName;
 
 	// Computed in the service layer, not stored in the database
@@ -18,17 +20,29 @@ public class StockModel {
 	public void setId(String id) {
 		this.id = id;
 	}
+	public String getProductId() {
+		return productId;
+	}
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+	public String getColour() {
+		return colour;
+	}
+	public void setColour(String colour) {
+		this.colour = colour;
+	}
+	public String getSize() {
+		return size;
+	}
+	public void setSize(String size) {
+		this.size = size;
+	}
 	public int getStockQty() {
 		return stockQty;
 	}
 	public void setStockQty(int stockQty) {
 		this.stockQty = stockQty;
-	}
-	public String getProductsId() {
-		return productsId;
-	}
-	public void setProductsId(String productsId) {
-		this.productsId = productsId;
 	}
 	public String getProductName() {
 		return productName;

@@ -2,6 +2,7 @@ package ai.shoppingapp.repository.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 import org.springframework.jdbc.core.RowMapper;
 
@@ -12,10 +13,19 @@ public class StockMapper implements RowMapper<Stock> {
 	@Override
 	public Stock mapRow(ResultSet rs, int rowNum) throws SQLException {
 
+		LocalDateTime createdAt = rs.getTimestamp("created_at") != null
+				? rs.getTimestamp("created_at").toLocalDateTime() : null;
+		LocalDateTime updatedAt = rs.getTimestamp("updated_at") != null
+				? rs.getTimestamp("updated_at").toLocalDateTime() : null;
+
 		Stock stock = new Stock(
 				rs.getString("id"),
+				rs.getString("product_id"),
+				rs.getString("colour"),
+				rs.getString("size"),
 				rs.getInt("stock_qty"),
-				rs.getString("products_id")
+				createdAt,
+				updatedAt
 		);
 
 		// Present only when the query joins the products table (SELECT ... p.name AS product_name)

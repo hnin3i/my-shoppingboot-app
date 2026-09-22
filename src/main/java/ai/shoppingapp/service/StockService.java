@@ -89,8 +89,10 @@ public class StockService {
 		StockModel dto = new StockModel();
 
 		dto.setId(entity.getId());
+		dto.setProductId(entity.getProduct_id());
+		dto.setColour(entity.getColour());
+		dto.setSize(entity.getSize());
 		dto.setStockQty(entity.getStock_qty());
-		dto.setProductsId(entity.getProducts_id());
 		dto.setProductName(entity.getProductName());
 		dto.setLowStock(entity.getStock_qty() < LOW_STOCK_THRESHOLD);
 
@@ -103,8 +105,10 @@ public class StockService {
 		Stock entity = new Stock();
 
 		entity.setId(dto.getId());
+		entity.setProduct_id(dto.getProductId());
+		entity.setColour(dto.getColour());
+		entity.setSize(dto.getSize());
 		entity.setStock_qty(dto.getStockQty());
-		entity.setProducts_id(dto.getProductsId());
 
 		return entity;
 	}

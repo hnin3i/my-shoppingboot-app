@@ -25,7 +25,7 @@ public class StockRepository {
 		String sql = """
 				SELECT s.*, p.name AS product_name
 				FROM stocks s
-				JOIN products p ON s.products_id = p.id
+				JOIN products p ON s.product_id = p.id
 				ORDER BY p.name ASC
 				""";
 
@@ -38,7 +38,7 @@ public class StockRepository {
 		String sql = """
 				SELECT s.*, p.name AS product_name
 				FROM stocks s
-				JOIN products p ON s.products_id = p.id
+				JOIN products p ON s.product_id = p.id
 				WHERE s.id = ?
 				""";
 
@@ -51,8 +51,8 @@ public class StockRepository {
 	public int save(Stock entity) {
 
 		String sql = """
-				INSERT INTO stocks (id, stock_qty, products_id)
-				VALUES (?, ?, ?)
+				INSERT INTO stocks (id, product_id, colour, size, stock_qty, created_at, updated_at)
+				VALUES (?, ?, ?, ?, ?, NOW(), NOW())
 				""";
 
 		String id = UUID.randomUUID().toString();
@@ -60,8 +60,10 @@ public class StockRepository {
 		return this.jdbcTemplate.update(
 				sql,
 				id,
-				entity.getStock_qty(),
-				entity.getProducts_id()
+				entity.getProduct_id(),
+				entity.getColour(),
+				entity.getSize(),
+				entity.getStock_qty()
 		);
 	}
 
@@ -70,15 +72,20 @@ public class StockRepository {
 
 		String sql = """
 				UPDATE stocks
-				SET stock_qty = ?,
-				    products_id = ?
+				SET product_id = ?,
+				    colour = ?,
+				    size = ?,
+				    stock_qty = ?,
+				    updated_at = NOW()
 				WHERE id = ?
 				""";
 
 		return this.jdbcTemplate.update(
 				sql,
+				entity.getProduct_id(),
+				entity.getColour(),
+				entity.getSize(),
 				entity.getStock_qty(),
-				entity.getProducts_id(),
 				id
 		);
 	}
@@ -124,7 +131,7 @@ public class StockRepository {
 	// STAT: number of distinct products that have a stock record
 	public int getDistinctProductCount() {
 
-		String sql = "SELECT COUNT(DISTINCT products_id) FROM stocks";
+		String sql = "SELECT COUNT(DISTINCT product_id) FROM stocks";
 
 		Integer count = this.jdbcTemplate.queryForObject(sql, Integer.class);
 
@@ -135,9 +142,9 @@ public class StockRepository {
 	public int getDistinctCategoryCount() {
 
 		String sql = """
-				SELECT COUNT(DISTINCT p.categories_id)
+				SELECT COUNT(DISTINCT p.category_id)
 				FROM stocks s
-				JOIN products p ON s.products_id = p.id
+				JOIN products p ON s.product_id = p.id
 				""";
 
 		Integer count = this.jdbcTemplate.queryForObject(sql, Integer.class);

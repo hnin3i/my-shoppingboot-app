@@ -48,7 +48,7 @@ public class StockController {
 	@PostMapping("/admin/stock/add")
 	public String addStock(@ModelAttribute("stock") StockModel stock, Model model) {
 
-		if (stock.getProductsId() == null || stock.getProductsId().isBlank()) {
+		if (stock.getProductId() == null || stock.getProductId().isBlank()) {
 
 			model.addAttribute("error", "Please select a product.");
 			model.addAttribute("products", stockService.getProductOptions());
@@ -78,7 +78,7 @@ public class StockController {
 	@PostMapping("/admin/stock/edit")
 	public String editStock(@ModelAttribute("stock") StockModel stock, Model model) {
 
-		if (stock.getProductsId() == null || stock.getProductsId().isBlank()) {
+		if (stock.getProductId() == null || stock.getProductId().isBlank()) {
 
 			model.addAttribute("error", "Please select a product.");
 			model.addAttribute("products", stockService.getProductOptions());
