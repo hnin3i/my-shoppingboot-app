@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public class Product {
 
+
     private String id;
     private String categoryId;
     private String name;
@@ -163,3 +164,5 @@ public class Product {
         this.discountDuration = discountDuration;
     }
 }
+	
+	
