@@ -1,55 +1,46 @@
-package ai.shoppingapp.repository.entity;
+package ai.shoppingapp.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Product {
-
+public class ProductModel{
 
     private String id;
+
     private String categoryId;
+
+    private String categoryName;
+
     private String name;
+
     private String description;
+
     private BigDecimal price;
+
     private String image;
 
     private int isActive;
 
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
 
     private String createdUserId;
+
     private String updatedUserId;
 
     private int isDiscount;
+
     private int discountProduct;
+
     private LocalDate discountDuration;
 
-    public Product() {
-    }
+    private BigDecimal discountPrice;
 
-    public Product(String id, String categoryId, String name,
-                    String description, BigDecimal price, String image,
-                    int isActive, LocalDateTime createdAt,
-                    LocalDateTime updatedAt, String createdUserId,
-                    String updatedUserId, int isDiscount,
-                    int discountProduct, LocalDate  discountDuration) {
+    private BigDecimal finalPrice;
 
-        this.id = id;
-        this.categoryId = categoryId;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.image = image;
-        this.isActive = isActive;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.createdUserId = createdUserId;
-        this.updatedUserId = updatedUserId;
-        this.isDiscount = isDiscount;
-        this.discountProduct = discountProduct;
-        this.discountDuration = discountDuration;
+    public ProductModel() {
     }
 
     public String getId() {
@@ -60,6 +51,7 @@ public class Product {
         this.id = id;
     }
 
+
     public String getCategoryId() {
         return categoryId;
     }
@@ -67,6 +59,16 @@ public class Product {
     public void setCategoryId(String categoryId) {
         this.categoryId = categoryId;
     }
+
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
 
     public String getName() {
         return name;
@@ -76,6 +78,7 @@ public class Product {
         this.name = name;
     }
 
+
     public String getDescription() {
         return description;
     }
@@ -83,6 +86,7 @@ public class Product {
     public void setDescription(String description) {
         this.description = description;
     }
+
 
     public BigDecimal getPrice() {
         return price;
@@ -92,6 +96,7 @@ public class Product {
         this.price = price;
     }
 
+
     public String getImage() {
         return image;
     }
@@ -99,6 +104,7 @@ public class Product {
     public void setImage(String image) {
         this.image = image;
     }
+
 
     public int getIsActive() {
         return isActive;
@@ -108,6 +114,7 @@ public class Product {
         this.isActive = isActive;
     }
 
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -115,6 +122,7 @@ public class Product {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
 
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
@@ -124,6 +132,7 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
+
     public String getCreatedUserId() {
         return createdUserId;
     }
@@ -131,6 +140,7 @@ public class Product {
     public void setCreatedUserId(String createdUserId) {
         this.createdUserId = createdUserId;
     }
+
 
     public String getUpdatedUserId() {
         return updatedUserId;
@@ -148,6 +158,7 @@ public class Product {
         this.isDiscount = isDiscount;
     }
 
+
     public int getDiscountProduct() {
         return discountProduct;
     }
@@ -156,11 +167,30 @@ public class Product {
         this.discountProduct = discountProduct;
     }
 
+
     public LocalDate  getDiscountDuration() {
         return discountDuration;
     }
 
     public void setDiscountDuration(LocalDate  discountDuration) {
         this.discountDuration = discountDuration;
+    }
+
+
+    public BigDecimal getDiscountPrice() {
+        return discountPrice;
+    }
+
+    public void setDiscountPrice(BigDecimal discountPrice) {
+        this.discountPrice = discountPrice;
+    }
+
+
+    public BigDecimal getFinalPrice() {
+        return finalPrice;
+    }
+
+    public void setFinalPrice(BigDecimal finalPrice) {
+        this.finalPrice = finalPrice;
     }
 }
