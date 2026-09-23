@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Code</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #222222;
+            --card-dark: #1a1a1a;
+            --input-bg: #2a2a2a;
+            --border-color: #383838;
+            --text-light: #f5f5f5;
+            --accent-red: #e50010;
+        }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            letter-spacing: 0.2px;
+        }
+        .form-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-light);
+        }
+        .auth-card {
+            background-color: var(--card-dark);
+            border: 1px solid var(--border-color);
+        }
+        .form-control {
+            border-radius: 0 !important;
+            border: 1px solid var(--border-color);
+            background-color: var(--input-bg);
+            padding: 0.75rem 0.85rem;
+            color: var(--text-light);
+        }
+        .form-control:focus {
+            background-color: var(--input-bg);
+            border-color: var(--text-light);
+            color: var(--text-light);
+            box-shadow: none;
+        }
+        .otp-input {
+            letter-spacing: 0.5rem;
+            font-weight: 700;
+        }
+        .btn-action {
+            background-color: #ffffff;
+            color: #222222;
+            border-radius: 0 !important;
+            padding: 0.85rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border: none;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+        .btn-action:hover {
+            background-color: var(--accent-red);
+            color: #ffffff;
+        }
+        /* Button loading & fade transitions */
+		.btn-action, .auth-link, .btn-outline-action {
+		    transition: opacity 0.25s ease, background-color 0.2s ease, color 0.2s ease;
+		}
+		.faded {
+		    opacity: 0.35 !important;
+		    pointer-events: none !important;
+		}
+		.btn-spinner {
+		    display: inline-block;
+		    width: 1rem;
+		    height: 1rem;
+		    border: 2px solid currentColor;
+		    border-right-color: transparent;
+		    border-radius: 50%;
+		    animation: spinner-border 0.75s linear infinite;
+		    vertical-align: -0.125em;
+		    margin-right: 0.5rem;
+		}
+		@keyframes spinner-border {
+		    to { transform: rotate(360deg); }
+		}
+        .btn-outline-action {
+            background-color: transparent;
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+            border-radius: 0 !important;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            padding: 0.45rem 1rem;
+        }
+        .btn-outline-action:hover:not(:disabled) {
+            border-color: var(--text-light);
+            color: var(--text-light);
+        }
+        .btn-outline-action:disabled {
+            border-color: #333;
+            color: #666;
+        }
+        .form-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+            color: var(--text-light);
+        }
+        .alert {
+            border-radius: 0 !important;
+            font-size: 0.85rem;
+        }
+        .auth-link {
+            color: var(--text-light);
+            font-weight: 600;
+            text-decoration: underline;
+        }
+        .auth-link:hover {
+            color: var(--accent-red);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5 col-lg-4">
+            <div class="text-center mb-4">
+                <div class="form-title">Verification Code</div>
+                <p class="small text-secondary mt-1">
+                    Sent to <strong class="text-light" th:text="${email}">user@example.com</strong>
+                </p>
+            </div>
+
+            <div class="auth-card p-4">
+                <div th:if="${error}" class="alert alert-danger py-2 text-center" th:text="${error}"></div>
+                <div th:if="${param.resent}" class="alert alert-success py-2 text-center">A fresh code was sent.</div>
+
+                <form th:action="@{/verify-otp}" method="post">
+                    <input type="hidden" name="email" th:value="${email}" />
+
+                    <div class="mb-4">
+                        <label for="otp" class="form-label text-center w-100">Enter 6-Digit Code</label>
+                        <input type="text" id="otp" name="otp" class="form-control text-center fs-4 otp-input" 
+                               maxlength="6" placeholder="000000" pattern="[0-9]{6}" autocomplete="one-time-code" required autofocus>
+                    </div>
+
+                    <button type="submit" class="btn btn-action w-100 mb-3">Verify &amp; Activate</button>
+                </form>
+
+                <div class="text-center pt-3 border-top border-secondary-subtle">
+                    <p class="small text-secondary mb-2">Didn't receive the code?</p>
+                    <form th:action="@{/verify-otp/resend}" method="post" id="resendForm" class="d-inline">
+                        <input type="hidden" name="email" th:value="${email}" />
+                        <button type="submit" id="resendBtn" class="btn btn-outline-action" disabled>
+                            Resend Code (<span id="timer">30</span>s)
+                        </button>
+                    </form>
+                </div>
+
+                <div class="text-center mt-3 small">
+                    <span class="text-secondary">Incorrect email?</span> <a th:href="@{/register}" class="auth-link">Start over</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+//Verification submit
+const verifyForm = document.querySelector('form[action$="/verify-otp"]');
+if (verifyForm) {
+    verifyForm.addEventListener('submit', function() {
+        const btn = this.querySelector('button[type="submit"]');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="btn-spinner"></span> Verifying...';
+
+        // Fade resend container and alternative links
+        document.querySelectorAll('#resendBtn, .auth-link').forEach(el => el.classList.add('faded'));
+        this.submit();
+    });
+}
+
+// Resend OTP submit
+const resendForm = document.getElementById('resendForm');
+if (resendForm) {
+    resendForm.addEventListener('submit', function() {
+        const btn = document.getElementById('resendBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<span class="btn-spinner"></span> Sending...';
+
+        // Fade primary button and links
+        document.querySelectorAll('.btn-action, .auth-link').forEach(el => el.classList.add('faded'));
+        this.submit();
+    });
+}
+
+let timeLeft = 30;
+const timerEl = document.getElementById('timer');
+const resendBtn = document.getElementById('resendBtn');
+
+const countdown = setInterval(() => {
+    timeLeft--;
+    if (timeLeft <= 0) {
+        clearInterval(countdown);
+        resendBtn.disabled = false;
+        resendBtn.innerText = 'Resend Code';
+    } else {
+        timerEl.innerText = timeLeft;
+    }
+}, 1000);
+</script>
+
+</body>
+</html>

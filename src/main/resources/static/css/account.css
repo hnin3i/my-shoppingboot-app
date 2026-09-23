@@ -1,0 +1,291 @@
+@charset "UTF-8";
+
+.account-page {
+	padding: 0.5rem 0 6rem;
+}
+
+/* ================= PROFILE ================= */
+.account-profile-section {
+	border-bottom: 1px solid #dedede;
+	background: #fff;
+}
+
+.profile-header {
+	align-items: center;
+	display: flex;
+	gap: 1.5rem;
+	min-height: 180px;
+	padding: 2rem 0;
+}
+
+/* Profile Photo */
+.profile-photo-wrapper {
+	flex-shrink: 0;
+}
+
+.profile-photo {
+	border: 1px solid #ddd;
+	border-radius: 50%;
+	height: 115px;
+	object-fit: cover;
+	width: 115px;
+}
+
+/* Profile Basic */
+.profile-basic {
+	flex: 1;
+}
+
+.profile-basic h2 {
+	font-size: 1.7rem;
+	font-weight: 750;
+	letter-spacing: -.035em;
+	margin: 0 0 .3rem;
+}
+
+.profile-basic p {
+	color: #777;
+	font-size: .9rem;
+	margin: 0 0 .8rem;
+}
+
+.profile-link {
+	color: #111;
+	font-size: .7rem;
+	font-weight: 700;
+	letter-spacing: .08em;
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+/* Edit Button */
+.account-button {
+	background: #111;
+	border: 1px solid #111;
+	border-radius: 0;
+	color: #fff;
+	font-size: .7rem;
+	font-weight: 700;
+	letter-spacing: .08em;
+	padding: .8rem 1.1rem;
+}
+
+.account-button:hover {
+	background: transparent;
+	color: #111;
+}
+
+/* ================= CONTENT ================= */
+.account-content {
+	padding: 4.5rem 0 6rem;
+}
+
+.menu-title {
+	color: #777;
+	font-size: .75rem;
+	font-weight: 700;
+	letter-spacing: .12em;
+	margin: 1rem 0 .5rem;
+}
+
+.account-menu-link {
+	align-items: center;
+	border-bottom: 1px solid #ddd;
+	color: #111;
+	display: flex;
+	font-size: .75rem;
+	font-weight: 700;
+	justify-content: space-between;
+	letter-spacing: .07em;
+	padding: 1rem 0;
+	text-decoration: none;
+}
+
+.account-menu-link:hover, .account-menu-link.active {
+	color: #e00020;
+}
+
+.account-menu-link i {
+	font-size: .8rem;
+}
+
+.logout-link {
+	color: #777;
+}
+
+/* ================= WELCOME ================= */
+.account-welcome {
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 2rem;
+	padding-bottom: 2rem;
+}
+
+.account-welcome h2 {
+	font-size: clamp(2rem, 4vw, 3rem);
+	font-weight: 800;
+	letter-spacing: -.05em;
+	margin: 0 0 .8rem;
+}
+
+.account-welcome>p:not(.eyebrow) {
+	color: #666;
+	line-height: 1.6;
+	margin: 0;
+	max-width: 550px;
+}
+
+/* ================= ACCOUNT CARDS ================= */
+.account-card {
+	border: 1px solid #ddd;
+	color: #111;
+	display: block;
+	min-height: 250px;
+	padding: 1.5rem;
+	position: relative;
+	text-decoration: none;
+	transition: .25s ease;
+}
+
+.account-card:hover {
+	border-color: #111;
+	color: #111;
+	transform: translateY(-3px);
+}
+
+.card-number {
+	color: #999;
+	font-size: .65rem;
+	font-weight: 700;
+	letter-spacing: .1em;
+}
+
+.card-icon {
+	display: block;
+	font-size: 1.5rem;
+	margin: 2rem 0 1rem;
+}
+
+.account-card h3 {
+	font-size: .9rem;
+	font-weight: 750;
+	letter-spacing: .04em;
+	margin-bottom: .6rem;
+}
+
+.account-card p {
+	color: #777;
+	font-size: .78rem;
+	line-height: 1.5;
+	margin: 0;
+	max-width: 200px;
+}
+
+.card-arrow {
+	bottom: 1.4rem;
+	font-size: 1.2rem;
+	position: absolute;
+	right: 1.5rem;
+}
+
+/* ================= RECENT ORDER ================= */
+.recent-order-section {
+	border-top: 1px solid #ddd;
+	margin-top: 4rem;
+	padding-top: 2.5rem;
+}
+
+.section-heading-row {
+	align-items: end;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 1.5rem;
+}
+
+.section-heading-row h2 {
+	font-size: 1.7rem;
+	font-weight: 800;
+	letter-spacing: -.045em;
+	margin: 0;
+}
+
+.text-link {
+	color: #111;
+	font-size: .7rem;
+	font-weight: 700;
+	letter-spacing: .08em;
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+/* Order */
+.recent-order {
+	align-items: center;
+	border-bottom: 1px solid #ddd;
+	border-top: 1px solid #111;
+	display: grid;
+	gap: 1.5rem;
+	grid-template-columns: 1.3fr 1fr 1fr .8fr;
+	padding: 1.5rem 0;
+}
+
+.recent-order>div {
+	display: flex;
+	flex-direction: column;
+	gap: .35rem;
+}
+
+.order-label {
+	color: #888;
+	font-size: .6rem;
+	font-weight: 700;
+	letter-spacing: .1em;
+}
+
+.recent-order strong, .recent-order>div>span:not(.order-label):not(.order-status)
+	{
+	font-size: .78rem;
+}
+
+.order-status {
+	align-self: flex-start;
+	border: 1px solid #111;
+	font-size: .6rem;
+	font-weight: 700;
+	letter-spacing: .08em;
+	padding: .4rem .6rem;
+}
+
+/* ================= MOBILE ================= */
+@media ( max-width : 767.98px) {
+	.account-hero {
+		padding: 3rem 0;
+	}
+	.profile-header {
+		align-items: flex-start;
+		flex-wrap: wrap;
+	}
+	.profile-basic {
+		min-width: 180px;
+	}
+	.profile-edit {
+		width: 100%;
+	}
+	.account-button {
+		width: 100%;
+	}
+	.account-content {
+		padding: 3rem 0 4rem;
+	}
+	.recent-order {
+		grid-template-columns: 1fr 1fr;
+	}
+	.recent-order>div:last-child {
+		grid-column: 1/-1;
+	}
+	.section-heading-row {
+		align-items: flex-start;
+		flex-direction: column;
+		gap: .8rem;
+	}
+}
+

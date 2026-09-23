@@ -24,7 +24,6 @@ public class CategoryController {
 	public String categoryList(Model model) {
 
 		model.addAttribute("categories", categoryService.findAll());
-
 		return "admin/categories/list";
 	}
 

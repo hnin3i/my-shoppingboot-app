@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Order Details</title>
+<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+</head>
+<body class="bg-light">
+
+<div class="container my-5">
+    <h3 class="fw-bold mb-4">Order Details</h3>
+
+    <div class="row g-4">
+        <!-- ဘယ်ဘက် Column: Order Items List -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm p-3 bg-white rounded">
+                <h5 class="fw-bold mb-3">Order Items</h5>
+                
+                <!-- Item အများကြီးရှိပါက Scroll ဆွဲနိုင်ရန် max-height ထည့်သွင်းထားသည် -->
+                <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
+                    <table class="table align-middle">
+                        <thead class="table-light sticky-top">
+                            <tr>
+                                <th>No.</th>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Spec</th>
+                                <th>Unit Price</th>
+                                <th>Qty</th>
+                                <th class="text-end">Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="item, stat : ${items}">
+                                <td th:text="${stat.count}"></td>
+                                <td>
+                                    <img th:src="${item.image ?: '/images/default.jpg'}" class="rounded" width="75" height="75" style="object-fit: cover;" alt="Product Image" />
+                                </td>
+                                <td class="fw-semibold" th:text="${item.productName}"></td>
+                                <td class="small text-muted">
+                                    <span th:text="${item.color}"></span> / <span th:text="${item.size}"></span>
+                                </td>
+                                <td th:text="${#numbers.formatDecimal(item.price, 1, 2)}"></td>
+                                <td th:text="${item.quantity}"></td>
+                                <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(item.subtotal, 1, 2)}"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Column: Order Summary Card (Sticky) -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded sticky-top" style="top: 20px;" th:if="${summary != null}">
+                <h5 class="fw-bold mb-3 border-bottom pb-2">Order Summary</h5>
+                
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Subtotal</span>
+                    <span class="fw-semibold" th:text="${#numbers.formatDecimal(summary.subtotal, 1, 2)}"></span>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Shipping Fee</span>
+                    <span class="fw-semibold" th:text="${#numbers.formatDecimal(summary.shippingFee, 1, 2)}"></span>
+                </div>
+                
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Tax</span>
+                    <span class="fw-semibold" th:text="${#numbers.formatDecimal(summary.tax, 1, 2)}"></span>
+                </div>
+                
+                <hr class="my-3">
+                
+                <div class="d-flex justify-content-between text-primary fw-bold fs-5">
+                    <span>Grand Total</span>
+                    <span th:text="${#numbers.formatDecimal(summary.grandTotal, 1, 2)}"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
