@@ -1,6 +1,20 @@
 :root { --shop-black: #050505; --shop-muted: #a8a8a8; }
 body { color: #171717; font-family: Arial, Helvetica, sans-serif; }
-.shop-navbar { min-height: 82px; background: var(--shop-black); }
+.shop-navbar { min-height: 92px; background: var(--shop-black); }
+
+.categories-hover { position: relative; }
+.categories-dropdown { min-width: 220px; padding: 8px 0; border: none; border-radius: 0; background: #fff; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); }
+.categories-dropdown .dropdown-item { padding: 11px 18px; font-size: 13px; font-weight: 500; letter-spacing: 0.5px; color: #171717; background: transparent; }
+.categories-dropdown .dropdown-item:hover { background: #f5f5f5; color: #d00000; }
+#moreCategories { max-height: 250px; overflow-y: auto; }
+#moreCategories .dropdown-item {display: block;}
+#moreCategories::-webkit-scrollbar { width: 5px; }
+#moreCategories::-webkit-scrollbar-thumb { background: #bdbdbd; }
+#moreCategories::-webkit-scrollbar-track { background: #f5f5f5; }
+.categories-dropdown .see-more { font-weight: 600; color: #d00000; }
+.categories-dropdown .see-more:hover { color: #a00000; background: #f5f5f5; }
+.categories-dropdown .dropdown-divider { margin: 6px 0; }
+
 .shop-brand { color: #e00020 !important; font-family:  "Brush Script MT", cursive; font-size: 2.25rem; font-style: italic; font-weight: 800; letter-spacing: 0; margin-right: 4.5rem; }
 .shop-menu { gap: 1.25rem; }
 .shop-menu .nav-link { color: var(--shop-muted) !important; font-size: 1rem; font-weight: 600; letter-spacing: .025em; padding: 1.8rem 0 !important; }
@@ -33,16 +47,17 @@ body { color: #171717; font-family: Arial, Helvetica, sans-serif; }
 @media (max-width: 575.98px) { .footer-divider { margin: 2.5rem 0 2rem; } }
 
 .home-page { margin: -1.5rem 0; }
-.home-hero { background: #e8e2da; display: grid; grid-template-columns: 1fr 1fr; min-height: 530px; overflow: hidden; }
+
 .hero-copy { align-self: center; max-width: 535px; padding: 4rem 7%; position: relative; z-index: 1; }
 .eyebrow { color: #69645f; font-size: .7rem; font-weight: 700; letter-spacing: .13em; margin: 0 0 .85rem; }
 .hero-copy h1 { color: #101010; font-size: clamp(2.7rem, 5vw, 5.2rem); font-weight: 800; letter-spacing: -.06em; line-height: .92; margin-bottom: 1.35rem; text-transform: uppercase; }
 .hero-copy > p:not(.eyebrow) { color: #35312e; font-size: 1.05rem; margin-bottom: 1.8rem; max-width: 360px; }
 .hero-button { background: #111; border: 1px solid #111; border-radius: 0; color: #fff; font-size: .75rem; font-weight: 700; letter-spacing: .08em; padding: .9rem 1.25rem; }
 .hero-button:hover { background: transparent; color: #111; }
-.hero-visual { background: linear-gradient(145deg, #a89d93, #d8d1c8 55%, #776d65); min-height: 530px; overflow: hidden; position: relative; }
-.hero-visual span { background: rgba(255,255,255,.72); color: #4a433e; font-size: .65rem; font-weight: 700; left: 50%; letter-spacing: .12em; padding: .4rem .6rem; position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 2; }
-.hero-shape { border-radius: 50%; position: absolute; }.shape-one { background: #2a2522; height: 430px; right: 20%; top: 13%; width: 230px; }.shape-two { background: #b7a99b; height: 500px; right: -9%; top: -10%; width: 330px; }
+.home-hero { min-height: 560px; overflow: hidden; position: relative; display: flex; align-items: center; }
+.hero-background { height: 100%; inset: 0; object-fit: cover; object-position: center; position: absolute; width: 100%; z-index: 0; }
+.hero-overlay { inset: 0; position: absolute; z-index: 1; }
+.hero-copy { align-self: center; max-width: 535px; padding: 4rem 7%; position: relative; z-index: 2; }
 .home-section { padding: 5rem 0; }.section-heading { margin-bottom: 2rem; text-align: center; }.section-heading h2 { font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 750; letter-spacing: -.045em; margin: 0; }.section-heading-row { align-items: end; display: flex; justify-content: space-between; text-align: left; }
 .text-link { color: #111; font-size: .72rem; font-weight: 700; letter-spacing: .08em; padding-bottom: .2rem; text-decoration: underline; text-underline-offset: 4px; }
 .category-tile { align-items: end; background: #d8d1c8; color: #fff; display: flex; height: 260px; justify-content: center; overflow: hidden; padding: 1.1rem; position: relative; text-decoration: none; }.category-tile::before { background: linear-gradient(transparent 45%, rgba(0,0,0,.55)); content: ""; inset: 0; position: absolute; }.category-tile span { font-size: .78rem; font-weight: 700; letter-spacing: .13em; position: relative; }.category-tile:hover { color: #fff; transform: translateY(-3px); transition: .25s ease; }
