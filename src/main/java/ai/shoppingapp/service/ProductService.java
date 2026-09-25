@@ -102,4 +102,9 @@ public class ProductService {
 		BigDecimal salePrice = price.subtract(discountAmount);
 		product.setFinalPrice(salePrice);
 	}
+
+	public List<ProductModel> getProductsByCategoryId(String categoryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

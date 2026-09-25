@@ -6,6 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import ai.shoppingapp.model.ProductModel;
+import ai.shoppingapp.repository.entity.Product;
 import ai.shoppingapp.repository.mapper.ProductMapper;
 
 @Repository
@@ -138,6 +139,10 @@ public class ProductRepository {
         return products.isEmpty()
                 ? null
                 : products.get(0);
+    }
+    public List<ProductModel> findByCategoryId(String categoryId) {
+        String sql = "SELECT * FROM products WHERE category_id = ? AND is_delete = 0";
+        return jdbcTemplate.query(sql, new ProductMapper(), categoryId);
     }
 
     public int save(ProductModel product) {

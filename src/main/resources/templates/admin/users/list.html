@@ -1,629 +1,420 @@
-
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users - BLACKJACK Admin</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --brand-primary: #6366f1;
+            --brand-primary-hover: #4f46e5;
+            --brand-danger: #ef4444;
+            --sidebar-bg: #ffffff;
+            --main-bg: #f8fafc;
+        }
 
-<title>Users - BLACKJACK Admin</title>
+        body {
+            background-color: var(--main-bg);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #1e293b;
+        }
 
-<!-- Bootstrap -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet">
+        /* Sidebar Styling */
+        .sidebar {
+            width: 250px;
+            background: #ffffff;
+            min-height: 100vh;
+            border-right: 1px solid #f1f5f9;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+        }
 
-<!-- Bootstrap Icons -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        .brand-logo {
+            font-size: 1.35rem;
+            font-weight: 900;
+            color: #e11d48;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            padding-left: 12px;
+            margin-bottom: 28px;
+            display: block;
+        }
 
-<!-- Admin CSS -->
-<link rel="stylesheet" th:href="@{/css/admin.css}">
+        .sidebar-section-title {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #94a3b8;
+            font-weight: 700;
+            padding: 0 12px;
+            margin-bottom: 12px;
+        }
+
+        .nav-link-custom {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 16px;
+            color: #64748b;
+            font-weight: 500;
+            border-radius: 10px;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            margin-bottom: 4px;
+        }
+
+        .nav-link-custom:hover {
+            color: #1e293b;
+            background-color: #f8fafc;
+        }
+
+        .nav-link-custom.active {
+            background-color: var(--brand-primary);
+            color: #ffffff;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        /* Main Content */
+        .main-wrapper {
+            margin-left: 250px;
+            padding: 40px 48px;
+        }
+
+        .header-title {
+            font-size: 1.85rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .header-subtitle {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 32px;
+        }
+
+        /* Card Container */
+        .content-card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            border-radius: 16px;
+            padding: 28px 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        .card-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        /* Search input styling */
+        .search-box {
+            position: relative;
+            width: 280px;
+        }
+
+        .search-box input {
+            padding-left: 38px;
+            border-radius: 10px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.9rem;
+            height: 40px;
+        }
+
+        .search-box input:focus {
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+
+        /* Table styles */
+        .table-custom {
+            width: 100%;
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        .table-custom thead th {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            background: transparent;
+        }
+
+        .table-custom tbody tr {
+            transition: background 0.15s ease;
+        }
+
+        .table-custom tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .table-custom tbody td {
+            padding: 18px 16px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f8fafc;
+            font-size: 0.92rem;
+            color: #334155;
+        }
+
+        .user-avatar-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            background-color: #f1f5f9;
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .user-name-title {
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.2;
+        }
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+            color: #475569;
+        }
+
+        /* Action Buttons */
+        .btn-action-edit {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e0e7ff;
+            color: var(--brand-primary);
+            background: #ffffff;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.15s ease;
+        }
+
+        .btn-action-edit:hover {
+            background-color: #eef2ff;
+            color: var(--brand-primary-hover);
+        }
+
+        .btn-action-delete {
+            width: 34px;
+            height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #fee2e2;
+            color: var(--brand-danger);
+            background: #ffffff;
+            border-radius: 8px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-action-delete:hover {
+            background-color: #fef2f2;
+            color: #dc2626;
+        }
+    </style>
 </head>
-
 <body>
 
-	<div th:replace="~{fragments/sidebar :: sidebar}"></div>
-
-	<div class="admin-main">
-
-		<div class="admin-topbar">
-
-			<div class="search-box">
-
-				<i class="bi bi-search"></i> <input type="text"
-					placeholder="Search user..." id="topSearch">
-
-			</div>
-
-
-			<div class="admin-profile">
-
-				<div class="admin-avatar">A</div>
-
-				<div>
-					<strong>Admin</strong>
-				</div>
-
-			</div>
-
-		</div>
-
-		<div class="admin-content">
-
-
-			<!-- Flash Messages -->
-
-			<div th:if="${success}"
-				class="alert alert-success alert-dismissible fade show" role="alert">
-
-				<i class="bi bi-check-circle me-2"></i> <span th:text="${success}">
-					User created successfully. </span>
-
-				<button type="button" class="btn-close" data-bs-dismiss="alert">
-				</button>
-
-			</div>
-
-
-			<div th:if="${error}"
-				class="alert alert-danger alert-dismissible fade show" role="alert">
-
-				<i class="bi bi-exclamation-circle me-2"></i> <span
-					th:text="${error}"> Something went wrong. </span>
-
-				<button type="button" class="btn-close" data-bs-dismiss="alert">
-				</button>
-
-			</div>
-
-
-			<div class="d-flex justify-content-between align-items-center mb-4">
-
-				<div>
-
-					<div class="page-title">Users</div>
-
-					<div class="page-subtitle">Manage registered users and their
-						roles</div>
-
-				</div>
-
-
-				<!-- ADD USER -->
-
-				<button type="button" class="btn btn-purple" data-bs-toggle="modal"
-					data-bs-target="#addUserModal">
-
-					<i class="bi bi-plus-lg me-1"></i> Add User
-
-				</button>
-
-			</div>
-
-
-			<div class="admin-card">
-
-
-				<!-- Card Header -->
-
-				<div class="d-flex justify-content-between align-items-center mb-3">
-
-					<div>
-
-						<div class="admin-card-title mb-1">User List</div>
-
-						<div class="user-count">
-							<span id="userCount">6</span> users
-						</div>
-
-					</div>
-
-
-					<!-- SEARCH -->
-
-					<div class="position-relative">
-
-						<i class="bi bi-search position-absolute"
-							style="left: 12px; top: 50%; transform: translateY(-50%); color: #999;">
-						</i> <input type="text" id="userSearch" class="form-control ps-5"
-							placeholder="Search user..." style="width: 240px;">
-
-					</div>
-
-				</div>
-
-
-				<div class="table-responsive">
-
-					<table class="admin-table" id="userTable">
-
-						<thead>
-
-							<tr>
-
-								<th>Name</th>
-
-								<th>Email</th>
-
-								<th>Phone</th>
-
-								<th>Role</th>
-
-								<th>Joined</th>
-
-								<th class="text-end">Action</th>
-
-							</tr>
-
-						</thead>
-
-
-						<tbody>
-
-
-							<!-- =================================================
-                             SAMPLE USER 1
-                        ================================================== -->
-
-							<tr>
-
-								<td>
-
-									<div class="user-name-wrapper">
-
-										<div class="user-avatar">J</div>
-
-										<strong> Jessica Smith </strong>
-
-									</div>
-
-								</td>
-
-								<td>jessica@gmail.com</td>
-
-								<td>09 421 234 567</td>
-
-								<td><span class="role-badge role-customer"> <i
-										class="bi bi-person"></i> Customer
-
-								</span></td>
-
-								<td>2026-09-01</td>
-
-								<td class="text-end">
-
-									<button class="btn btn-sm btn-outline-primary me-1">
-										<i class="bi bi-pencil"></i>
-									</button>
-
-									<button class="btn btn-sm btn-outline-danger">
-										<i class="bi bi-trash"></i>
-									</button>
-
-								</td>
-							</tr>
-
-
-
-							<!-- =================================================
-                             SAMPLE USER 2
-                        ================================================== -->
-
-							<tr>
-
-								<td>
-
-									<div class="user-name-wrapper">
-
-										<div class="user-avatar">E</div>
-
-										<strong> Emily Johnson </strong>
-
-									</div>
-
-								</td>
-
-								<td>emily@gmail.com</td>
-
-								<td>09 785 345 621</td>
-
-								<td><span class="role-badge role-customer"> <i
-										class="bi bi-person"></i> Customer
-
-								</span></td>
-
-								<td>2026-08-28</td>
-
-								<td class="text-end">
-
-									<button class="btn btn-sm btn-outline-primary me-1">
-										<i class="bi bi-pencil"></i>
-									</button>
-
-									<button class="btn btn-sm btn-outline-danger">
-										<i class="bi bi-trash"></i>
-									</button>
-
-								</td>
-
-							</tr>
-
-
-
-							<!-- =================================================
-                             SAMPLE USER 3 - ADMIN
-                        ================================================== -->
-
-							<tr>
-
-								<td>
-
-									<div class="user-name-wrapper">
-
-										<div class="user-avatar">A</div>
-
-										<strong> Admin </strong>
-
-									</div>
-
-								</td>
-
-								<td>admin@blackjack.com</td>
-
-								<td>09 555 123 456</td>
-
-								<td><span class="role-badge role-admin"> <i
-										class="bi bi-shield-check"></i> Admin
-
-								</span></td>
-
-								<td>2026-08-20</td>
-
-								<td class="text-end">
-
-									<button class="btn btn-sm btn-outline-primary me-1">
-										<i class="bi bi-pencil"></i>
-									</button>
-
-									<button class="btn btn-sm btn-outline-danger">
-										<i class="bi bi-trash"></i>
-									</button>
-
-								</td>
-
-							</tr>
-
-
-
-							<!-- =================================================
-                             SAMPLE USER 4
-                        ================================================== -->
-
-							<tr>
-
-								<td>
-
-									<div class="user-name-wrapper">
-
-										<div class="user-avatar">S</div>
-
-										<strong> Sophia Lee </strong>
-
-									</div>
-
-								</td>
-
-								<td>sophia@gmail.com</td>
-
-								<td>09 667 890 321</td>
-
-								<td><span class="role-badge role-customer"> <i
-										class="bi bi-person"></i> Customer
-
-								</span></td>
-
-								<td>2026-08-15</td>
-
-								<td class="text-end">
-
-									<button class="btn btn-sm btn-outline-primary me-1">
-										<i class="bi bi-pencil"></i>
-									</button>
-
-									<button class="btn btn-sm btn-outline-danger">
-										<i class="bi bi-trash"></i>
-									</button>
-
-								</td>
-
-							</tr>
-
-
-
-							<!-- =================================================
-                             SAMPLE USER 5
-                        ================================================== -->
-
-							<tr>
-
-								<td>
-
-									<div class="user-name-wrapper">
-
-										<div class="user-avatar">O</div>
-
-										<strong> Olivia Brown </strong>
-
-									</div>
-
-								</td>
-
-								<td>olivia@gmail.com</td>
-
-								<td>09 734 123 890</td>
-
-								<td><span class="role-badge role-customer"> <i
-										class="bi bi-person"></i> Customer
-
-								</span></td>
-
-								<td>2026-08-10</td>
-
-								<td class="text-end">
-
-									<button class="btn btn-sm btn-outline-primary me-1">
-										<i class="bi bi-pencil"></i>
-									</button>
-
-									<button class="btn btn-sm btn-outline-danger">
-										<i class="bi bi-trash"></i>
-									</button>
-
-								</td>
-
-							</tr>
-
-
-
-							<!-- =================================================
-                             SAMPLE USER 6
-                        ================================================== -->
-
-							<tr>
-
-								<td>
-
-									<div class="user-name-wrapper">
-
-										<div class="user-avatar">M</div>
-
-										<strong> Mia Wilson </strong>
-
-									</div>
-
-								</td>
-
-								<td>mia@gmail.com</td>
-
-								<td>09 456 789 123</td>
-
-								<td><span class="role-badge role-customer"> <i
-										class="bi bi-person"></i> Customer
-
-								</span></td>
-
-								<td>2026-08-05</td>
-
-								<td class="text-end">
-
-									<button class="btn btn-sm btn-outline-primary me-1">
-										<i class="bi bi-pencil"></i>
-									</button>
-
-									<button class="btn btn-sm btn-outline-danger">
-										<i class="bi bi-trash"></i>
-									</button>
-
-								</td>
-
-							</tr>
-
-
-						</tbody>
-
-					</table>
-
-				</div>
-
-			</div>
-
-		</div>
-
-	</div>
-
-
-
-	<!-- =========================================================
-     ADD USER MODAL
-========================================================= -->
-
-	<div class="modal fade" id="addUserModal" tabindex="-1"
-		aria-labelledby="addUserModalLabel" aria-hidden="true">
-
-		<div class="modal-dialog modal-dialog-centered">
-
-			<div class="modal-content">
-
-
-				<!-- Modal Header -->
-
-				<div class="modal-header">
-
-					<div>
-
-						<h5 class="modal-title" id="addUserModalLabel">Add New User</h5>
-
-						<small class="text-muted"> Create a new customer or admin
-							account </small>
-
-					</div>
-
-					<button type="button" class="btn-close" data-bs-dismiss="modal">
-					</button>
-
-				</div>
-
-
-
-				<!-- Modal Body -->
-
-				<div class="modal-body">
-
-					<form id="addUserForm">
-
-
-						<!-- Name -->
-
-						<div class="mb-3">
-
-							<label class="form-label"> Full Name </label> <input type="text"
-								name="name" class="form-control" placeholder="Enter full name"
-								required>
-
-						</div>
-
-
-
-						<!-- Email -->
-
-						<div class="mb-3">
-
-							<label class="form-label"> Email </label> <input type="email"
-								name="email" class="form-control"
-								placeholder="Enter email address" required>
-
-						</div>
-
-
-
-						<!-- Phone -->
-
-						<div class="mb-3">
-
-							<label class="form-label"> Phone </label> <input type="text"
-								name="phone" class="form-control" placeholder="09 xxx xxx xxx">
-
-						</div>
-
-
-
-						<!-- Password -->
-
-						<div class="mb-3">
-
-							<label class="form-label"> Password </label> <input
-								type="password" name="password" class="form-control"
-								placeholder="Enter password" required>
-
-						</div>
-
-
-
-						<!-- Role -->
-
-						<div class="mb-3">
-
-							<label class="form-label"> Role </label> <select name="role"
-								class="form-select">
-
-								<option value="CUSTOMER" selected>Customer</option>
-
-								<option value="ADMIN">Admin</option>
-
-							</select>
-
-							<div class="form-text">Customer can shop and manage their
-								account. Admin can manage the store.</div>
-
-						</div>
-
-
-					</form>
-
-				</div>
-
-
-
-				<!-- Modal Footer -->
-
-				<div class="modal-footer">
-
-					<button type="button" class="btn btn-light" data-bs-dismiss="modal">
-
-						Cancel</button>
-
-					<button type="submit" form="addUserForm" class="btn btn-purple">
-
-						<i class="bi bi-person-plus me-1"></i> Create User
-
-					</button>
-
-				</div>
-
-
-			</div>
-
-		</div>
-
-	</div>
-
-
-
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-		
-	</script>
-
-
-
-	<script>
-		const searchInput = document.getElementById("userSearch");
-
-		const table = document.getElementById("userTable");
-
-		searchInput.addEventListener("input", function() {
-
-			const keyword = this.value.toLowerCase();
-
-			const rows = table.querySelectorAll("tbody tr");
-
-			let visibleCount = 0;
-
-			rows.forEach(function(row) {
-
-				const text = row.innerText.toLowerCase();
-
-				if (text.includes(keyword)) {
-
-					row.style.display = "";
-
-					visibleCount++;
-
-				} else {
-
-					row.style.display = "none";
-
-				}
-
-			});
-
-			document.getElementById("userCount").textContent = visibleCount;
-
-		});
-	</script>
-
-
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <a th:href="@{/}" class="brand-logo">BLACKJACK</a>
+
+        <div class="sidebar-section-title">Admin</div>
+        <nav class="nav flex-column">
+            <a th:href="@{/admin/dashboard}" class="nav-link-custom">
+                <i class="bi bi-grid-fill"></i> Dashboard
+            </a>
+            <a th:href="@{/admin/products}" class="nav-link-custom">
+                <i class="bi bi-handbag"></i> Products
+            </a>
+            <a th:href="@{/admin/categories}" class="nav-link-custom">
+                <i class="bi bi-tag"></i> Categories
+            </a>
+            <a th:href="@{/admin/stock}" class="nav-link-custom">
+                <i class="bi bi-box-seam"></i> Stock
+            </a>
+            <a th:href="@{/admin/orders}" class="nav-link-custom">
+                <i class="bi bi-cart"></i> Orders
+            </a>
+            <a th:href="@{/admin/users}" class="nav-link-custom active">
+                <i class="bi bi-people-fill"></i> Users
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <a th:href="@{/logout}" class="nav-link-custom text-danger">
+                <i class="bi bi-box-arrow-left"></i> Logout
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Container -->
+    <main class="main-wrapper">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+                <h1 class="header-title">Users</h1>
+                <p class="header-subtitle">Manage registered users and their roles</p>
+            </div>
+            <!-- Add User Button -->
+            <a th:href="@{/admin/users/add}" class="btn text-white px-3 py-2 fw-semibold d-inline-flex align-items-center gap-2" style="background-color: var(--brand-primary); border-radius: 10px;">
+                <i class="bi bi-plus-lg"></i> Add User
+            </a>
+        </div>
+
+        <div class="content-card">
+            <!-- Search & Count Header -->
+            <div class="card-top-bar">
+                <div>
+                    <h5 class="fw-bold mb-1" style="color: #0f172a;">User List</h5>
+                    <p class="text-secondary small mb-0" th:text="${totalUsers != null ? totalUsers : (users != null ? users.size() : 0)} + ' users'">
+                        0 users
+                    </p>
+                </div>
+                
+                <!-- Filter / Search Form -->
+                <form th:action="@{/admin/users}" method="get" class="search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" 
+                           name="keyword" 
+                           th:value="${keyword}" 
+                           class="form-control" 
+                           placeholder="Search user..."
+                           onchange="this.form.submit()">
+                </form>
+            </div>
+
+            <!-- Dynamic Users Table -->
+            <div class="table-responsive">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Joined</th>
+                            <th class="text-end pe-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop over dynamic users -->
+                        <tr th:each="user : ${users}">
+                            <!-- Name + First Initial Avatar -->
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="user-avatar-badge" 
+                                         th:text="${user.name != null and !user.name.isEmpty() ? #strings.substring(user.name, 0, 1).toUpperCase() : 'U'}">
+                                        J
+                                    </div>
+                                    <div class="user-name-title" th:text="${user.name}">Jessica Smith</div>
+                                </div>
+                            </td>
+
+                            <!-- Email -->
+                            <td th:text="${user.email}">user@example.com</td>
+
+                            <!-- Phone -->
+                            <td th:text="${user.phone != null and !user.phone.isEmpty() ? user.phone : '-'}">09 123 456 789</td>
+
+                            <!-- Role: Dynamic Shield vs Person icon -->
+                            <td>
+                                <span class="role-badge">
+                                    <i th:if="${#strings.toUpperCase(#strings.toString(user.role)).contains('ADMIN')}" 
+                                       class="bi bi-shield-check text-primary"></i>
+                                    <i th:unless="${#strings.toUpperCase(#strings.toString(user.role)).contains('ADMIN')}" 
+                                       class="bi bi-person"></i>
+                                    <span th:text="${#strings.toUpperCase(#strings.toString(user.role)).contains('ADMIN') ? 'Admin' : 'Customer'}">
+                                        Customer
+                                    </span>
+                                </span>
+                            </td>
+
+                            <!-- Joined Date -->
+                            <td th:text="${user.createdAt != null ? #temporals.format(user.createdAt, 'yyyy-MM-dd') : '2026-09-01'}">
+                                2026-09-01
+                            </td>
+
+                            <!-- Actions (Edit & Delete) -->
+                            <td class="text-end pe-2">
+                                <div class="d-inline-flex gap-2">
+                                    <!-- Edit Link -->
+                                    <a th:href="@{/admin/users/edit(id=${user.id})}" 
+                                       class="btn-action-edit" 
+                                       title="Edit User">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+
+                                    <!-- Delete Form with Confirmation Dialog -->
+                                    <form th:action="@{/admin/users/delete}" method="post" 
+                                          onsubmit="return confirm('Are you sure you want to delete this user?');" 
+                                          style="display: inline;">
+                                        <input type="hidden" name="id" th:value="${user.id}" />
+                                        <button type="submit" class="btn-action-delete" title="Delete User">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Empty State if no users found -->
+                        <tr th:if="${#lists.isEmpty(users)}">
+                            <td colspan="6" class="text-center py-5 text-secondary">
+                                <i class="bi bi-people fs-2 d-block mb-2 text-muted"></i>
+                                No users found.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

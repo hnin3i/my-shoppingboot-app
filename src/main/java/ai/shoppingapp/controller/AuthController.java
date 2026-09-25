@@ -71,14 +71,7 @@ public class AuthController {
         return "redirect:/";
     }
 
-    @GetMapping("/access-denied")
-    public String accessDenied(Model model) {
-        return "access-denied";
-    }
-
-    // ==========================================
     // REGISTRATION WITH OTP VERIFICATION
-    // ==========================================
 
     @GetMapping("/register")
     public String registerPage(Model model) {
@@ -142,9 +135,7 @@ public class AuthController {
         return "redirect:/verify-otp?email=" + email + "&resent=true";
     }
 
-    // ==========================================
     // FORGOT & RESET PASSWORD WITH OTP
-    // ==========================================
 
     @GetMapping("/forgot-password")
     public String showForgotPasswordPage() {

@@ -1,5 +1,6 @@
 package ai.shoppingapp.service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +33,35 @@ public class UserService {
 		User entity = this.userRepo.findById(id);
 		if (entity == null) return null;
 		return toModel(entity);
+	}
+	public List<UserModel> searchUsersWithFilter(String keyword, String role) {
+	    List<UserModel> allUsers = findAll();
+
+	    if (allUsers == null) {
+	        return List.of();
+	    }
+
+	    return allUsers.stream()
+	            .filter(user -> {
+	                if (keyword != null && !keyword.trim().isEmpty()) {
+	                    String term = keyword.trim().toLowerCase();
+	                    boolean matchesName = user.getName() != null && user.getName().toLowerCase().contains(term);
+	                    boolean matchesEmail = user.getEmail() != null && user.getEmail().toLowerCase().contains(term);
+	                    boolean matchesPhone = user.getPhone() != null && user.getPhone().contains(term);
+	                    if (!matchesName && !matchesEmail && !matchesPhone) {
+	                        return false;
+	                    }
+	                }
+
+	                if (role != null && !role.trim().isEmpty()) {
+	                    if (user.getRole() == null || !user.getRole().toString().equalsIgnoreCase(role.trim())) {
+	                        return false;
+	                    }
+	                }
+
+	                return true;
+	            })
+	            .toList();
 	}
 	public UserModel findByEmail(String email) {
 		User entity = this.userRepo.findByEmail(email);

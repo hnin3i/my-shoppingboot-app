@@ -5,7 +5,6 @@ import ai.shoppingapp.repository.EmailVerificationRepository;
 import ai.shoppingapp.repository.UserRepository;
 import ai.shoppingapp.repository.entity.EmailVerification;
 import ai.shoppingapp.repository.entity.User;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
