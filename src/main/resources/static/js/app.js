@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
 
 const seeMore = document.getElementById("seeMoreCategories");
@@ -17,3 +18,4 @@ seeMore.parentElement.style.display = "none";
 }
 
 });
+
