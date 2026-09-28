@@ -130,7 +130,7 @@
 							</div>
 
 							<div class="col-md-8 product-price"
-								th:text="${'' + #numbers.formatDecimal(product.price, 1, 'COMMA', 0, 'POINT')}">
+								 th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
 
 
 
@@ -164,7 +164,7 @@
 
 								<span th:if="${product.isDiscount == 1}"
 									class="status status-warning"> <span
-									th:text="${#numbers.formatDecimal(product.discountPrice, 1, 'COMMA', 0, 'POINT')}">
+									 th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
 										10,000 </span> &nbsp;OFF
 
 								</span> <span th:unless="${product.isDiscount == 1}" class="col-md-4">
@@ -186,7 +186,7 @@
 							</div>
 
 							<div class="col-md-8 product.finalPrice"
-								th:text="${'' + #numbers.formatDecimal(product.finalPrice, 1, 'COMMA', 0, 'POINT')}">
+								 th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
 
 								0</div>
 
