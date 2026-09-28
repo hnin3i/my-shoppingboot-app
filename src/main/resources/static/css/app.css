@@ -1,6 +1,7 @@
 :root { --shop-black: #050505; --shop-muted: #a8a8a8; }
 body { color: #171717; font-family: Arial, Helvetica, sans-serif; }
-.shop-navbar { min-height: 92px; background: var(--shop-black); }
+.shop-header {position: sticky; top: 0; z-index: 1000;}
+.shop-navbar { min-height: 52px; background: var(--shop-black); }
 
 .categories-hover { position: relative; }
 .categories-dropdown { min-width: 220px; padding: 8px 0; border: none; border-radius: 0; background: #fff; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); }
@@ -54,7 +55,7 @@ body { color: #171717; font-family: Arial, Helvetica, sans-serif; }
 .hero-copy > p:not(.eyebrow) { color: #35312e; font-size: 1.05rem; margin-bottom: 1.8rem; max-width: 360px; }
 .hero-button { background: #111; border: 1px solid #111; border-radius: 0; color: #fff; font-size: .75rem; font-weight: 700; letter-spacing: .08em; padding: .9rem 1.25rem; }
 .hero-button:hover { background: transparent; color: #111; }
-.home-hero { min-height: 560px; overflow: hidden; position: relative; display: flex; align-items: center; }
+.home-hero { min-height: 650px; overflow: hidden; position: relative; display: flex; align-items: center; }
 .hero-background { height: 100%; inset: 0; object-fit: cover; object-position: center; position: absolute; width: 100%; z-index: 0; }
 .hero-overlay { inset: 0; position: absolute; z-index: 1; }
 .hero-copy { align-self: center; max-width: 535px; padding: 4rem 7%; position: relative; z-index: 2; }
