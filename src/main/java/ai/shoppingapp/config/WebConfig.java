@@ -41,8 +41,6 @@ public class WebConfig implements WebMvcConfigurer {
                     "/home",
                     "/products/**",
                     "/categories/**",
-                    "/user/**",
-                    "/user/orders",
 
                     // Public Auth Pages
                     "/login",
@@ -56,6 +54,7 @@ public class WebConfig implements WebMvcConfigurer {
                     "/details"
                     
                 );
+        		
 
         // 2. Admin Interceptor - protects admin routes
         registry.addInterceptor(adminInterceptor)

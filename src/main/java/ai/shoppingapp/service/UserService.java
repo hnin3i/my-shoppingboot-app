@@ -1,6 +1,5 @@
 package ai.shoppingapp.service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -8,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ai.shoppingapp.model.Role;
 import ai.shoppingapp.model.UserModel;
+import ai.shoppingapp.model.usermanagement.ChangeProfileModel;
 import ai.shoppingapp.model.usermanagement.LoginModel;
 import ai.shoppingapp.model.usermanagement.RegisterModel;
 import ai.shoppingapp.repository.UserRepository;
@@ -34,39 +34,21 @@ public class UserService {
 		if (entity == null) return null;
 		return toModel(entity);
 	}
-	public List<UserModel> searchUsersWithFilter(String keyword, String role) {
-	    List<UserModel> allUsers = findAll();
-
-	    if (allUsers == null) {
-	        return List.of();
-	    }
-
-	    return allUsers.stream()
-	            .filter(user -> {
-	                if (keyword != null && !keyword.trim().isEmpty()) {
-	                    String term = keyword.trim().toLowerCase();
-	                    boolean matchesName = user.getName() != null && user.getName().toLowerCase().contains(term);
-	                    boolean matchesEmail = user.getEmail() != null && user.getEmail().toLowerCase().contains(term);
-	                    boolean matchesPhone = user.getPhone() != null && user.getPhone().contains(term);
-	                    if (!matchesName && !matchesEmail && !matchesPhone) {
-	                        return false;
-	                    }
-	                }
-
-	                if (role != null && !role.trim().isEmpty()) {
-	                    if (user.getRole() == null || !user.getRole().toString().equalsIgnoreCase(role.trim())) {
-	                        return false;
-	                    }
-	                }
-
-	                return true;
-	            })
-	            .toList();
-	}
 	public UserModel findByEmail(String email) {
 		User entity = this.userRepo.findByEmail(email);
 		if (entity == null) return null;
 		return toModel(entity);
+	}
+	public int editProfile(ChangeProfileModel model) {
+		User entity = this.userRepo.findById(model.getId());
+		if(entity == null) return 0;
+		
+		return this.userRepo.changeProfile(model.getId(),
+										model.getName(),
+										model.getEmail(),
+										model.getPhone(),
+										model.getAddress(),
+										model.getProfile());		
 	}
 	
 	public int register(RegisterModel model) {
