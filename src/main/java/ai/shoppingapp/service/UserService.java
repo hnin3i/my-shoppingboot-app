@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import ai.shoppingapp.model.Role;
 import ai.shoppingapp.model.UserModel;
+import ai.shoppingapp.model.usermanagement.ChangeProfileModel;
 import ai.shoppingapp.model.usermanagement.LoginModel;
 import ai.shoppingapp.model.usermanagement.RegisterModel;
 import ai.shoppingapp.repository.UserRepository;
@@ -37,6 +38,17 @@ public class UserService {
 		User entity = this.userRepo.findByEmail(email);
 		if (entity == null) return null;
 		return toModel(entity);
+	}
+	public int editProfile(ChangeProfileModel model) {
+		User entity = this.userRepo.findById(model.getId());
+		if(entity == null) return 0;
+		
+		return this.userRepo.changeProfile(model.getId(),
+										model.getName(),
+										model.getEmail(),
+										model.getPhone(),
+										model.getAddress(),
+										model.getProfile());		
 	}
 	
 	public int register(RegisterModel model) {
