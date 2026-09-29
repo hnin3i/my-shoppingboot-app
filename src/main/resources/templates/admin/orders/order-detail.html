@@ -103,9 +103,9 @@
                                             <span th:text="${item.colour != null ? item.colour : '-'}"></span> / 
                                             <span th:text="${item.size != null ? item.size : '-'}"></span>
                                         </td>
-                                        <td th:text="${#numbers.formatDecimal(item.unitPrice, 1, 'COMMA', 0, 'POINT')} + ' Ks'"></td>
+                                        <td th:text="${#numbers.formatDecimal(item.unitPrice, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></td>
                                         <td th:text="${item.quantity}"></td>
-                                        <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(item.subtotal, 1, 'COMMA', 0, 'POINT')} + ' Ks'"></td>
+                                        <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(item.subtotal, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -113,10 +113,10 @@
 
                         <!-- Price Breakdown -->
                         <div class="pt-3 text-end pe-2">
-                            <p class="mb-1 text-muted">Subtotal: <span class="fw-bold text-dark" th:text="${#numbers.formatDecimal(order.subtotalAmount, 1, 'COMMA', 0, 'POINT')} + ' Ks'"></span></p>
+                            <p class="mb-1 text-muted">Subtotal: <span class="fw-bold text-dark" th:text="${#numbers.formatDecimal(order.subtotalAmount, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></span></p>
                             <p class="mb-1 text-muted">Tax: <span class="fw-bold text-dark" th:text="${order.taxAmount} + ' %'"></span></p>
-                            <p class="mb-1 text-muted">Shipping Fee: <span class="fw-bold text-dark" th:text="${#numbers.formatDecimal(order.shippingFee, 1, 'COMMA', 0, 'POINT')} + ' Ks'"></span></p>
-                            <h5 class="fw-bold text-purple mt-2">Grand Total: <span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 0, 'POINT')} + ' Ks'"></span></h5>
+                            <p class="mb-1 text-muted">Shipping Fee: <span class="fw-bold text-dark" th:text="${#numbers.formatDecimal(order.shippingFee, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></span></p>
+                            <h5 class="fw-bold text-purple mt-2">Grand Total: <span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></span></h5>
                         </div>
                     </div>
 
