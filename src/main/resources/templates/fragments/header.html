@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+
 	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <header th:fragment="header" class="shop-header">
 	<nav class="navbar navbar-expand-lg navbar-dark shop-navbar py-0">
@@ -84,12 +85,78 @@
 								viewBox="0 0 24 24" aria-hidden="true">
 								<circle cx="11" cy="11" r="6.5" />
 								<path d="m16 16 4.5 4.5" /></svg><span class="d-lg-none ms-2">Search</span></a></li>
-					<li class="nav-item"><a class="nav-link shop-icon-link"
-						th:href="@{/login}" aria-label="Account"><svg
-								viewBox="0 0 24 24" aria-hidden="true">
-								<circle cx="12" cy="7" r="3.5" />
-								<path d="M4.5 21c.7-4.1 3.3-6.2 7.5-6.2s6.8 2.1 7.5 6.2" /></svg><span
-							class="d-lg-none ms-2">Account</span></a></li>
+					
+
+    <!-- 2. Account Icon: ONLY ONE of these three will ever render -->
+    
+
+<!-- Account -->
+<!-- ADMIN -->
+<li class="nav-item"
+    th:if="${session.loggedInUser != null and #strings.toUpperCase(#strings.toString(session.loggedInUser.role)).contains('ADMIN')}">
+
+    <a class="nav-link shop-icon-link"
+       th:href="@{/admin/dashboard}"
+       aria-label="Admin Dashboard"
+       title="Admin Dashboard">
+
+        <svg viewBox="0 0 24 24" width="20" height="20"
+             stroke="currentColor" stroke-width="2"
+             fill="none" stroke-linecap="round"
+             stroke-linejoin="round">
+
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+
+        </svg>
+    </a>
+</li>
+
+
+<!-- REGULAR USER -->
+<li class="nav-item"
+    th:if="${session.loggedInUser != null and !#strings.toUpperCase(#strings.toString(session.loggedInUser.role)).contains('ADMIN')}">
+
+    <a class="nav-link shop-icon-link"
+       th:href="@{/user/profile}"
+       aria-label="Profile"
+       title="Profile">
+
+        <svg viewBox="0 0 24 24" width="20" height="20"
+             stroke="currentColor" stroke-width="2"
+             fill="none" stroke-linecap="round"
+             stroke-linejoin="round">
+
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+
+        </svg>
+    </a>
+</li>
+
+
+<!-- GUEST -->
+<li class="nav-item d-flex align-items-center gap-2"
+    th:if="${session.loggedInUser == null}">
+
+    <a class="btn btn-sm px-3 fw-semibold"
+       th:href="@{/login}"
+       style="color: #fff; border: 1px solid #3f3f46; border-radius: 6px;">
+        Sign In
+    </a>
+
+    <a class="btn btn-sm px-3 fw-semibold"
+       th:href="@{/register}"
+       style="background-color: #e11d48; color: #fff; border-radius: 6px;">
+        Sign Up
+    </a>
+
+</li>
+
+
+    <!-- 1. Initial Auth Prompt Modal -->
+
+
 					<li class="nav-item"><a
 						class="nav-link shop-icon-link position-relative"
 						th:href="@{/cart}" aria-label="Cart"><svg viewBox="0 0 24 24"
@@ -101,4 +168,5 @@
 			</div>
 		</div>
 	</nav>
+
 </header>

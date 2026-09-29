@@ -3,12 +3,16 @@ package ai.shoppingapp.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import ai.shoppingapp.exception.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import ai.shoppingapp.model.CategoryModel;
+import ai.shoppingapp.model.Role;
+import ai.shoppingapp.model.UserModel;
 import ai.shoppingapp.service.CategoryService;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class CategoryController {
@@ -19,17 +23,16 @@ public class CategoryController {
 		this.categoryService = categoryService;
 	}
 
-// LIST
-	@GetMapping("/categories")
+	// LIST
+	@GetMapping("/admin/categories")
 	public String categoryList(Model model) {
 
 		model.addAttribute("categories", categoryService.findAll());
-
-		return "categories/list";
+		return "admin/categories/list";
 	}
 
-// CREATE FORM
-	@GetMapping("/categories/add")
+	// CREATE FORM
+	@GetMapping("/admin/categories/add")
 	public String addCategory(Model model) {
 
 		CategoryModel newCategory = new CategoryModel();
@@ -38,104 +41,96 @@ public class CategoryController {
 
 		model.addAttribute("category", newCategory);
 
-		return "categories/add";
+		return "admin/categories/add";
 	}
 
-// CREATE
-	@PostMapping("/categories/add")
-	public String addCategory(
-	        @ModelAttribute("category") CategoryModel category,
-	        Model model) {
+	// CREATE
+	@PostMapping("/admin/categories/add")
+	public String addCategory(@ModelAttribute("category") CategoryModel category, HttpSession session, Model model) {
+		
+		UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
+		if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
+			throw new ResourceNotFoundException("Page not found");
+		}
+		boolean exists = categoryService.existsByName(category.getName());
 
-	    boolean exists =
-	            this.categoryService.existsByName(category.getName());
+		if (exists) {
 
-	    if (exists) {
+			model.addAttribute("error", "Category name already exists!");
 
-	        model.addAttribute("error",
-	                "Category name already exists!");
+			return "admin/categories/add";
+		}
+		String currentUserId = String.valueOf(currentUser.getId());
+		category.setCreatedUserId(currentUserId);
+		category.setUpdatedUserId(currentUserId);
 
-	        return "categories/add";
-	    }
+		categoryService.add(category);
 
-	    category.setCreatedUserId("1");
-	    category.setUpdatedUserId("1");
-
-	    this.categoryService.add(category);
-
-	    return "redirect:/categories";
+		return "redirect:/admin/categories";
 	}
 
-// DETAIL
-	@GetMapping("/categories/detail/{id}")
+	// DETAIL
+	@GetMapping("/admin/categories/detail/{id}")
 	public String categoryDetail(@PathVariable String id, Model model) {
 
-		CategoryModel category = this.categoryService.findById(id);
+		CategoryModel category = categoryService.findById(id);
 
 		model.addAttribute("category", category);
 
-		return "categories/detail";
+		return "admin/categories/detail";
 	}
 
-// EDIT FORM
-	@GetMapping("/categories/edit/{id}")
+	// EDIT FORM
+	@GetMapping("/admin/categories/edit/{id}")
 	public String editCategory(@PathVariable String id, Model model) {
 
-		CategoryModel category = this.categoryService.findById(id);
+		CategoryModel category = categoryService.findById(id);
 
 		model.addAttribute("category", category);
 
-		return "categories/edit";
+		return "admin/categories/edit";
 	}
 
-// UPDATE
-	@PostMapping("/categories/edit")
-	public String editCategory(
-	        @ModelAttribute("category") CategoryModel category,
-	        Model model) {
+	// UPDATE
+	@PostMapping("/admin/categories/edit")
+	public String editCategory(@ModelAttribute("category") CategoryModel category, HttpSession session, Model model) {
+		UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
+		if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
+			throw new ResourceNotFoundException("Page not found");
+		}
+		boolean exists = categoryService.existsByName(category.getName(), category.getId());
 
-	    boolean exists = this.categoryService.existsByName(
-	            category.getName(),
-	            category.getId()
-	    );
+		if (exists) {
 
-	    if (exists) {
+			model.addAttribute("error", "Category name already exists!");
 
-	        model.addAttribute(
-	                "error",
-	                "Category name already exists!"
-	        );
+			return "admin/categories/edit";
+		}
+		String currentUserId = String.valueOf(currentUser.getId());
+		category.setUpdatedUserId(currentUserId);
 
-	        return "categories/edit";
-	    }
+		categoryService.edit(category.getId(), category);
 
-	    category.setUpdatedUserId("1");
-
-	    this.categoryService.edit(
-	            category.getId(),
-	            category
-	    );
-
-	    return "redirect:/categories";
+		return "redirect:/admin/categories";
 	}
 
-// DELETE
-	@GetMapping("/categories/delete/{id}")
+	// DELETE FORM
+	@GetMapping("/admin/categories/delete/{id}")
 	public String deleteCategory(@PathVariable String id, Model model) {
 
-		CategoryModel category = this.categoryService.findById(id);
+		CategoryModel category = categoryService.findById(id);
 
 		model.addAttribute("category", category);
 
-		return "categories/delete";
+		return "admin/categories/delete";
 	}
 
-// DELETE CONFIRM
-	@PostMapping("/categories/delete")
+	// DELETE CONFIRM - HARD DELETE
+	@PostMapping("/admin/categories/delete")
 	public String deleteConfirm(@ModelAttribute("category") CategoryModel category) {
 
-		this.categoryService.delete(category.getId());
+		categoryService.delete(category.getId());
 
-		return "redirect:/categories";
+		return "redirect:/admin/categories";
 	}
 }

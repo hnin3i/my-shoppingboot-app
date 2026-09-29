@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/public_layout}">
+
+<head>
+<meta charset="UTF-8">
+<title>Add Category</title>
+</head>
+
+<body>
+
+	<h2>Create Category</h2>
+
+	<form th:action="@{/categories/add}" th:object="${category}"
+		method="post" enctype="multipart/form-data">
+
+		<div>
+			<label>Name:</label> <input type="text" th:field="*{name}" id="name">
+		</div>
+
+		<br>
+
+		<div>
+			<label>Description:</label>
+			<textarea rows="5" cols="50" th:field="*{description}"
+				id="description">
+        </textarea>
+		</div>
+
+		<br>
+
+		<div>
+			<label>Image:</label> <input type="file" name="imageFile"
+				id="imageFile" accept="image/*">
+		</div>
+		<div>
+			<label>Status:</label> <input type="radio" th:field="*{isActive}"
+				value="1"> <label>Active</label> <input type="radio"
+				th:field="*{isActive}" value="0"> <label>Inactive</label>
+		</div>
+
+		<br>
+
+		<div>
+			<input type="submit" value="Add Category">
+		</div>
+
+	</form>
+
+</body>
+</html>
