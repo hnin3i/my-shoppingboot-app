@@ -28,15 +28,21 @@ public class AdminOrderUpdateController {
     
     @GetMapping
     public String showOrderListPage(
+    		@RequestParam(value = "customerName", required = false) String customerName,
             @RequestParam(value = "orderStatus", required = false) String orderStatus,
             @RequestParam(value = "paymentStatus", required = false) String paymentStatus,
+            @RequestParam(value = "startDate", required = false) String startDate,
+            @RequestParam(value = "endDate", required = false) String endDate,
             Model model) {
 
-        List<AdminOrderListDto> orders = service.getAllOrders(orderStatus, paymentStatus);
+        List<AdminOrderListDto> orders = service.getAllOrders(customerName,orderStatus, paymentStatus,startDate,endDate);
         
         model.addAttribute("orders", orders);
+        model.addAttribute("selectedCustomerName", customerName);
         model.addAttribute("selectedOrderStatus", orderStatus);
         model.addAttribute("selectedPaymentStatus", paymentStatus);
+        model.addAttribute("selectedStartDate", startDate);
+        model.addAttribute("selectedEndDate", endDate);
         
         return "admin/orders/order-list";
     }
@@ -52,18 +58,25 @@ public class AdminOrderUpdateController {
 
         return "admin/orders/order-detail";
     }
+
     
     @PostMapping("/update-status")
-    public String updateOrderStatus(@ModelAttribute("updateDto") AdminPaymentUpdateDto updateDto,
-                                    RedirectAttributes redirectAttributes) {
-        boolean success = service.updatePaymentAndOrderStatus(updateDto);
+	public String updateOrderStatus(@ModelAttribute("updateDto") AdminPaymentUpdateDto updateDto,
+									RedirectAttributes redirectAttributes) {
+		
+		List<String> lowStockWarnings = service.updatePaymentAndOrderStatus(updateDto);
 
-        if (success) {
-            redirectAttributes.addFlashAttribute("successMessage", "Success Order Status");
-        } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Try Again");
-        }
-        return "redirect:/admin/orders";
-    }
+		
+		redirectAttributes.addFlashAttribute("successMessage", "Order Status Success");
+
+		
+		if (!lowStockWarnings.isEmpty()) {
+			String warningMsg = "Low Stock - " 
+								+ String.join(", ", lowStockWarnings);
+			redirectAttributes.addFlashAttribute("warningMessage", warningMsg);
+		}
+
+		return "redirect:/admin/orders";
+	}
   
 }

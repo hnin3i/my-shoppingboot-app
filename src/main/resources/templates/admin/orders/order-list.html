@@ -36,7 +36,6 @@
             <!-- Success / Error Alert Messages -->
             <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
                 <span th:text="${successMessage}"></span>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
                 <span th:text="${errorMessage}"></span>
@@ -54,41 +53,81 @@
             <!-- Order List Card -->
             <div class="admin-card">
 
-                <!-- Card Header with Filters -->
-                <form th:action="@{/admin/orders}" method="get" class="mb-4">
-                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                        <div class="admin-card-title mb-0">All Orders</div>
+				<!-- Card Header with Filters -->
+				<form th:action="@{/admin/orders}" method="get" class="mb-4">
+					<div
+						class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+						<div class="admin-card-title mb-0">All Orders</div>
 
-                        <!-- Filters -->
-                        <div class="d-flex gap-2 flex-wrap">
-                            <!-- Order Status Filter -->
-                            <select name="orderStatus" class="form-select" style="width: 180px;" onchange="this.form.submit()">
-                                <option value="">All Order Statuses</option>
-                                <option value="PENDING" th:selected="${selectedOrderStatus == 'PENDING'}">PENDING</option>
-                                <option value="CONFIRMED" th:selected="${selectedOrderStatus == 'CONFIRMED'}">CONFIRMED</option>
-                                <option value="DELIVERED" th:selected="${selectedOrderStatus == 'DELIVERED'}">DELIVERED</option>
-                                <option value="CANCELLED" th:selected="${selectedOrderStatus == 'CANCELLED'}">CANCELLED</option>
-                            </select>
+						<!-- Filters -->
+						<div class="d-flex gap-2 flex-wrap align-items-center">
 
-                            <!-- Payment Status Filter -->
-                            <select name="paymentStatus" class="form-select" style="width: 180px;" onchange="this.form.submit()">
-                                <option value="">All Payment Statuses</option>
-                                <option value="UNPAID" th:selected="${selectedPaymentStatus == 'UNPAID'}">UNPAID</option>
-                                <option value="PAID" th:selected="${selectedPaymentStatus == 'PAID'}">PAID</option>
-                                <option value="REFUNDED" th:selected="${selectedPaymentStatus == 'REFUNDED'}">REFUNDED</option>
-                            </select>
+							<!-- Customer Name Search Input -->
+							<input type="text" name="customerName" class="form-control"
+								placeholder="Search customer..."
+								th:value="${selectedCustomerName}" style="width: 170px;">
 
-                            <!-- Reset Filter Button -->
-                            <a th:href="@{/admin/orders}" class="btn btn-outline-secondary">Reset</a>
-                        </div>
-                    </div>
-                </form>
+							<!-- Start Date Input -->
+							<input type="text" name="startDate" class="form-control"
+								placeholder="Start Date" onfocus="(this.type='date')"
+								onblur="if(!this.value) this.type='text'"
+								th:value="${selectedStartDate}" style="width: 140px;">
 
-                <!-- Table -->
+							<!-- End Date Input -->
+							<input type="text" name="endDate" class="form-control"
+								placeholder="End Date" onfocus="(this.type='date')"
+								onblur="if(!this.value) this.type='text'"
+								th:value="${selectedEndDate}" style="width: 140px;">
+
+							<!-- Order Status Filter -->
+							<select name="orderStatus" class="form-select"
+								style="width: 160px;" onchange="this.form.submit()">
+								<option value="">All Order Statuses</option>
+								<option value="PENDING"
+									th:selected="${selectedOrderStatus == 'PENDING'}">PENDING</option>
+								<option value="CONFIRMED"
+									th:selected="${selectedOrderStatus == 'CONFIRMED'}">CONFIRMED</option>
+								<option value="DELIVERED"
+									th:selected="${selectedOrderStatus == 'DELIVERED'}">DELIVERED</option>
+								<option value="CANCELLED"
+									th:selected="${selectedOrderStatus == 'CANCELLED'}">CANCELLED</option>
+							</select>
+
+							<!-- Payment Status Filter -->
+							<select name="paymentStatus" class="form-select"
+								style="width: 160px;" onchange="this.form.submit()">
+								<option value="">All Payment Statuses</option>
+								<option value="UNPAID"
+									th:selected="${selectedPaymentStatus == 'UNPAID'}">UNPAID</option>
+								<option value="PAID"
+									th:selected="${selectedPaymentStatus == 'PAID'}">PAID</option>
+								<option value="REFUNDED"
+									th:selected="${selectedPaymentStatus == 'REFUNDED'}">REFUNDED</option>
+							</select>
+
+							<!-- Search Button -->
+							<button type="submit" class="btn btn-purple">
+								<i class="bi bi-search"></i>
+							</button>
+
+							<!-- Reset Filter Button -->
+							<a th:href="@{/admin/orders}" class="btn btn-outline-secondary">Reset</a>
+						</div>
+					</div>
+				</form>
+
+				<div th:if="${warningMessage}"
+					class="alert alert-warning alert-dismissible fade show my-3"
+					role="alert">
+					<strong th:text="${warningMessage}"></strong>
+				</div>
+
+				<!-- Table -->
                 <div class="table-responsive">
                     <table class="admin-table">
                         <thead>
                             <tr>
+                            	<th>No.</th>
                                 <th>Order Num</th>
                                 <th>Customer Info</th>
                                 <th>Date & Time</th>
@@ -99,7 +138,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="order : ${orders}">
+                            <tr th:each="order, iterStat : ${orders}">
+                            	<td>
+                                    <strong class="text-purple" th:text="${iterStat.count}">1</strong>
+                                </td>
                                 <!-- Order Number -->
                                 <td>
                                     <strong class="text-purple" th:text="${order.orderNumber}">#ORD-1001</strong>

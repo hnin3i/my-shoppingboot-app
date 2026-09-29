@@ -20,10 +20,10 @@ public class AdminOrderDetailRowMapper implements RowMapper<AdminOrderDetailDto>
         dto.setCustomerName(rs.getString("customer_name"));
         dto.setCustomerPhone(rs.getString("phone_no"));
         dto.setShippingAddress(rs.getString("shipping_address"));
-        dto.setSubtotalAmount(rs.getDouble("subtotal_amount"));
-        dto.setTaxAmount(rs.getDouble("tax_amount"));
-        dto.setShippingFee(rs.getDouble("shipping_fee"));
-        dto.setTotalAmount(rs.getDouble("total_amount"));
+        dto.setSubtotalAmount(rs.getBigDecimal("subtotal_amount"));
+        dto.setTaxAmount(rs.getBigDecimal("tax_amount"));
+        dto.setShippingFee(rs.getBigDecimal("shipping_fee"));
+        dto.setTotalAmount(rs.getBigDecimal("total_amount"));
         dto.setPaymentMethod(rs.getString("payment_method"));
         dto.setPaymentConfirmPhoto(rs.getString("payment_confirm_photo"));
         dto.setPaymentStatus(PaymentStatus.valueOf(rs.getString("payment_status")));
