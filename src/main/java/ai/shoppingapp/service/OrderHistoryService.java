@@ -1,5 +1,6 @@
 package ai.shoppingapp.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import ai.shoppingapp.model.OrderHistoryDto;
@@ -32,11 +33,12 @@ public class OrderHistoryService {
 
         List<OrderDetailsDto> items = getOrderDetails(userId, orderId);
         
-        double calculatedSubtotal = items.stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
-        double shippingFee = order.getShipping_fee();
-        double taxRate = order.getTax_amount();
-        double taxAmount = calculatedSubtotal*(taxRate/100.0);
-        double grandTotal = calculatedSubtotal + shippingFee + taxAmount;
+        BigDecimal calculatedSubtotal = items.stream().map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
+        		.reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal shippingFee = order.getShipping_fee();
+        BigDecimal taxRate = order.getTax_amount();
+        BigDecimal taxAmount = calculatedSubtotal.multiply(taxRate).divide(BigDecimal.valueOf(100.0));
+        BigDecimal grandTotal = calculatedSubtotal.add(shippingFee).add(taxAmount);
 
         return new OrderSummaryDto(calculatedSubtotal, shippingFee, taxAmount, grandTotal);
     }

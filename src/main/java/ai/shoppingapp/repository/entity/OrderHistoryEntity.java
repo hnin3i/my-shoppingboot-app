@@ -1,5 +1,6 @@
 package ai.shoppingapp.repository.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class OrderHistoryEntity {
@@ -7,10 +8,10 @@ public class OrderHistoryEntity {
 	private String id;
 	private String user_id;
 	private String order_number;
-	private double subtotal_amount;
-	private double tax_amount;
-	private double shipping_fee;
-	private double total_amount;
+	private BigDecimal subtotal_amount;
+	private BigDecimal tax_amount;
+	private BigDecimal shipping_fee;
+	private BigDecimal total_amount;
 	private String status;
 	private String payment_method;
 	private String payment_status;
@@ -23,8 +24,8 @@ public class OrderHistoryEntity {
 	private String productName;
 	
 	public OrderHistoryEntity() {}
-	public OrderHistoryEntity(String id,String user_id,String order_number,double subtotal_amount,double tax_amount,double shipping_fee,
-			double total_amount,String status,String payment_method,String payment_status,String shipping_address,
+	public OrderHistoryEntity(String id,String user_id,String order_number,BigDecimal subtotal_amount,BigDecimal tax_amount,BigDecimal shipping_fee,
+			BigDecimal total_amount,String status,String payment_method,String payment_status,String shipping_address,
 			String phone_no,LocalDateTime created_at,LocalDateTime updated_at,String customerName,String productName) {
 		this.id=id;
 		this.user_id=user_id;
@@ -61,28 +62,28 @@ public class OrderHistoryEntity {
 	public void setOrder_number(String order_number) {
 		this.order_number = order_number;
 	}
-	public double getSubtotal_amount() {
+	public BigDecimal getSubtotal_amount() {
 		return subtotal_amount;
 	}
-	public void setSubtotal_amount(double subtotal_amount) {
+	public void setSubtotal_amount(BigDecimal subtotal_amount) {
 		this.subtotal_amount = subtotal_amount;
 	}
-	public double getTax_amount() {
+	public BigDecimal getTax_amount() {
 		return tax_amount;
 	}
-	public void setTax_amount(double tax_amount) {
+	public void setTax_amount(BigDecimal tax_amount) {
 		this.tax_amount = tax_amount;
 	}
-	public double getShipping_fee() {
+	public BigDecimal getShipping_fee() {
 		return shipping_fee;
 	}
-	public void setShipping_fee(double shipping_fee) {
+	public void setShipping_fee(BigDecimal shipping_fee) {
 		this.shipping_fee = shipping_fee;
 	}
-	public double getTotal_amount() {
+	public BigDecimal getTotal_amount() {
 		return total_amount;
 	}
-	public void setTotal_amount(double total_amount) {
+	public void setTotal_amount(BigDecimal total_amount) {
 		this.total_amount = total_amount;
 	}
 	public String getStatus() {

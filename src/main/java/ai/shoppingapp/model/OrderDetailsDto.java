@@ -1,17 +1,19 @@
 package ai.shoppingapp.model;
 
+import java.math.BigDecimal;
+
 public class OrderDetailsDto {
 	
 	private String productName;
     private String color;
     private String size;
-    private double price;
+    private BigDecimal price;
     private Integer quantity;
-    private double subtotal;
+    private BigDecimal subtotal;
     private String image;
     
     public OrderDetailsDto() {}
-    public OrderDetailsDto(String productName,String color,String size,double price,Integer quantity,double subtotal,String image) {
+    public OrderDetailsDto(String productName,String color,String size,BigDecimal price,Integer quantity,BigDecimal subtotal,String image) {
     	this.productName=productName;
     	this.color=color;
     	this.size=size;
@@ -38,10 +40,10 @@ public class OrderDetailsDto {
 	public void setSize(String size) {
 		this.size = size;
 	}
-	public double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
-	public void setPrice(double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 	public Integer getQuantity() {
@@ -50,10 +52,10 @@ public class OrderDetailsDto {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-	public double getSubtotal() {
+	public BigDecimal getSubtotal() {
 		return subtotal;
 	}
-	public void setSubtotal(double subtotal) {
+	public void setSubtotal(BigDecimal subtotal) {
 		this.subtotal = subtotal;
 	}
 	public String getImage() {

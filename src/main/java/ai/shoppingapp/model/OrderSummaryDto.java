@@ -1,41 +1,43 @@
 package ai.shoppingapp.model;
 
+import java.math.BigDecimal;
+
 public class OrderSummaryDto {
 	
-	private double subtotal;
-	private double shippingFee;
-	private double tax;
-	private double grandTotal;
+	private BigDecimal subtotal;
+	private BigDecimal shippingFee;
+	private BigDecimal tax;
+	private BigDecimal grandTotal;
 	
 	public OrderSummaryDto() {}
-	public OrderSummaryDto(double subtotal, double shippingFee, double tax, double grandTotal) {
+	public OrderSummaryDto(BigDecimal subtotal, BigDecimal shippingFee, BigDecimal tax, BigDecimal grandTotal) {
         this.subtotal = subtotal;
         this.shippingFee = shippingFee;
         this.tax = tax;
         this.grandTotal = grandTotal;
     }
-	public double getSubtotal() {
+	public BigDecimal getSubtotal() {
 		return subtotal;
 	}
-	public void setSubtotal(double subtotal) {
+	public void setSubtotal(BigDecimal subtotal) {
 		this.subtotal = subtotal;
 	}
-	public double getShippingFee() {
+	public BigDecimal getShippingFee() {
 		return shippingFee;
 	}
-	public void setShippingFee(double shippingFee) {
+	public void setShippingFee(BigDecimal shippingFee) {
 		this.shippingFee = shippingFee;
 	}
-	public double getTax() {
+	public BigDecimal getTax() {
 		return tax;
 	}
-	public void setTax(double tax) {
+	public void setTax(BigDecimal tax) {
 		this.tax = tax;
 	}
-	public double getGrandTotal() {
+	public BigDecimal getGrandTotal() {
 		return grandTotal;
 	}
-	public void setGrandTotal(double grandTotal) {
+	public void setGrandTotal(BigDecimal grandTotal) {
 		this.grandTotal = grandTotal;
 	}
 	
