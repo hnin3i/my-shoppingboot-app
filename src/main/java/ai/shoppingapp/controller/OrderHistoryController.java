@@ -27,7 +27,7 @@ public class OrderHistoryController {
     public String showOrderHistory(HttpSession session, Model model) {
     	UserModel user = (UserModel) session.getAttribute("loggedInUser");
         if (user == null) {
-            return "errors/not-authorized";
+            return "error";
         }
 
         String userId = user.getId();
@@ -40,7 +40,7 @@ public class OrderHistoryController {
     public String showOrderDetails(@RequestParam("orderId") String orderId, HttpSession session, Model model) {
     	UserModel user = (UserModel) session.getAttribute("loggedInUser");
         if (user == null) {
-            return "errors/not-authorized";
+            return "error";
         }
 
         String userId = user.getId();

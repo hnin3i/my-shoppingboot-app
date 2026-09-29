@@ -1,35 +1,19 @@
-function handleGlobalClick(event) {
-    const addButton = event.target.closest(
-        "[data-action='add-to-cart']"
-    );
+document.addEventListener("DOMContentLoaded", function () {
 
-    if (addButton) {
-        handleProductClick(event);
-        return;
+    const seeMore = document.getElementById("seeMoreCategories");
+    const moreCategories = document.getElementById("moreCategories");
+
+    if (seeMore && moreCategories) {
+
+        seeMore.addEventListener("click", function (e) {
+
+            e.preventDefault();
+
+            moreCategories.style.display = "block";
+
+            seeMore.parentElement.style.display = "none";
+        });
+
     }
 
-    const cartAction = event.target.closest("[data-cart-action]");
-
-    if (cartAction) {
-        handleCartAction(event);
-        return;
-    }
-
-    const orderButton = event.target.closest(
-        "[data-action='place-order']"
-    );
-
-    if (orderButton) {
-        placeOrder();
-    }
-}
-
-function initializePage() {
-    renderProducts();
-    renderCart();
-    renderOrderSummary();
-    updateBadge();
-}
-
-document.addEventListener("click", handleGlobalClick);
-document.addEventListener("DOMContentLoaded", initializePage);
+});

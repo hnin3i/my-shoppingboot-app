@@ -41,8 +41,6 @@ public class WebConfig implements WebMvcConfigurer {
                     "/home",
                     "/products/**",
                     "/categories/**",
-                    "/user/**",
-                    "/user/orders",
 
                     // Public Auth Pages
                     "/user/**",
@@ -53,17 +51,19 @@ public class WebConfig implements WebMvcConfigurer {
                     "/reset-password",
                     
                     //Order History
-                    "/order-history",
-                    "/details",
-                    
-                    
+                    "/order-history",                  
                     "/api/orders/place",
                     "/cart",
                     "/cart/checkout",
                     "/cart/order-success",
-                    "/index"
+                    "/index",
+
+                    "/products/**",
+                    "/details"
+
                     
                 );
+        		
 
         // 2. Admin Interceptor - protects admin routes
         registry.addInterceptor(adminInterceptor)
@@ -78,9 +78,8 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/js/**")
                 .addResourceLocations("classpath:/static/js/");
 
-		registry.addResourceHandler("/images/categories/**")
-				.addResourceLocations("file:///D:/Shopping/shoppingapp/src/main/resources/template/images/product/");
-		registry.addResourceHandler("/images/user/**")
-				.addResourceLocations("file:///D:/Shopping/shoppingapp/src/main/resources/template/images/user/");
+		registry.addResourceHandler("static/images/**")
+				.addResourceLocations("file://C://Users/Admin/git/my-shoppingboot-app/src/main/resources/static/images/");
+		
 	}
 }
