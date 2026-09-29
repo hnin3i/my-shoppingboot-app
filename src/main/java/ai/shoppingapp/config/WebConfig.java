@@ -31,9 +31,9 @@ public class WebConfig implements WebMvcConfigurer {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
-		registry.addResourceHandler("/images/categories/**")
-				.addResourceLocations("file:///D:/Shopping/shoppingapp/src/main/resources/template/images/product/");
+		registry.addResourceHandler("/images/product/**")
+				.addResourceLocations("file:///D:/Shopping/my-shoppingboot-app/src/main/resources/static/images/product/");
 		registry.addResourceHandler("/images/user/**")
-				.addResourceLocations("file:///D:/Shopping/shoppingapp/src/main/resources/template/images/user/");
+				.addResourceLocations("file:///D:/Shopping/my-shoppingboot-app/src/main/resources/static/images/user/");
 	}
 }
