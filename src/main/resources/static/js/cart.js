@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 function addToCart(stockInfo, quantity = 1) {
     const cart = getCart();
     const existingIndex = cart.findIndex(
@@ -108,6 +107,24 @@ function updateBadge() {
     const count = getCartCount();
     badge.textContent = count;
     badge.style.display = count > 0 ? "inline-block" : "none";
+}
+
+function loadCartPage() {
+    const cart = getCart();
+
+    renderCart(cart);
+    updateCartTotal(cart);
+}
+
+function goToCheckout(){
+	const cart=getCart();
+	
+	if(cart.length=== 0){
+		showError("Your cart is empty");
+		return;
+	}
+	
+	window.location.href="/cart/checkout";
 }
 
 function renderCart() {
@@ -221,6 +238,11 @@ function handleCartAction(event) {
     if (!button) return;
 
     const action = button.dataset.cartAction;
+	
+	if(action==="checkout"){
+				goToCheckout();
+				return;
+			}
     const stockId = button.dataset.stockId;
     const quantity = Number(button.dataset.quantity);
 
@@ -232,82 +254,6 @@ function handleCartAction(event) {
     if (action === "remove") {
         removeFromCart(stockId);
     }
+	
+	
 }
-=======
-
-class ShoppingCart {
-  constructor(storageKey = 'bootstrap_cart_demo') {
-    this.storageKey = storageKey;
-    this.items = this.loadFromLocalStorage();
-  }
-
-  loadFromLocalStorage() {
-    const data = localStorage.getItem(this.storageKey);
-    return data ? JSON.parse(data) : [];
-  }
-
-  saveToLocalStorage() {
-    localStorage.setItem(this.storageKey, JSON.stringify(this.items));
-    window.dispatchEvent(new Event('cartUpdated'));
-  }
-
-
-  addItem(product, size, quantity = 1) {
-    const existingItem = this.items.find(
-      item => item.id === product.id && item.size === size
-    );
-
-    if (existingItem) {
-      existingItem.quantity += quantity;
-    } else {
-      this.items.push({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        color: product.color,
-        size: size,
-        quantity: quantity
-      });
-    }
-    this.saveToLocalStorage();
-  }
-
-  updateQuantity(index, change) {
-    if (this.items[index]) {
-      this.items[index].quantity += change;
-      if (this.items[index].quantity <= 0) {
-        this.items.splice(index, 1);
-      }
-      this.saveToLocalStorage();
-    }
-  }
-
-  removeItem(index) {
-    if (this.items[index]) {
-      this.items.splice(index, 1);
-      this.saveToLocalStorage();
-    }
-  }
-
-  getItems() {
-    return this.items;
-  }
-
-  getTotalCount() {
-    return this.items.reduce((sum, item) => sum + item.quantity, 0);
-  }
-
-  getTotalPrice() {
-    return this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-  }
-
-  clearCart() {
-        this.items = [];
-        localStorage.removeItem(this.storageKey);
-        window.dispatchEvent(new Event('cartUpdated'));
-      }
-}
-
-
-const cart = new ShoppingCart();
->>>>>>> dev/patee

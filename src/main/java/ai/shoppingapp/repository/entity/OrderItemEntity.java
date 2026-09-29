@@ -1,21 +1,22 @@
 package ai.shoppingapp.repository.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class OrderItem1 {
+public class OrderItemEntity {
 	private String id;
 	private String order_id;
 	private String stock_id;
-	private double price;
+	private BigDecimal price;
 	private int quantity;
-	private double subtotal;
+	private BigDecimal subtotal;
 	private LocalDateTime created_at;
 	private LocalDateTime updated_at;
 	
-	public OrderItem1() {}
+	public OrderItemEntity() {}
 	
-	public OrderItem1(String id,String order_id,String stock_id,double price,
-			int quantity,double subtotal,LocalDateTime created_at,LocalDateTime updated_at) {
+	public OrderItemEntity(String id,String order_id,String stock_id,BigDecimal price,
+			int quantity,BigDecimal subtotal,LocalDateTime created_at,LocalDateTime updated_at) {
 		this.id=id;
 		this.order_id=order_id;
 		this.stock_id=stock_id;
@@ -50,11 +51,11 @@ public class OrderItem1 {
 		this.stock_id = stock_id;
 	}
 
-	public double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 
@@ -66,11 +67,11 @@ public class OrderItem1 {
 		this.quantity = quantity;
 	}
 
-	public double getSubtotal() {
+	public BigDecimal getSubtotal() {
 		return subtotal;
 	}
 
-	public void setSubtotal(double subtotal) {
+	public void setSubtotal(BigDecimal subtotal) {
 		this.subtotal = subtotal;
 	}
 

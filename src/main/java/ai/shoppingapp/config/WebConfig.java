@@ -45,6 +45,7 @@ public class WebConfig implements WebMvcConfigurer {
                     "/user/orders",
 
                     // Public Auth Pages
+                    "/user/**",
                     "/login",
                     "/register",
                     "/verify-otp",
@@ -53,7 +54,14 @@ public class WebConfig implements WebMvcConfigurer {
                     
                     //Order History
                     "/order-history",
-                    "/details"
+                    "/details",
+                    
+                    
+                    "/api/orders/place",
+                    "/cart",
+                    "/cart/checkout",
+                    "/cart/order-success",
+                    "/index"
                     
                 );
 

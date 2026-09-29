@@ -1,12 +1,12 @@
 const MOCK_PRODUCTS = [
     {
-        productId: "prod-001",
+        productId: "a9ae2897-b7c0-11f1-bcf3-8038fbbba9bc",
         productName: "Classic T-Shirt",
         image: "https://via.placeholder.com/150/FF6B6B/fff?text=T-Shirt",
         price: 15000,
         stocks: [
-            { stockId: "stk-001a", colour: "Red", size: "M", stock_qty: 10 },
-            { stockId: "stk-001b", colour: "Blue", size: "L", stock_qty: 5 }
+            { stockId: "9c8ee5a7-b7c0-11f1-bcf3-8038fbbba9bc", colour: "Red", size: "M", stock_qty: 10 },
+            { stockId: "185238e6-b8ae-11f1-ac2f-8038fbbba9bc", colour: "Blue", size: "L", stock_qty: 5 }
         ]
     },
     {

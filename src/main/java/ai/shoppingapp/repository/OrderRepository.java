@@ -3,7 +3,7 @@ package ai.shoppingapp.repository;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import ai.shoppingapp.repository.entity.Order1;
+import ai.shoppingapp.repository.entity.OrderEntity;
 
 @Repository
 public class OrderRepository {
@@ -13,7 +13,7 @@ public class OrderRepository {
 		this.jdbcTemplate=jdbcTemplate;
 	}
 	
-	public int save(Order1 entity) {
+	public int save(OrderEntity entity) {
 		String sql="INSERT INTO orders ("
 				+ "id,"
 				+ "user_id,"

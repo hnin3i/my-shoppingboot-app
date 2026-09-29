@@ -11,6 +11,12 @@ public class HomeController {
 	public String home() {
 		return "home";
 	}
+	
+	
+//	@GetMapping("/checkout")
+//    public String viewCheckout() {
+//        return "cart/checkout"; 
+//    }
 //	@GetMapping("/error/not-authorized")
 //	public String notAuthorized() {
 //	    return "error/not-authorized";

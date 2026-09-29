@@ -161,4 +161,15 @@ public class StockRepository {
 
 		return count == null ? 0 : count;
 	}
+	
+//	public int decreaseStock(String stockId,int quantity) {
+//		String sql="UPDATE stocks\r\n"
+//				+ "                SET stock_qty = stock_qty - ?,\r\n"
+//				+ "                    updated_at = NOW()\r\n"
+//				+ "                WHERE id = ?\r\n"
+//				+ "                  AND stock_qty >= ?";
+//		
+//		Integer count=this.jdbcTemplate.update(sql,quantity,stockId,quantity);
+//		return count==null?0:count;
+//	}
 }
