@@ -51,6 +51,7 @@ public class WebConfig implements WebMvcConfigurer {
                     
                     //Order History
                     "/order-history",
+                    "/products/**",
                     "/details"
                     
                 );
