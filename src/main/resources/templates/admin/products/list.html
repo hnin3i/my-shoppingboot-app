@@ -460,23 +460,27 @@
 										Category </span></td>
 
 								<td><span class="product-price"
-									th:text="${'' + #numbers.formatDecimal(product.price, 1, 'COMMA', 0, 'POINT')}">
+									 th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
 
 										25000 </span></td>
 
 								<td><span th:if="${product.isDiscount == 1}"
 									class="status status-warning"> <span
-										th:text="${'' + #numbers.formatDecimal(product.discountPrice, 1, 'COMMA', 0, 'POINT')}">
+										 th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
 
 											10000 </span> &nbsp;OFF
 
 								</span> <span th:unless="${product.isDiscount == 1}"
 									class="status status-normal"> No Discount </span></td>
 
-								<td><span class="sale-price"
-									th:text="${product.finalPrice != null ? '' + #numbers.formatDecimal(product.finalPrice, 1, 'COMMA', 0, 'POINT') : '' + #numbers.formatDecimal(product.price, 1, 'COMMA', 0, 'POINT')}">
-
-										15000 </span></td>
+								<td>
+    <span class="sale-price"
+          th:text="${product.finalPrice != null
+              ? #numbers.formatDecimal(product.finalPrice, 0, 'COMMA', 0, 'POINT') + ' MMK'
+              : #numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
+        15,000 MMK
+    </span>
+</td>
 
 								<td>
 									<!-- ACTIVE --> <span th:if="${product.isActive == 1}"
