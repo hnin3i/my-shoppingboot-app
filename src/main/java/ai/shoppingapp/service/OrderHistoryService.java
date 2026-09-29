@@ -40,7 +40,7 @@ public class OrderHistoryService {
         BigDecimal taxAmount = calculatedSubtotal.multiply(taxRate).divide(BigDecimal.valueOf(100.0));
         BigDecimal grandTotal = calculatedSubtotal.add(shippingFee).add(taxAmount);
 
-        return new OrderSummaryDto(calculatedSubtotal, shippingFee, taxAmount, grandTotal);
+        return new OrderSummaryDto(calculatedSubtotal, shippingFee, taxRate, grandTotal);
     }
 	
 	private OrderDetailsDto toItemDto(OrderDetailsEntity entity) {

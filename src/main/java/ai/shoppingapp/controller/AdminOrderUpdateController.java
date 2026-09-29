@@ -59,7 +59,6 @@ public class AdminOrderUpdateController {
         return "admin/orders/order-detail";
     }
 
-    
     @PostMapping("/update-status")
 	public String updateOrderStatus(@ModelAttribute("updateDto") AdminPaymentUpdateDto updateDto,
 									RedirectAttributes redirectAttributes) {

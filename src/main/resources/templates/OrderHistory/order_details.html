@@ -67,7 +67,7 @@
                 
                 <div class="d-flex justify-content-between mb-2">
                     <span class="text-muted">Tax</span>
-                    <span class="fw-semibold" th:text="${#numbers.formatDecimal(summary.tax, 1, 2)}"></span>
+                    <span class="fw-semibold" th:text="${summary.tax}+ '%'"></span>
                 </div>
                 
                 <hr class="my-3">
