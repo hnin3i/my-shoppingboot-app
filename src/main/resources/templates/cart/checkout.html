@@ -37,103 +37,6 @@
             color: #0f172a;
         }
 
-        /* Payment Option Styling */
-        .payment-group-title {
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            color: #64748b;
-            margin-top: 16px;
-            margin-bottom: 10px;
-        }
-
-        .payment-option {
-            display: block !important;
-            border: 1.5px solid var(--border-color);
-            border-radius: var(--input-radius);
-            padding: 16px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            background-color: #ffffff;
-        }
-
-        .payment-option:hover {
-            border-color: #cbd5e1;
-        }
-
-        .payment-option.selected {
-            border-color: #0f172a;
-            background-color: #f8fafc;
-            box-shadow: 0 0 0 1px #0f172a;
-        }
-
-        .payment-option-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            width: 100%;
-        }
-
-        .payment-radio {
-            width: 18px;
-            height: 18px;
-            accent-color: #0f172a;
-            cursor: pointer;
-        }
-
-        .payment-icon {
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            background-color: #f1f5f9;
-            border-radius: 6px;
-        }
-
-        .payment-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .payment-info strong {
-            font-size: 0.938rem;
-            font-weight: 600;
-            color: #0f172a;
-        }
-
-        .payment-info span {
-            font-size: 0.813rem;
-            color: #64748b;
-        }
-
-        .payment-details-wrapper {
-            width: 100%;
-            margin-top: 16px;
-        }
-
-        /* Custom Payment Expand Card (Matching Screenshot UI) */
-        .custom-payment-card {
-            border: 1px solid #e2e8f0;
-            border-radius: var(--input-radius);
-            background: #ffffff;
-            padding: 20px;
-        }
-
-        .custom-dashed-upload {
-            border: 1.5px dashed #cbd5e1;
-            background-color: #f8fafc;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .custom-dashed-upload:hover {
-            border-color: #0f172a;
-            background-color: #f1f5f9;
-        }
-
         /* Floating Input Styling */
         .form-floating > .form-control,
         .form-floating > .form-select {
@@ -160,10 +63,9 @@
             border-color: #0f172a;
         }
 
-        /* Order Summary Sticky Sidebar */
+        /* Order Summary */
         .order-summary-card {
-            position: sticky;
-            top: 24px;
+            position: static;
             border: 1px solid var(--border-color);
             border-radius: var(--card-radius);
             background: #ffffff;
@@ -324,7 +226,7 @@
                 <div class="payment-option" data-payment="KBZ_BANK">
                     <div class="payment-option-header">
                         <input class="payment-radio" type="radio" name="payment-method" value="KBZ_BANK">
-                        <div class="payment-icon">🏦</div>
+                        <img class="payment-icon" src="/images/bank/kbz.jpg" alt="kbz bank logo">
                         <div class="payment-info">
                             <strong>KBZ Bank</strong>
                             <span>Bank transfer</span>
@@ -336,7 +238,7 @@
                 <div class="payment-option" data-payment="AYA_BANK">
                     <div class="payment-option-header">
                         <input class="payment-radio" type="radio" name="payment-method" value="AYA_BANK">
-                        <div class="payment-icon">🏦</div>
+                        <img class="payment-icon" src="/images/bank/aya.png" alt="aya bank logo">
                         <div class="payment-info">
                             <strong>AYA Bank</strong>
                             <span>Bank transfer</span>
@@ -348,7 +250,7 @@
                 <div class="payment-option" data-payment="CB_BANK">
                     <div class="payment-option-header">
                         <input class="payment-radio" type="radio" name="payment-method" value="CB_BANK">
-                        <div class="payment-icon">🏦</div>
+                        <img class="payment-icon" src="/images/bank/cb.jpg" alt="cb bank logo">
                         <div class="payment-info">
                             <strong>CB Bank</strong>
                             <span>Bank transfer</span>
@@ -360,7 +262,7 @@
                 <div class="payment-option" data-payment="MOBILE_PAY">
                     <div class="payment-option-header">
                         <input class="payment-radio" type="radio" name="payment-method" value="MOBILE_PAY">
-                        <div class="payment-icon">📱</div>
+                        <img class="payment-icon" src="/images/bank/kpay.png" alt="cb bank logo">
                         <div class="payment-info">
                             <strong>K Pay / AYA Pay / CB Pay / Wave Pay</strong>
                             <span>Mobile payment</span>
@@ -406,7 +308,7 @@
                 </div>
 
                 <div class="d-flex justify-content-between mb-3 small">
-                    <span class="text-secondary">Estimated taxes</span>
+                    <span class="text-secondary">Estimated taxes(5.00%)</span>
                     <span id="order-tax" class="fw-semibold">0 MMK</span>
                 </div>
 
@@ -434,6 +336,6 @@
 <script src="/js/api.js"></script>
 <script src="/js/checkout.js"></script>
 <script src="/js/error-handler.js"></script>
-<script src="/js/cartapp.js"></script>
+<script src="/js/cart-app.js"></script>
 </body>
 </html>

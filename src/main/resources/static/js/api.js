@@ -6,24 +6,42 @@ async function fetchWithConnectionCheck(url, options) {
 }
 
 
-async function createOrder(payload) {
+async function createOrder(payload,paymentProof) {
 	try{
 		const BASE_URL = "http://localhost:8080";
 		console.log(`${BASE_URL}/api/orders/place`);
-		    const response = await fetchWithConnectionCheck(`${BASE_URL}/api/orders/place`, {
+		
+		const formData=new FormData();
+		formData.append("order",
+			new Blob(
+			[JSON.stringify(payload)],
+			{
+				type:"application/json"
+			}	
+			)
+		);
+		
+		if(paymentProof){
+			formData.append(
+				"paymentProof",
+				paymentProof
+			);
+		}
+		    const response = await fetchWithConnectionCheck(
+			    `${BASE_URL}/api/orders/place`, {
 		        method: "POST",
-		        headers: {
-		            "Content-Type": "application/json"
-		        },
-		        body: JSON.stringify(payload)
+		        body: formData
 		    });
 
 		    if (response.ok) {
-		        return response.json();
+				
+				const result=await response.json();
+				clearCart();
+		        return result;
 				
 		    }
 
-			clearCart();
+			
 		    if (response.status === 400) {
 		        const errorBody = await response.json();
 
@@ -36,14 +54,10 @@ async function createOrder(payload) {
 		    if (response.status === 401) {
 		        throw new Error("SESSION_EXPIRED");
 		    }
-			
-			console.log('Response => ' + response.status)
-
-		    throw new Error("Something went wrong on the server.");
 	}
 	catch(err){
 		console.log(err)
-		throw new Error("Something went wrong on the server.");
+		throw err;
 		
 	}
 	

@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import ai.shoppingapp.model.OrderItemRequestDto;
 import ai.shoppingapp.model.PlaceOrderRequestDto;
@@ -28,19 +29,22 @@ public class OrderService {
     private final OrderRepository orderRepo;
     private final StockRepository stockRepo;
     private final OrderProductRepository orderProductRepo;
+    private final PaymentProofStorageService paymentProofStorageService;
 
     public OrderService(OrderItemRepository orderItemRepo,
                         OrderRepository orderRepo,
                         StockRepository stockRepo,
-                        OrderProductRepository orderProductRepo) {
+                        OrderProductRepository orderProductRepo,
+                        PaymentProofStorageService paymentProofStorageService) {
         this.orderItemRepo = orderItemRepo;
         this.orderRepo = orderRepo;
         this.stockRepo = stockRepo;
         this.orderProductRepo = orderProductRepo;
+        this.paymentProofStorageService=paymentProofStorageService;
     }
 
     @Transactional
-    public String placeOrder(PlaceOrderRequestDto requestDto) {
+    public String placeOrder(PlaceOrderRequestDto requestDto,MultipartFile paymentProof) {
         String orderId = UUID.randomUUID().toString();
         String orderNumber = "ORD-" + System.currentTimeMillis();
         LocalDateTime now = LocalDateTime.now();
@@ -75,7 +79,8 @@ public class OrderService {
 
            
             subtotalAmount = subtotalAmount.add(itemSubtotal);
-
+            
+           
             
             OrderItemEntity itemEntity = toOrderItemEntity(orderId, itemDto, price, itemSubtotal, now);
             orderItemToSave.add(itemEntity);
@@ -96,9 +101,16 @@ public class OrderService {
                                              .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
         BigDecimal grandTotal = subtotalAmount.add(shippingFee).add(taxAmount);
-
         
+        String paymentProofPath = null;
         
+        if(!"COD".equals(requestDto.getPaymentMethod())) {
+        	if(paymentProof ==null || paymentProof.isEmpty()) {
+        		throw new RuntimeException("Payment proof is required.");
+        	}
+        	
+        	paymentProofPath=this.paymentProofStorageService.save(paymentProof);
+        }
 
        
         OrderEntity order = toOrderEntity(
@@ -109,6 +121,7 @@ public class OrderService {
                 taxAmount,
                 shippingFee,
                 grandTotal,
+            	   paymentProofPath,
                 now
         );
         order.setUser_id("382d6828-b8bc-11f1-ac2f-8038fbbba9bc");//Will change later
@@ -144,6 +157,7 @@ public class OrderService {
             BigDecimal tax,
             BigDecimal shippingFee,
             BigDecimal total,
+            String paymentProof,
             LocalDateTime now) {
         
         OrderEntity entity = new OrderEntity();
@@ -163,7 +177,7 @@ public class OrderService {
         entity.setPhone_no(requestDto.getPhoneNo());
         entity.setCreated_at(now);
         entity.setUpdated_at(now);
-        entity.setPayment_confirm_photo(null);
+        entity.setPayment_confirm_photo(paymentProof);
         entity.setAdditional_note(requestDto.getOrderNotes());
         return entity;
     }

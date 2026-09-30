@@ -3,29 +3,29 @@ const PAYMENT_DETAILS = {
         title: "KBZ Bank",
         account: "200xxxxxxxxxxxx",
         name: "BLACKJACK Clothing",
-        logo: "/images/logos/kbz-logo.png",
-        qrImage: "/images/qr/kbz-qr.png"
+        logo: "/images/bank/kbz.jpg",
+        qrImage: "/images/qr/qr.png"
     },
     AYA_BANK: {
         title: "AYA Bank",
         account: "40038396418",
         name: "BLACKJACK Clothing",
-        logo: "/images/logos/aya-logo.png",
-        qrImage: "/images/qr/aya-qr.png"
+        logo: "/images/bank/aya.png",
+        qrImage: "/images/qr/qr.png"
     },
     CB_BANK: {
         title: "CB Bank",
         account: "000xxxxxxxxxxxx",
         name: "BLACKJACK Clothing",
-        logo: "/images/logos/cb-logo.png",
-        qrImage: "/images/qr/cb-qr.png"
+        logo: "/images/bank/cb.jpg",
+        qrImage: "/images/qr/qr.png"
     },
     MOBILE_PAY: {
         title: "K Pay / Mobile Pay",
         account: "09xxxxxxxxx",
         name: "BLACKJACK Clothing",
-        logo: "/images/logos/kpay-logo.png",
-        qrImage: "/images/qr/kpay-qr.png"
+        logo: "/images/bank/kpay.png",
+        qrImage: "/images/qr/qr.png"
     }
 };
 function buildCheckoutPayload(
@@ -185,22 +185,11 @@ function selectPaymentOption(paymentMethod) {
     wrapper.innerHTML = `
         <div class="custom-payment-card border rounded-3 p-4 bg-white">
             
-            <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-2 mb-4">
-                <div class="check-icon-circle bg-dark text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 24px; height: 24px;">
-                    <span style="font-size: 14px;">✓</span>
-                </div>
-                ${payment.logo ? `<img src="${payment.logo}" alt="${payment.title}" class="rounded" style="width: 40px; height: 40px; object-fit: contain;">` : ''}
-                <div>
-                    <h6 class="fw-bold mb-0 text-dark">${payment.title}</h6>
-                    <small class="text-muted">${payment.name}</small>
-                </div>
-            </div>
-
-            <div class="text-center my-4">
-                <p class="fw-medium text-dark mb-3">Scan to Pay</p>
+            <div class="text-center mt-2 mb-4">
+                <p class="payment-scan-title">Scan to Pay</p>
                 
-                <div class="d-inline-block p-3 rounded-4 bg-dark mb-2">
-                    <img src="${payment.qrImage}" alt="Payment QR Code" class="img-fluid rounded" style="width: 180px; height: 180px; object-fit: cover;">
+                <div class="payment-qr-frame">
+                    <img src="${payment.qrImage}" alt="Payment QR Code" class="payment-qr">
                 </div>
                 
                 <div>
@@ -214,23 +203,29 @@ function selectPaymentOption(paymentMethod) {
                 </div>
             </div>
 
-            <div class="mb-4 text-start">
-                <p class="mb-1 text-dark"><strong>Account:</strong> ${payment.account}</p>
-                <p class="mb-0 text-dark"><strong>Name:</strong> ${payment.name}</p>
+            <div class="payment-account">
+                <div><strong>Account:</strong> ${payment.account}</div>
+                <div><strong>Name:</strong> ${payment.name}</div>
             </div>
 
-            <label for="payment-proof" class="custom-dashed-upload d-flex align-items-center gap-3 p-3 rounded-3 cursor-pointer">
-                <div class="upload-icon-box fs-4 text-muted border rounded p-2 bg-light d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
-                    ↥
-                </div>
-                <div>
-                    <strong class="d-block text-dark fw-bold">Upload screenshot</strong>
-                    <small class="text-muted">Click to upload your payment proof</small>
-                </div>
-            </label>
-            <input id="payment-proof" type="file" accept="image/*" hidden>
-            <div id="payment-proof-name" class="selected-file text-success mt-2 small" hidden></div>
-            <div id="payment-proof-error" class="field-error" hidden></div>
+            <div class="payment-upload-section text-start">
+                <label for="payment-proof" class="form-label fw-bold text-dark mb-1">Payment Proof <span class="text-danger">*</span></label>
+                <div class="small text-muted mb-2">JPG, PNG or WEBP • Maximum 5 MB</div>
+
+                <label for="payment-proof" class="custom-dashed-upload d-flex align-items-center gap-3 p-3 rounded-3 cursor-pointer">
+                    <div class="upload-icon-box">
+                        ↥
+                    </div>
+                    <div>
+                        <strong class="d-block text-dark fw-bold">Upload payment screenshot</strong>
+                        <small class="text-muted">Click here to choose your payment proof</small>
+                    </div>
+                </label>
+
+                <input id="payment-proof" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" hidden>
+                <div id="payment-proof-name" class="selected-file text-success mt-2 small" hidden></div>
+                <div id="payment-proof-error" class="field-error text-danger mt-1 small" hidden></div>
+            </div>
 
         </div>
     `;
@@ -239,6 +234,12 @@ function selectPaymentOption(paymentMethod) {
 }
 
 function handlePaymentSelection(event) {
+	
+	const header=event.target.closest(".payment-option-header");
+	
+	if(!header){
+		return;
+	}
     const option = event.target.closest(".payment-option");
 
     if (!option) {
@@ -246,6 +247,30 @@ function handlePaymentSelection(event) {
     }
 
     selectPaymentOption(option.dataset.payment);
+}
+
+function validatePaymentProof(file) {
+    if (!file) {
+        return "Please upload your payment proof.";
+    }
+
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+        return "Only JPG, PNG, and WEBP images are allowed.";
+    }
+
+    const maxSize = 5 * 1024 * 1024;
+
+    if (file.size > maxSize) {
+        return "Payment proof must be smaller than 5 MB.";
+    }
+
+    return "";
 }
 
 function handlePaymentProofChange(event) {
@@ -261,6 +286,17 @@ function handlePaymentProofChange(event) {
     if (!file) {
         nameElement.hidden = true;
         nameElement.textContent = "";
+        clearFieldError("payment-proof");
+        return;
+    }
+
+    const errorMessage = validatePaymentProof(file);
+
+    if (errorMessage) {
+        input.value = "";
+        nameElement.hidden = true;
+        nameElement.textContent = "";
+        showFieldError("payment-proof", errorMessage);
         return;
     }
 
@@ -278,26 +314,48 @@ async function placeOrder() {
         );
     }
 
+    const paymentMethod = getSelectedPaymentMethod();
+
     if (!validateCheckoutForm()) {
         return;
     }
 
+    const paymentProof =
+        document.getElementById("payment-proof")?.files[0] || null;
+
+    if (paymentMethod !== "COD") {
+        const paymentProofError = validatePaymentProof(paymentProof);
+
+        if (paymentProofError) {
+            showFieldError("payment-proof", paymentProofError);
+            return;
+        }
+    }
+
     setButtonLoading(true);
 
-	const firstName = document.getElementById("first-name")?.value.trim() || "";
-	    const lastName = document.getElementById("last-name")?.value.trim() || "";
-	    const fullName = `${firstName} ${lastName}`.trim();
+    const firstName =
+        document.getElementById("first-name")?.value.trim() || "";
+    const lastName =
+        document.getElementById("last-name")?.value.trim() || "";
+    const fullName = `${firstName} ${lastName}`.trim();
 
-	    const street = document.getElementById("address-street")?.value.trim() || "";
-	    const apartment = document.getElementById("address-apartment")?.value.trim() || "";
-	    const city = document.getElementById("address-city")?.value.trim() || "";
-	    const postal = document.getElementById("address-postal")?.value.trim() || "";
-	    
-	    const shippingAddress = `${street}${apartment ? ', ' + apartment : ''}, ${city}${postal ? ' ' + postal : ''}, Myanmar`.trim();
+    const street =
+        document.getElementById("address-street")?.value.trim() || "";
+    const apartment =
+        document.getElementById("address-apartment")?.value.trim() || "";
+    const city =
+        document.getElementById("address-city")?.value.trim() || "";
+    const postal =
+        document.getElementById("address-postal")?.value.trim() || "";
 
-	    const phoneNo = document.getElementById("phone-no").value.trim();
-	    const paymentMethod = getSelectedPaymentMethod();
-	    const orderNotes = document.getElementById("order-notes")?.value.trim() || "";
+    const shippingAddress =
+        `${street}${apartment ? ", " + apartment : ""}, ${city}${postal ? " " + postal : ""}, Myanmar`.trim();
+
+    const phoneNo =
+        document.getElementById("phone-no")?.value.trim() || "";
+    const orderNotes =
+        document.getElementById("order-notes")?.value.trim() || "";
 
     const payload = buildCheckoutPayload(
         fullName,
@@ -307,9 +365,7 @@ async function placeOrder() {
         orderNotes
     );
 
-    const result = await createOrder(payload);
-
-
+    const result = await createOrder(payload, paymentProof);
 
     window.location.href =
         `./order-success.html?orderNumber=${encodeURIComponent(result.orderNumber)}`;
@@ -389,7 +445,7 @@ function renderOrderSummary() {
 
 	      if (taxElement) {
 	          taxElement.textContent =
-	              `${Math.round(taxAmount).toLocaleString()} MMK`+"(5.00%)";
+	              `${Math.round(taxAmount).toLocaleString()} MMK`;
 	      }
 
 	      if (totalElement) {

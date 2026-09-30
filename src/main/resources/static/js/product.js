@@ -2,7 +2,7 @@ const MOCK_PRODUCTS = [
     {
         productId: "a9ae2897-b7c0-11f1-bcf3-8038fbbba9bc",
         productName: "Classic T-Shirt",
-        image: "https://via.placeholder.com/150/FF6B6B/fff?text=T-Shirt",
+        image: "/images/temporary/miu-top.jpg",
         price: 15000,
         stocks: [
             { stockId: "9c8ee5a7-b7c0-11f1-bcf3-8038fbbba9bc", colour: "Red", size: "M", stock_qty: 10 },
@@ -12,7 +12,7 @@ const MOCK_PRODUCTS = [
     {
         productId: "prod-002",
         productName: "Denim Jeans",
-        image: "https://via.placeholder.com/150/4ECDC4/fff?text=Jeans",
+        image: "/images/temporary/miu-top.jpg",
         price: 35000,
         stocks: [
             { stockId: "stk-002a", colour: "Dark Blue", size: "32", stock_qty: 8 },
@@ -22,7 +22,7 @@ const MOCK_PRODUCTS = [
     {
         productId: "prod-003",
         productName: "Sneakers",
-        image: "https://via.placeholder.com/150/45B7D1/fff?text=Shoes",
+        image: "/images/temporary/women-top-with-knot.jpg",
         price: 55000,
         stocks: [
             { stockId: "stk-003a", colour: "White", size: "42", stock_qty: 6 },

@@ -9,6 +9,7 @@ public class PlaceOrderRequestDto {
 	private String phoneNo;
 	private String paymentMethod;
 	private String orderNotes;
+	private String paymentProof;
 	private List<OrderItemRequestDto> items;
 	
 	public PlaceOrderRequestDto() {}
@@ -67,6 +68,14 @@ public class PlaceOrderRequestDto {
 
 	public void setItems(List<OrderItemRequestDto> items) {
 		this.items = items;
+	}
+
+	public String getPaymentProof() {
+		return paymentProof;
+	}
+
+	public void setPaymentProof(String paymentProof) {
+		this.paymentProof = paymentProof;
 	}
 	
 	
