@@ -41,7 +41,7 @@ public class HomeController {
             model.addAttribute("selectedCategoryId", "all");
         }
         model.addAttribute("products", products);
-
+        model.addAttribute("newProducts", products);
         return "home"; // templates/home.html
     }
     

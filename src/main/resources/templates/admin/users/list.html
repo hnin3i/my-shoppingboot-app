@@ -1,420 +1,169 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users - BLACKJACK Admin</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --brand-primary: #6366f1;
-            --brand-primary-hover: #4f46e5;
-            --brand-danger: #ef4444;
-            --sidebar-bg: #ffffff;
-            --main-bg: #f8fafc;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        body {
-            background-color: var(--main-bg);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            color: #1e293b;
-        }
+<title>Users - BLACKJACK Admin</title>
 
-        /* Sidebar Styling */
-        .sidebar {
-            width: 250px;
-            background: #ffffff;
-            min-height: 100vh;
-            border-right: 1px solid #f1f5f9;
-            padding: 24px 16px;
-            display: flex;
-            flex-direction: column;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 100;
-        }
+<!-- Bootstrap -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
 
-        .brand-logo {
-            font-size: 1.35rem;
-            font-weight: 900;
-            color: #e11d48;
-            letter-spacing: -0.02em;
-            text-decoration: none;
-            padding-left: 12px;
-            margin-bottom: 28px;
-            display: block;
-        }
+<!-- Bootstrap Icons -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-        .sidebar-section-title {
-            font-size: 0.72rem;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #94a3b8;
-            font-weight: 700;
-            padding: 0 12px;
-            margin-bottom: 12px;
-        }
-
-        .nav-link-custom {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 11px 16px;
-            color: #64748b;
-            font-weight: 500;
-            border-radius: 10px;
-            text-decoration: none;
-            transition: all 0.15s ease;
-            margin-bottom: 4px;
-        }
-
-        .nav-link-custom:hover {
-            color: #1e293b;
-            background-color: #f8fafc;
-        }
-
-        .nav-link-custom.active {
-            background-color: var(--brand-primary);
-            color: #ffffff;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
-        }
-
-        .sidebar-footer {
-            margin-top: auto;
-            padding-top: 16px;
-            border-top: 1px solid #f1f5f9;
-        }
-
-        /* Main Content */
-        .main-wrapper {
-            margin-left: 250px;
-            padding: 40px 48px;
-        }
-
-        .header-title {
-            font-size: 1.85rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin-bottom: 4px;
-        }
-
-        .header-subtitle {
-            color: #64748b;
-            font-size: 0.95rem;
-            margin-bottom: 32px;
-        }
-
-        /* Card Container */
-        .content-card {
-            background: #ffffff;
-            border: 1px solid #f1f5f9;
-            border-radius: 16px;
-            padding: 28px 32px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-        }
-
-        .card-top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 24px;
-        }
-
-        /* Search input styling */
-        .search-box {
-            position: relative;
-            width: 280px;
-        }
-
-        .search-box input {
-            padding-left: 38px;
-            border-radius: 10px;
-            border: 1px solid #e2e8f0;
-            font-size: 0.9rem;
-            height: 40px;
-        }
-
-        .search-box input:focus {
-            border-color: var(--brand-primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94a3b8;
-            font-size: 0.95rem;
-        }
-
-        /* Table styles */
-        .table-custom {
-            width: 100%;
-            margin-bottom: 0;
-            border-collapse: separate;
-            border-spacing: 0;
-        }
-
-        .table-custom thead th {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 12px 16px;
-            border-bottom: 1px solid #f1f5f9;
-            background: transparent;
-        }
-
-        .table-custom tbody tr {
-            transition: background 0.15s ease;
-        }
-
-        .table-custom tbody tr:hover {
-            background-color: #f8fafc;
-        }
-
-        .table-custom tbody td {
-            padding: 18px 16px;
-            vertical-align: middle;
-            border-bottom: 1px solid #f8fafc;
-            font-size: 0.92rem;
-            color: #334155;
-        }
-
-        .user-avatar-badge {
-            width: 38px;
-            height: 38px;
-            border-radius: 8px;
-            background-color: #f1f5f9;
-            color: #475569;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.95rem;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        .user-name-title {
-            font-weight: 700;
-            color: #0f172a;
-            line-height: 1.2;
-        }
-
-        .role-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-weight: 500;
-            color: #475569;
-        }
-
-        /* Action Buttons */
-        .btn-action-edit {
-            width: 34px;
-            height: 34px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #e0e7ff;
-            color: var(--brand-primary);
-            background: #ffffff;
-            border-radius: 8px;
-            text-decoration: none;
-            transition: all 0.15s ease;
-        }
-
-        .btn-action-edit:hover {
-            background-color: #eef2ff;
-            color: var(--brand-primary-hover);
-        }
-
-        .btn-action-delete {
-            width: 34px;
-            height: 34px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #fee2e2;
-            color: var(--brand-danger);
-            background: #ffffff;
-            border-radius: 8px;
-            transition: all 0.15s ease;
-        }
-
-        .btn-action-delete:hover {
-            background-color: #fef2f2;
-            color: #dc2626;
-        }
-    </style>
+<!-- Admin CSS -->
+<link rel="stylesheet" th:href="@{/css/admin.css}">
 </head>
+
 <body>
 
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-        <a th:href="@{/}" class="brand-logo">BLACKJACK</a>
+	<!-- Sidebar -->
+	<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-        <div class="sidebar-section-title">Admin</div>
-        <nav class="nav flex-column">
-            <a th:href="@{/admin/dashboard}" class="nav-link-custom">
-                <i class="bi bi-grid-fill"></i> Dashboard
-            </a>
-            <a th:href="@{/admin/products}" class="nav-link-custom">
-                <i class="bi bi-handbag"></i> Products
-            </a>
-            <a th:href="@{/admin/categories}" class="nav-link-custom">
-                <i class="bi bi-tag"></i> Categories
-            </a>
-            <a th:href="@{/admin/stock}" class="nav-link-custom">
-                <i class="bi bi-box-seam"></i> Stock
-            </a>
-            <a th:href="@{/admin/orders}" class="nav-link-custom">
-                <i class="bi bi-cart"></i> Orders
-            </a>
-            <a th:href="@{/admin/users}" class="nav-link-custom active">
-                <i class="bi bi-people-fill"></i> Users
-            </a>
-        </nav>
 
-        <div class="sidebar-footer">
-            <a th:href="@{/logout}" class="nav-link-custom text-danger">
-                <i class="bi bi-box-arrow-left"></i> Logout
-            </a>
-        </div>
-    </aside>
+	<!-- Main -->
+	<div class="admin-main">
 
-    <!-- Main Container -->
-    <main class="main-wrapper">
-        <div class="d-flex justify-content-between align-items-start mb-3">
-            <div>
-                <h1 class="header-title">Users</h1>
-                <p class="header-subtitle">Manage registered users and their roles</p>
-            </div>
-            <!-- Add User Button -->
-            <a th:href="@{/admin/users/add}" class="btn text-white px-3 py-2 fw-semibold d-inline-flex align-items-center gap-2" style="background-color: var(--brand-primary); border-radius: 10px;">
-                <i class="bi bi-plus-lg"></i> Add User
-            </a>
-        </div>
+		<!-- Topbar -->
+		<div class="admin-topbar">
 
-        <div class="content-card">
-            <!-- Search & Count Header -->
-            <div class="card-top-bar">
-                <div>
-                    <h5 class="fw-bold mb-1" style="color: #0f172a;">User List</h5>
-                    <p class="text-secondary small mb-0" th:text="${totalUsers != null ? totalUsers : (users != null ? users.size() : 0)} + ' users'">
-                        0 users
-                    </p>
-                </div>
-                
-                <!-- Filter / Search Form -->
-                <form th:action="@{/admin/users}" method="get" class="search-box">
-                    <i class="bi bi-search"></i>
-                    <input type="text" 
-                           name="keyword" 
-                           th:value="${keyword}" 
-                           class="form-control" 
-                           placeholder="Search user..."
-                           onchange="this.form.submit()">
-                </form>
-            </div>
+			<div class="search-box">
+				<i class="bi bi-search"></i> <input type="text"
+					placeholder="Search user...">
+			</div>
 
-            <!-- Dynamic Users Table -->
-            <div class="table-responsive">
-                <table class="table-custom">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Role</th>
-                            <th>Joined</th>
-                            <th class="text-end pe-3">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Loop over dynamic users -->
-                        <tr th:each="user : ${users}">
-                            <!-- Name + First Initial Avatar -->
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="user-avatar-badge" 
-                                         th:text="${user.name != null and !user.name.isEmpty() ? #strings.substring(user.name, 0, 1).toUpperCase() : 'U'}">
-                                        J
-                                    </div>
-                                    <div class="user-name-title" th:text="${user.name}">Jessica Smith</div>
-                                </div>
-                            </td>
+			<div class="admin-profile">
+				<div class="admin-avatar">A</div>
+				<div>
+					<strong>Admin</strong>
+				</div>
+			</div>
 
-                            <!-- Email -->
-                            <td th:text="${user.email}">user@example.com</td>
+		</div>
 
-                            <!-- Phone -->
-                            <td th:text="${user.phone != null and !user.phone.isEmpty() ? user.phone : '-'}">09 123 456 789</td>
 
-                            <!-- Role: Dynamic Shield vs Person icon -->
-                            <td>
-                                <span class="role-badge">
-                                    <i th:if="${#strings.toUpperCase(#strings.toString(user.role)).contains('ADMIN')}" 
-                                       class="bi bi-shield-check text-primary"></i>
-                                    <i th:unless="${#strings.toUpperCase(#strings.toString(user.role)).contains('ADMIN')}" 
-                                       class="bi bi-person"></i>
-                                    <span th:text="${#strings.toUpperCase(#strings.toString(user.role)).contains('ADMIN') ? 'Admin' : 'Customer'}">
-                                        Customer
-                                    </span>
-                                </span>
-                            </td>
+		<!-- Content -->
+		<div class="admin-content">
 
+<<<<<<< HEAD
+			<!-- Flash messages -->
+			<div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+			<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+=======
                             <!-- Joined Date -->
                             <td th:text="${user.created_at != null ? #temporals.format(user.created_at, 'yyyy-MM-dd') : '2026-09-01'}">
                                 2026-09-01
                             </td>
+>>>>>>> a1716cc46921c084fb5bc9a9cb07620574eba3ef
 
-                            <!-- Actions (Edit & Delete) -->
-                            <td class="text-end pe-2">
-                                <div class="d-inline-flex gap-2">
-                                    <!-- Edit Link -->
-                                    <a th:href="@{/admin/users/edit(id=${user.id})}" 
-                                       class="btn-action-edit" 
-                                       title="Edit User">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
+			<!-- Page Header -->
+			<div class="d-flex justify-content-between align-items-center mb-4">
 
-                                    <!-- Delete Form with Confirmation Dialog -->
-                                    <form th:action="@{/admin/users/delete}" method="post" 
-                                          onsubmit="return confirm('Are you sure you want to delete this user?');" 
-                                          style="display: inline;">
-                                        <input type="hidden" name="id" th:value="${user.id}" />
-                                        <button type="submit" class="btn-action-delete" title="Delete User">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
+				<div>
+					<div class="page-title">Users</div>
+					<div class="page-subtitle">Manage registered users and their roles</div>
+				</div>
 
-                        <!-- Empty State if no users found -->
-                        <tr th:if="${#lists.isEmpty(users)}">
-                            <td colspan="6" class="text-center py-5 text-secondary">
-                                <i class="bi bi-people fs-2 d-block mb-2 text-muted"></i>
-                                No users found.
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </main>
+			</div>
 
-    <!-- Bootstrap 5 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+			<!-- User Card -->
+			<div class="admin-card">
+
+				<div class="d-flex justify-content-between align-items-center mb-3">
+
+					<div class="admin-card-title mb-0">User List</div>
+
+					<div>
+						<input type="text" class="form-control"
+							placeholder="Search user..." style="width: 220px;">
+					</div>
+
+				</div>
+
+
+				<!-- Table -->
+				<div class="table-responsive">
+
+					<table class="admin-table">
+
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Email</th>
+								<th>Phone</th>
+								<th>Role</th>
+								<th>Joined</th>
+								<th class="text-end">Action</th>
+							</tr>
+						</thead>
+
+						<tbody>
+
+							<tr th:each="user : ${users}">
+
+								<td><strong th:text="${user.name}">Name</strong></td>
+
+								<td th:text="${user.email}">email@example.com</td>
+
+								<td th:text="${user.phone} ?: '-'">-</td>
+
+								<td>
+									<span class="status"
+										th:classappend="${user.role.name() == 'ADMIN'} ? ' status-success' : ' status-warning'"
+										th:text="${user.role}"> ROLE </span>
+								</td>
+
+								<td th:text="${user.created_at != null} ? ${user.created_at.toLocalDate()} : '-'">2026-01-01</td>
+
+								<td class="text-end">
+
+									<form th:action="@{'/admin/users/' + ${user.id} + '/role'}"
+										method="post" class="d-inline-flex gap-1 justify-content-end">
+
+										<select name="role" class="form-select form-select-sm"
+											style="width: auto;">
+											<option value="CUSTOMER"
+												th:selected="${user.role.name() == 'CUSTOMER'}">Customer</option>
+											<option value="ADMIN"
+												th:selected="${user.role.name() == 'ADMIN'}">Admin</option>
+										</select>
+
+										<button type="submit" class="btn btn-sm btn-outline-secondary">
+											<i class="bi bi-check-lg"></i>
+										</button>
+
+									</form>
+
+								</td>
+							</tr>
+
+							<tr th:if="${#lists.isEmpty(users)}">
+								<td colspan="6" class="text-center text-muted">No users found.</td>
+							</tr>
+
+						</tbody>
+
+					</table>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<!-- Bootstrap JS -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
 </body>
 </html>
