@@ -50,9 +50,16 @@
 		<!-- Content -->
 		<div class="admin-content">
 
+<<<<<<< HEAD
 			<!-- Flash messages -->
 			<div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
 			<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+=======
+                            <!-- Joined Date -->
+                            <td th:text="${user.created_at != null ? #temporals.format(user.created_at, 'yyyy-MM-dd') : '2026-09-01'}">
+                                2026-09-01
+                            </td>
+>>>>>>> a1716cc46921c084fb5bc9a9cb07620574eba3ef
 
 			<!-- Page Header -->
 			<div class="d-flex justify-content-between align-items-center mb-4">
