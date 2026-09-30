@@ -466,7 +466,7 @@
 
 								<td><span th:if="${product.isDiscount == 1}"
 									class="status status-warning"> <span
-										 th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
+										 th:text="${#numbers.formatDecimal(product.discountPrice, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
 
 											10000 </span> &nbsp;OFF
 

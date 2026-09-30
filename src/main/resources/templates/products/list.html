@@ -90,8 +90,9 @@
             <article class="product-card"
                      th:each="product : ${products}"
                      th:attr="data-price=${product.isDiscount == 1
-                             ? product.discountPrice
-                             : product.price}">
+                             ? product.finalPrice
+                             : product.price},
+            data-created=${product.createdAt}">
 
                 <!-- PRODUCT IMAGE -->
 
@@ -163,7 +164,7 @@
 
                         <span class="sale-price"
                               th:text="${#numbers.formatDecimal(
-                                  product.discountPrice,
+                                  product.finalPrice,
                                   0,
                                   'COMMA',
                                   0,
@@ -307,10 +308,14 @@
 
             productCards.sort(function(a, b) {
 
-                return 0;
+                const dateA =
+                    new Date(a.dataset.created);
 
+                const dateB =
+                    new Date(b.dataset.created);
+
+                return dateB - dateA;
             });
-
         }
 
 

@@ -32,7 +32,6 @@
 </head>
 
 <style>
-
     /* ================= QUANTITY ================= */
 
     .quantity-section {
@@ -63,12 +62,38 @@
         background: #f5f5f5;
     }
 
+    /* Quantity input */
     #quantity {
         flex: 1;
+        width: 50px;
+        height: 100%;
+        border: none;
+        outline: none;
         text-align: center;
         font-size: 16px;
     }
 
+    /* Remove number input arrows */
+    #quantity::-webkit-inner-spin-button,
+    #quantity::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    #quantity[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    .old-price {
+        text-decoration: line-through;
+        color: #888;
+        margin-right: 10px;
+    }
+
+    .sale-price {
+        color: #d63384;
+        font-weight: 600;
+    }
 </style>
 
 <body>
@@ -157,18 +182,56 @@
 
                         <!-- ================= PRICE ================= -->
 
-                        <div class="product-price">
+                        
+<!-- NORMAL PRICE -->
+<div class="product-price"
+     th:if="${product != null and product.isDiscount != 1}">
 
-                            <span th:if="${product != null}"
-                                   th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
-                                79,900 MMK
-                            </span>
+    <span th:text="${#numbers.formatDecimal(
+                        product.price,
+                        0,
+                        'COMMA',
+                        0,
+                        'POINT'
+                    ) + ' MMK'}">
+        79,900 MMK
+    </span>
 
-                            <span th:unless="${product != null}">
-                                79,900 MMK
-                            </span>
+</div>
 
-                        </div>
+
+<!-- DISCOUNT PRICE -->
+<div class="product-price discount-price"
+     th:if="${product != null and product.isDiscount == 1}">
+
+    <!-- Normal Price - Cross Line -->
+    <span class="old-price"
+          th:text="${#numbers.formatDecimal(
+                      product.price,
+                      0,
+                      'COMMA',
+                      0,
+                      'POINT'
+                  ) + ' MMK'}">
+        79,900 MMK
+    </span>
+
+    <!-- Discount Price -->
+    <span class="sale-price"
+          th:text="${#numbers.formatDecimal(
+                      product.finalPrice,
+                      0,
+                      'COMMA',
+                      0,
+                      'POINT'
+                  ) + ' MMK'}">
+        69,900 MMK
+    </span>
+
+</div>
+
+
+
 
 
                         <!-- ================= DESCRIPTION ================= -->
@@ -263,8 +326,7 @@
                                 </button>
 
                                 <button type="button"
-                                        class="size-btn"
-                                        disabled>
+                                        class="size-btn">
                                     L
                                 </button>
 
@@ -285,44 +347,45 @@
                         <!-- QUANTITY -->
                         <!-- ================================================= -->
 
-                        <div class="product-option quantity-section">
+                       <div class="product-option quantity-section">
 
-                            <div class="option-heading">
+  
+<div class="option-heading">
+    <span>QUANTITY</span>
+</div>
 
-                                <span>QUANTITY</span>
+<div class="quantity-control">
 
-                            </div>
+    <!-- Decrease -->
+    <button type="button"
+            class="quantity-btn"
+            id="decreaseQuantity"
+            aria-label="Decrease quantity">
+        <i class="bi bi-dash"></i>
+    </button>
+
+    <!-- Quantity Input -->
+    <input type="number"
+           id="quantity"
+           name="quantity"
+           value="1"
+           min="1"
+           max="20"
+           step="1"
+           inputmode="numeric">
+
+    <!-- Increase -->
+    <button type="button"
+            class="quantity-btn"
+            id="increaseQuantity"
+            aria-label="Increase quantity">
+        <i class="bi bi-plus"></i>
+    </button>
+
+</div>
 
 
-                            <div class="quantity-control">
 
-                                <button type="button"
-                                        class="quantity-btn"
-                                        id="decreaseQuantity"
-                                        aria-label="Decrease quantity">
-
-                                    <i class="bi bi-dash"></i>
-
-                                </button>
-
-
-                                <span id="quantity">
-                                    1
-                                </span>
-
-
-                                <button type="button"
-                                        class="quantity-btn"
-                                        id="increaseQuantity"
-                                        aria-label="Increase quantity">
-
-                                    <i class="bi bi-plus"></i>
-
-                                </button>
-
-                            </div>
-
-                        </div>
 
 
                         <!-- ================================================= -->
@@ -362,6 +425,7 @@
         </div>
 
     </main>
+    
 
 
     <!-- ================================================= -->
@@ -465,48 +529,111 @@
            QUANTITY
         ================================================= */
 
-        const decreaseQuantity =
-            document.getElementById("decreaseQuantity");
+        
+        
+        const quantityInput = document.getElementById("quantity");
+        const decreaseBtn = document.getElementById("decreaseQuantity");
+        const increaseBtn = document.getElementById("increaseQuantity");
 
-        const increaseQuantity =
-            document.getElementById("increaseQuantity");
-
-        const quantityDisplay =
-            document.getElementById("quantity");
-
-
-        let quantity = 1;
+        const MIN_QUANTITY = 1;
+        const MAX_QUANTITY = 20;
 
 
-        /* PLUS */
+        /* ================= DECREASE ================= */
 
-        increaseQuantity.addEventListener("click", function() {
+        decreaseBtn.addEventListener("click", function () {
 
-            quantity++;
+            let quantity = parseInt(quantityInput.value) || MIN_QUANTITY;
 
-            quantityDisplay.textContent =
-                quantity;
-
-        });
-
-
-        /* MINUS */
-
-        decreaseQuantity.addEventListener("click", function() {
-
-            if (quantity > 1) {
-
-                quantity--;
-
-                quantityDisplay.textContent =
-                    quantity;
-
+            if (quantity > MIN_QUANTITY) {
+                quantityInput.value = quantity - 1;
             }
 
         });
 
-    </script>
 
+        /* ================= INCREASE ================= */
+
+        increaseBtn.addEventListener("click", function () {
+
+            let quantity = parseInt(quantityInput.value) || MIN_QUANTITY;
+
+            if (quantity < MAX_QUANTITY) {
+                quantityInput.value = quantity + 1;
+            }
+
+        });
+
+
+        /* ================= MANUAL INPUT ================= */
+
+        quantityInput.addEventListener("input", function () {
+
+            // Allow numbers only
+            this.value = this.value.replace(/[^0-9]/g, "");
+
+            // Empty
+            if (this.value === "") {
+                return;
+            }
+
+            let quantity = parseInt(this.value);
+
+            // Less than 1
+            if (quantity < MIN_QUANTITY) {
+                this.value = MIN_QUANTITY;
+            }
+
+            // Greater than 20
+            else if (quantity > MAX_QUANTITY) {
+                this.value = MAX_QUANTITY;
+            }
+
+        });
+
+
+        /* ================= BLUR ================= */
+
+        quantityInput.addEventListener("blur", function () {
+
+            let quantity = parseInt(this.value);
+
+            if (isNaN(quantity) || quantity < MIN_QUANTITY) {
+                this.value = MIN_QUANTITY;
+            }
+
+            else if (quantity > MAX_QUANTITY) {
+                this.value = MAX_QUANTITY;
+            }
+
+        });
+
+
+        /* ================= PREVENT INVALID KEYS ================= */
+
+        quantityInput.addEventListener("keydown", function (event) {
+
+            const allowedKeys = [
+                "Backspace",
+                "Delete",
+                "ArrowLeft",
+                "ArrowRight",
+                "Tab"
+            ];
+
+            if (allowedKeys.includes(event.key)) {
+                return;
+            }
+
+            // Only allow 0-9
+            if (!/^[0-9]$/.test(event.key)) {
+                event.preventDefault();
+            }
+
+        });
+        
+
+    </script>
 </div>
 
 </body>
