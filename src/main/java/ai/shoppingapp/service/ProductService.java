@@ -104,7 +104,7 @@ public class ProductService {
 	}
 
 	public List<ProductModel> getProductsByCategoryId(String categoryId) {
-		// TODO Auto-generated method stub
-		return null;
+
+	    return productRepository.findByCategoryId(categoryId);
 	}
 }

@@ -13,9 +13,9 @@ public class UserMapper implements RowMapper<User> {
 	@Override
 	public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-		LocalDateTime createdAt = rs.getTimestamp("created_at") != null
+		LocalDateTime created_at = rs.getTimestamp("created_at") != null
 				? rs.getTimestamp("created_at").toLocalDateTime() : null;
-		LocalDateTime updatedAt = rs.getTimestamp("updated_at") != null
+		LocalDateTime updated_at = rs.getTimestamp("updated_at") != null
 				? rs.getTimestamp("updated_at").toLocalDateTime() : null;
 
 		return new User(
@@ -26,8 +26,8 @@ public class UserMapper implements RowMapper<User> {
 				rs.getString("password"),
 				rs.getString("role"),
 				rs.getString("address"),
-				createdAt,
-				updatedAt,
+				created_at,
+				updated_at,
 				rs.getString("profile")
 				);
 	}
