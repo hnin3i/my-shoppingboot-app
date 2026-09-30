@@ -45,74 +45,32 @@
 				<h2>NEW IN</h2>
 			</div>
 
-			<!-- The controller can later provide newProducts sorted by created_at DESC. -->
+		
 			<div class="row g-3 g-lg-4"
 				th:if="${newProducts != null and !#lists.isEmpty(newProducts)}">
+
 				<div class="col-6 col-md-3" th:each="product : ${newProducts}">
+
 					<a class="text-decoration-none text-dark d-block"
 						th:href="@{/products/{id}(id=${product.id})}">
+
 						<article class="product-card">
+
 							<img class="w-100 object-fit-cover mb-3" style="height: 300px;"
-								th:src="${product.image}" th:alt="${product.name}">
+								th:src="@{'/images/product/' + ${product.image}}" th:alt="${product.name}">
+
 							<h3 th:text="${product.name}">Product name</h3>
+
 							<p th:text="${product.price + ' MMK'}">0 MMK</p>
+
 						</article>
+
 					</a>
+
 				</div>
 			</div>
 
-			<!-- Temporary UI-only cards shown until the backend supplies newProducts. -->
-			<div class="row g-3 g-lg-4"
-				th:unless="${newProducts != null and !#lists.isEmpty(newProducts)}">
-				<div class="col-6 col-md-3">
-					<a class="text-decoration-none text-dark d-block"
-						th:href="@{/products}">
-						<article class="product-card">
-							<div class="product-placeholder product-shirt">
-								<span>NEW T-SHIRT</span>
-							</div>
-							<h3>Essential Cotton Tee</h3>
-							<p>25,000 MMK</p>
-						</article>
-					</a>
-				</div>
-				<div class="col-6 col-md-3">
-					<a class="text-decoration-none text-dark d-block"
-						th:href="@{/products}">
-						<article class="product-card">
-							<div class="product-placeholder product-bag">
-								<span>NEW BAG</span>
-							</div>
-							<h3>Everyday Shoulder Bag</h3>
-							<p>45,000 MMK</p>
-						</article>
-					</a>
-				</div>
-				<div class="col-6 col-md-3">
-					<a class="text-decoration-none text-dark d-block"
-						th:href="@{/products}">
-						<article class="product-card">
-							<div class="product-placeholder product-shoe">
-								<span>NEW SNEAKERS</span>
-							</div>
-							<h3>Classic Street Sneakers</h3>
-							<p>55,000 MMK</p>
-						</article>
-					</a>
-				</div>
-				<div class="col-6 col-md-3">
-					<a class="text-decoration-none text-dark d-block"
-						th:href="@{/products}">
-						<article class="product-card">
-							<div class="product-placeholder product-watch">
-								<span>NEW WATCH</span>
-							</div>
-							<h3>Minimal Steel Watch</h3>
-							<p>60,000 MMK</p>
-						</article>
-					</a>
-				</div>
-			</div>
+			
 			<div class="text-center mt-4">
 				<a class="btn hero-button" th:href="@{/products}">VIEW ALL</a>
 			</div>

@@ -53,6 +53,14 @@ public class UserProductController {
 
 		return "products/list";
 	}
+	
+//	
+//	public String getProductByCategory(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+//		
+//		return 'product list by category redirect page';
+//	}
+//	
+	
 	 
 
 }
