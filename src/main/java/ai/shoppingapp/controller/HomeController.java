@@ -22,7 +22,7 @@ public class HomeController {
         this.productService = productService;
         this.categoryService = categoryService;
     }
-
+    //restore
     @GetMapping("/")
     public String home(@RequestParam(value = "categoryId", required = false) String categoryId, 
                        Model model) {
