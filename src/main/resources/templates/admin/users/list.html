@@ -26,8 +26,34 @@
 	<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
 
+<<<<<<< HEAD
 	<!-- Main -->
 	<div class="admin-main">
+=======
+    <!-- Main Container -->
+    <main class="admin-main">
+    
+    <!-- Topbar -->
+        <div class="admin-topbar">
+            <div class="admin-profile" style="margin-left: auto;">
+                <div class="admin-avatar">A</div>
+                <div>
+                    <strong>Admin</strong>
+                </div>
+<<<<<<< HEAD
+                
+                <!-- Filter / Search Form -->
+                <form th:action="@{/admin/users}" method="get" class="search-box">
+                    <i class="bi bi-search"></i>
+                    <input type="text" 
+                           name="keyword" 
+                           th:value="${keyword}" 
+                           class="form-control" 
+                           placeholder="Search user..."
+                           onchange="this.form.submit()">
+                </form>
+            </div>
+>>>>>>> 8e4ebc9fca7981ad5a1c641a0856681559795714
 
 		<!-- Topbar -->
 		<div class="admin-topbar">
@@ -69,7 +95,23 @@
 					<div class="page-subtitle">Manage registered users and their roles</div>
 				</div>
 
+<<<<<<< HEAD
 			</div>
+=======
+                        <!-- Empty State if no users found -->
+                        <tr th:if="${#lists.isEmpty(users)}">
+                            <td colspan="6" class="text-center py-5 text-secondary">
+                                <i class="bi bi-people fs-2 d-block mb-2 text-muted"></i>
+                                No users found.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+=======
+>>>>>>> 5848818c011d92c069901a7a5eb34273236f9234
+            </div>
+        </div>
+>>>>>>> 8e4ebc9fca7981ad5a1c641a0856681559795714
 
 
 			<!-- User Card -->
