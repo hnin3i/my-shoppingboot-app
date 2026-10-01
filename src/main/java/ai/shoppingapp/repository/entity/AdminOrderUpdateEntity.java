@@ -1,10 +1,10 @@
 package ai.shoppingapp.repository.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
-public class OrderEntity {
-
+public class AdminOrderUpdateEntity {
+	
 	private String id;
 	private String user_id;
 	private String order_number;
@@ -17,18 +17,16 @@ public class OrderEntity {
 	private String payment_status;
 	private String shipping_address;
 	private String phone_no;
-	private LocalDateTime created_at;
-	private LocalDateTime updated_at;
+	private Timestamp created_at;
+	private Timestamp updated_at;
 	private String payment_confirm_photo;
-	private String additional_note;
 	
-
-	public OrderEntity() {}
-	public OrderEntity(String id,String user_id,String order_number,BigDecimal subtotal_amount,BigDecimal tax_amount,BigDecimal shipping_fee,BigDecimal total_amount,String status,String payment_method,
-			String payment_status,String shipping_address,String phone_no,LocalDateTime created_at,LocalDateTime updated_at,String payment_confirm_photo,
-			String additional_note) {
-
-        this.id=id;
+	
+	public AdminOrderUpdateEntity() {}
+	public AdminOrderUpdateEntity(String id,String user_id,String order_number,BigDecimal subtotal_amount,BigDecimal tax_amount,BigDecimal shipping_fee,
+			BigDecimal total_amount,String status,String payment_method,String payment_status,String shipping_address,
+			String phone_no,Timestamp created_at,Timestamp updated_at,String payment_confirm_photo) {
+		this.id=id;
 		this.user_id=user_id;
 		this.order_number=order_number;
 		this.subtotal_amount=subtotal_amount;
@@ -43,8 +41,6 @@ public class OrderEntity {
 		this.created_at=created_at;
 		this.updated_at=updated_at;
 		this.payment_confirm_photo=payment_confirm_photo;
-		this.additional_note=additional_note;
-		
 		
 	}
 	public String getId() {
@@ -119,16 +115,16 @@ public class OrderEntity {
 	public void setPhone_no(String phone_no) {
 		this.phone_no = phone_no;
 	}
-	public LocalDateTime getCreated_at() {
+	public Timestamp getCreated_at() {
 		return created_at;
 	}
-	public void setCreated_at(LocalDateTime created_at) {
+	public void setCreated_at(Timestamp created_at) {
 		this.created_at = created_at;
 	}
-	public LocalDateTime getUpdated_at() {
+	public Timestamp getUpdated_at() {
 		return updated_at;
 	}
-	public void setUpdated_at(LocalDateTime updated_at) {
+	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
 	}
 	public String getPayment_confirm_photo() {
@@ -137,10 +133,5 @@ public class OrderEntity {
 	public void setPayment_confirm_photo(String payment_confirm_photo) {
 		this.payment_confirm_photo = payment_confirm_photo;
 	}
-	public String getAdditional_note() {
-		return additional_note;
-	}
-	public void setAdditional_note(String additional_note) {
-		this.additional_note = additional_note;
-	}
+
 }

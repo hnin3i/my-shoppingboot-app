@@ -14,16 +14,26 @@ public class RegisterModel {
 	@Size(min = 6, message = "Password must be at least 6 characters.")
 	private String password;
 	private String comfirmPassword;
+	private String address;
 	
 	public RegisterModel() {}
 
-	public RegisterModel(String name, String email, String phone, String password, String comfirmPassword) {
+	public RegisterModel(String name, String email, String phone, String password, String comfirmPassword, String address) {
 		
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
 		this.password = password;
 		this.comfirmPassword = comfirmPassword;
+		this.address = address;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public String getName() {

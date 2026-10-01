@@ -101,5 +101,12 @@ public class ProductService {
 
 		BigDecimal salePrice = price.subtract(discountAmount);
 		product.setFinalPrice(salePrice);
+		
+		
+	}
+	
+	public List<ProductModel> getProductsByCategoryId(String categoryId) {
+
+	    return productRepository.findByCategoryId(categoryId);
 	}
 }

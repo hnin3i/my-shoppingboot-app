@@ -22,27 +22,27 @@ public class HomeController {
         this.productService = productService;
         this.categoryService = categoryService;
     }
+    //restore
+    @GetMapping("/")
+    public String home(@RequestParam(value = "categoryId", required = false) String categoryId, 
+                       Model model) {
+        // 1. Fetch all categories for the clickable buttons
+        List<CategoryModel> categories = categoryService.findAll();
+        model.addAttribute("categories", categories);
 
-//    @GetMapping("/")
-//    public String home(@RequestParam(value = "categoryId", required = false) String categoryId, 
-//                       Model model) {
-//        // 1. Fetch all categories for the clickable buttons
-//        List<CategoryModel> categories = categoryService.findAll();
-//        model.addAttribute("categories", categories);
-//
-//        // 2. Fetch products (either filtered by category or all products)
-//        List<ProductModel> products;
-//        if (categoryId != null && !categoryId.trim().isEmpty() && !"all".equalsIgnoreCase(categoryId)) {
-//            products = productService.getProductsByCategoryId(categoryId);
-//            model.addAttribute("selectedCategoryId", categoryId);
-//        } else {
-//            products = productService.findAll();
-//            model.addAttribute("selectedCategoryId", "all");
-//        }
-//        model.addAttribute("products", products);
-//        model.addAttribute("newProducts", products);
-//        return "home"; // templates/home.html
-//    }
+        // 2. Fetch products (either filtered by category or all products)
+        List<ProductModel> products;
+        if (categoryId != null && !categoryId.trim().isEmpty() && !"all".equalsIgnoreCase(categoryId)) {
+            products = productService.getProductsByCategoryId(categoryId);
+            model.addAttribute("selectedCategoryId", categoryId);
+        } else {
+            products = productService.findAll();
+            model.addAttribute("selectedCategoryId", "all");
+        }
+        model.addAttribute("products", products);
+        model.addAttribute("newProducts", products);
+        return "home"; // templates/home.html
+    }
     
 	@GetMapping("/error")
 	public String handleDirectErrorAccess(Model model) {

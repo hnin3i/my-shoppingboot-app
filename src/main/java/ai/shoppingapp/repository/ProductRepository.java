@@ -139,6 +139,10 @@ public class ProductRepository {
                 ? null
                 : products.get(0);
     }
+    public List<ProductModel> findByCategoryId(String categoryId) {
+        String sql = "SELECT * FROM products WHERE category_id = ? AND is_delete = 0";
+        return jdbcTemplate.query(sql, new ProductMapper(), categoryId);
+    }
 
     public int save(ProductModel product) {
 
