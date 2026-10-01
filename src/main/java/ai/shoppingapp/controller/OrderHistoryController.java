@@ -51,4 +51,5 @@ public class OrderHistoryController {
         model.addAttribute("summary", summary);
         return "OrderHistory/order_details";
     }
+    //...
 }
