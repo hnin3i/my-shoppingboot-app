@@ -78,9 +78,9 @@ public class UserController {
 		return "user/profile";
 	}
 
-	@GetMapping("/orders")
-	public String orders() {
-		return "user/orders";
-	}
+//	@GetMapping("/orders")
+//	public String orders() {
+//		return "user/orders";
+//	}
 	
 }

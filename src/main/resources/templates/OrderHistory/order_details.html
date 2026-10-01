@@ -40,9 +40,9 @@
                                 <td class="small text-muted">
                                     <span th:text="${item.color}"></span> / <span th:text="${item.size}"></span>
                                 </td>
-                                <td th:text="${#numbers.formatDecimal(item.price, 1, 2)}"></td>
+                                <td th:text="${#numbers.formatDecimal(item.price, 1, 2)} + ' MMK'"></td>
                                 <td th:text="${item.quantity}"></td>
-                                <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(item.subtotal, 1, 2)}"></td>
+                                <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(item.subtotal, 1, 2)} + ' MMK'"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -57,24 +57,24 @@
                 
                 <div class="d-flex justify-content-between mb-2">
                     <span class="text-muted">Subtotal</span>
-                    <span class="fw-semibold" th:text="${#numbers.formatDecimal(summary.subtotal, 1, 2)}"></span>
+                    <span class="fw-semibold" th:text="${#numbers.formatDecimal(summary.subtotal, 1, 2)} + ' MMK'"></span>
                 </div>
                 
                 <div class="d-flex justify-content-between mb-2">
                     <span class="text-muted">Shipping Fee</span>
-                    <span class="fw-semibold" th:text="${#numbers.formatDecimal(summary.shippingFee, 1, 2)}"></span>
+                    <span class="fw-semibold" th:text="${#numbers.formatDecimal(summary.shippingFee, 1, 2)} + ' MMK'"></span>
                 </div>
                 
                 <div class="d-flex justify-content-between mb-2">
                     <span class="text-muted">Tax</span>
-                    <span class="fw-semibold" th:text="${#numbers.formatDecimal(summary.tax, 1, 2)}"></span>
+                    <span class="fw-semibold" th:text="${summary.tax}+ '%'"></span>
                 </div>
                 
                 <hr class="my-3">
                 
                 <div class="d-flex justify-content-between text-primary fw-bold fs-5">
                     <span>Grand Total</span>
-                    <span th:text="${#numbers.formatDecimal(summary.grandTotal, 1, 2)}"></span>
+                    <span th:text="${#numbers.formatDecimal(summary.grandTotal, 1, 2)} + ' MMK'"></span>
                 </div>
             </div>
         </div>

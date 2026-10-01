@@ -15,9 +15,9 @@ public class OrderHistoryRowMapper implements RowMapper<OrderHistoryEntity>  {
 		entity.setOrder_number(rs.getString("order_number"));
 		entity.setCustomerName(rs.getString("customer_name"));
 		entity.setProductName(rs.getString("product_names"));
-		entity.setTotal_amount(rs.getDouble("total_amount"));
-		entity.setTax_amount(rs.getDouble("tax_amount"));
-		entity.setShipping_fee(rs.getDouble("shipping_fee"));
+		entity.setTotal_amount(rs.getBigDecimal("total_amount"));
+		entity.setTax_amount(rs.getBigDecimal("tax_amount"));
+		entity.setShipping_fee(rs.getBigDecimal("shipping_fee"));
 		entity.setStatus(rs.getString("order_status"));
 		entity.setPayment_status(rs.getString("payment_status"));
 		if(rs.getTimestamp("created_at")!=null) {

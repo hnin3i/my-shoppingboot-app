@@ -1,5 +1,6 @@
 package ai.shoppingapp.model;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class AdminOrderListDto {
@@ -9,14 +10,14 @@ public class AdminOrderListDto {
     private String customerName;
     private String customerPhone;
     private Timestamp createdAt;
-    private double totalAmount;
+    private BigDecimal totalAmount;
     private PaymentStatus paymentStatus;
     private OrderStatus status;
     private String paymentConfirmPhoto;
 
     public AdminOrderListDto() {}
     public AdminOrderListDto(String id,String orderNumber,String customerName,String customerPhone,Timestamp createdAt,
-    		double totalAmount,PaymentStatus paymentStatus,OrderStatus status,String paymentConfirmPhoto) {
+    		BigDecimal totalAmount,PaymentStatus paymentStatus,OrderStatus status,String paymentConfirmPhoto) {
     	this.id=id;
     	this.orderNumber=orderNumber;
     	this.customerName=customerName;
@@ -57,10 +58,10 @@ public class AdminOrderListDto {
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
-	public double getTotalAmount() {
+	public BigDecimal getTotalAmount() {
 		return totalAmount;
 	}
-	public void setTotalAmount(double totalAmount) {
+	public void setTotalAmount(BigDecimal totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 	public PaymentStatus getPaymentStatus() {
