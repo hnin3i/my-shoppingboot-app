@@ -2,34 +2,30 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Users - BLACKJACK Admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Bootstrap -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet">
+    <title>Users - BLACKJACK Admin</title>
 
-<!-- Bootstrap Icons -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
-<!-- Admin CSS -->
-<link rel="stylesheet" th:href="@{/css/admin.css}">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Your existing admin.css -->
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+
 </head>
 
 <body>
 
-	<!-- Sidebar -->
-	<div th:replace="~{fragments/sidebar :: sidebar}"></div>
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
 
-<<<<<<< HEAD
-	<!-- Main -->
-	<div class="admin-main">
-=======
     <!-- Main Container -->
     <main class="admin-main">
     
@@ -53,51 +49,81 @@
                            onchange="this.form.submit()">
                 </form>
             </div>
->>>>>>> 8745f93989f19aaf6278e1b4318c13b552655553
 
-		<!-- Topbar -->
-		<div class="admin-topbar">
+            <!-- Dynamic Users Table -->
+            <div class="table-responsive">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Joined</th>
+                            <th class="text-end pe-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Loop over dynamic users -->
+                        <tr th:each="user : ${users}">
+                            <!-- Name + First Initial Avatar -->
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="user-avatar-badge" 
+                                         th:text="${user.name != null and !user.name.isEmpty() ? #strings.substring(user.name, 0, 1).toUpperCase() : 'U'}">
+                                        J
+                                    </div>
+                                    <div class="user-name-title" th:text="${user.name}">Jessica Smith</div>
+                                </div>
+                            </td>
 
-			<div class="search-box">
-				<i class="bi bi-search"></i> <input type="text"
-					placeholder="Search user...">
-			</div>
+                            <!-- Email -->
+                            <td th:text="${user.email}">user@example.com</td>
 
-			<div class="admin-profile">
-				<div class="admin-avatar">A</div>
-				<div>
-					<strong>Admin</strong>
-				</div>
-			</div>
+                            <!-- Phone -->
+                            <td th:text="${user.phone != null and !user.phone.isEmpty() ? user.phone : '-'}">09 123 456 789</td>
 
-		</div>
+                            <!-- Role: Dynamic Shield vs Person icon -->
+                            <td>
+                                <span class="role-badge">
+                                    <i th:if="${#strings.toUpperCase(#strings.toString(user.role)).contains('ADMIN')}" 
+                                       class="bi bi-shield-check text-primary"></i>
+                                    <i th:unless="${#strings.toUpperCase(#strings.toString(user.role)).contains('ADMIN')}" 
+                                       class="bi bi-person"></i>
+                                    <span th:text="${#strings.toUpperCase(#strings.toString(user.role)).contains('ADMIN') ? 'Admin' : 'Customer'}">
+                                        Customer
+                                    </span>
+                                </span>
+                            </td>
 
-
-		<!-- Content -->
-		<div class="admin-content">
-
-<<<<<<< HEAD
-			<!-- Flash messages -->
-			<div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
-			<div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-=======
                             <!-- Joined Date -->
                             <td th:text="${user.created_at != null ? #temporals.format(user.created_at, 'yyyy-MM-dd') : '2026-09-01'}">
                                 2026-09-01
                             </td>
->>>>>>> a1716cc46921c084fb5bc9a9cb07620574eba3ef
 
-			<!-- Page Header -->
-			<div class="d-flex justify-content-between align-items-center mb-4">
+                            <!-- Actions (Edit & Delete) -->
+                            <td class="text-end pe-2">
+                                <div class="d-inline-flex gap-2">
+                                    <!-- Edit Link -->
+                                    <a th:href="@{/admin/users/edit(id=${user.id})}" 
+                                       class="btn-action-edit" 
+                                       title="Edit User">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
 
-				<div>
-					<div class="page-title">Users</div>
-					<div class="page-subtitle">Manage registered users and their roles</div>
-				</div>
+                                    <!-- Delete Form with Confirmation Dialog -->
+                                    <form th:action="@{/admin/users/delete}" method="post" 
+                                          onsubmit="return confirm('Are you sure you want to delete this user?');" 
+                                          style="display: inline;">
+                                        <input type="hidden" name="id" th:value="${user.id}" />
+                                        <button type="submit" class="btn-action-delete" title="Delete User">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
 
-<<<<<<< HEAD
-			</div>
-=======
                         <!-- Empty State if no users found -->
                         <tr th:if="${#lists.isEmpty(users)}">
                             <td colspan="6" class="text-center py-5 text-secondary">
@@ -111,101 +137,234 @@
 >>>>>>> 5848818c011d92c069901a7a5eb34273236f9234
             </div>
         </div>
->>>>>>> 8745f93989f19aaf6278e1b4318c13b552655553
+
+        <div class="admin-content">
+
+            <!-- Page Header -->
+            <div class="d-flex justify-content-between align-items-start mb-4">
+
+                <div>
+
+                    <h1 class="page-title">
+                        Users
+                    </h1>
+
+                    <p class="page-subtitle">
+                        Manage registered users and their roles
+                    </p>
+
+                </div>
+
+                <!-- Add User Button -->
+                <a th:href="@{/admin/users/add}"
+                   class="btn-purple text-decoration-none d-inline-flex align-items-center gap-2">
+
+                    <i class="bi bi-plus-lg"></i>
+                    Add User
+
+                </a>
+
+            </div>
 
 
-			<!-- User Card -->
-			<div class="admin-card">
+            <!-- User Card -->
+            <div class="admin-card">
 
-				<div class="d-flex justify-content-between align-items-center mb-3">
+                <!-- Search & Count Header -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
 
-					<div class="admin-card-title mb-0">User List</div>
+                    <div>
 
-					<div>
-						<input type="text" class="form-control"
-							placeholder="Search user..." style="width: 220px;">
-					</div>
+                        <h5 class="admin-card-title">
+                            User List
+                        </h5>
 
-				</div>
+                        <p class="text-secondary small mb-0"
+                           th:text="${totalUsers != null
+                                     ? totalUsers
+                                     : (users != null ? users.size() : 0)} + ' users'">
 
+                            0 users
 
-				<!-- Table -->
-				<div class="table-responsive">
+                        </p>
 
-					<table class="admin-table">
-
-						<thead>
-							<tr>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Phone</th>
-								<th>Role</th>
-								<th>Joined</th>
-								<th class="text-end">Action</th>
-							</tr>
-						</thead>
-
-						<tbody>
-
-							<tr th:each="user : ${users}">
-
-								<td><strong th:text="${user.name}">Name</strong></td>
-
-								<td th:text="${user.email}">email@example.com</td>
-
-								<td th:text="${user.phone} ?: '-'">-</td>
-
-								<td>
-									<span class="status"
-										th:classappend="${user.role.name() == 'ADMIN'} ? ' status-success' : ' status-warning'"
-										th:text="${user.role}"> ROLE </span>
-								</td>
-
-								<td th:text="${user.created_at != null} ? ${user.created_at.toLocalDate()} : '-'">2026-01-01</td>
-
-								<td class="text-end">
-
-									<form th:action="@{'/admin/users/' + ${user.id} + '/role'}"
-										method="post" class="d-inline-flex gap-1 justify-content-end">
-
-										<select name="role" class="form-select form-select-sm"
-											style="width: auto;">
-											<option value="CUSTOMER"
-												th:selected="${user.role.name() == 'CUSTOMER'}">Customer</option>
-											<option value="ADMIN"
-												th:selected="${user.role.name() == 'ADMIN'}">Admin</option>
-										</select>
-
-										<button type="submit" class="btn btn-sm btn-outline-secondary">
-											<i class="bi bi-check-lg"></i>
-										</button>
-
-									</form>
-
-								</td>
-							</tr>
-
-							<tr th:if="${#lists.isEmpty(users)}">
-								<td colspan="6" class="text-center text-muted">No users found.</td>
-							</tr>
-
-						</tbody>
-
-					</table>
-
-				</div>
-
-			</div>
-
-		</div>
-
-	</div>
+                    </div>
 
 
-	<!-- Bootstrap JS -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-</script>
+                    <!-- Search Form -->
+                    <form th:action="@{/admin/users}"
+                          method="get"
+                          class="search-box">
+
+                        <i class="bi bi-search"></i>
+
+                        <input type="text"
+                               name="keyword"
+                               th:value="${keyword}"
+                               placeholder="Search user..."
+                               onchange="this.form.submit()">
+
+                    </form>
+
+                </div>
+
+
+                <!-- Dynamic Users Table -->
+                <div class="table-responsive">
+
+                    <table class="admin-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                                
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            <!-- Loop over dynamic users -->
+                            <tr th:each="user : ${users}">
+
+                                <!-- Name + First Initial Avatar -->
+                                <td>
+
+                                    <div class="d-flex align-items-center">
+
+                                        <div class="admin-avatar me-2"
+                                             th:text="${user.name != null
+                                                       and !user.name.isEmpty()
+                                                       ? #strings.substring(
+                                                           user.name,
+                                                           0,
+                                                           1
+                                                         ).toUpperCase()
+                                                       : 'U'}">
+
+                                            U
+
+                                        </div>
+
+                                        <span class="fw-semibold"
+                                              th:text="${user.name}">
+
+                                            User Name
+
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- Email -->
+                                <td th:text="${user.email}">
+                                    user@example.com
+                                </td>
+
+
+                                <!-- Phone -->
+                                <td th:text="${user.phone != null
+                                              and !user.phone.isEmpty()
+                                              ? user.phone
+                                              : '-'}">
+
+                                    -
+
+                                </td>
+
+
+                                <!-- Role -->
+                                <td>
+
+                                    <span class="d-inline-flex align-items-center gap-1">
+
+                                        <!-- Admin Icon -->
+                                        <i th:if="${#strings.toUpperCase(
+                                                    #strings.toString(user.role)
+                                                  ).contains('ADMIN')}"
+                                           class="bi bi-shield-check text-primary">
+                                        </i>
+
+                                        <!-- Customer Icon -->
+                                        <i th:unless="${#strings.toUpperCase(
+                                                        #strings.toString(user.role)
+                                                      ).contains('ADMIN')}"
+                                           class="bi bi-person">
+                                        </i>
+
+                                        <!-- Role Name -->
+                                        <span th:text="${#strings.toUpperCase(
+                                                        #strings.toString(user.role)
+                                                      ).contains('ADMIN')
+                                                      ? 'Admin'
+                                                      : 'Customer'}">
+
+                                            Customer
+
+                                        </span>
+
+                                    </span>
+
+                                </td>
+
+
+                                <!-- Joined Date -->
+                                <td th:text="${user.created_at != null
+                                              ? #temporals.format(
+                                                    user.created_at,
+                                                    'yyyy-MM-dd'
+                                                )
+                                              : '-'}">
+
+                                    -
+
+                                </td>
+
+								 
+								
+
+                            </tr>
+
+
+                            <!-- Empty State -->
+                            <tr th:if="${#lists.isEmpty(users)}">
+
+                                <td colspan="6"
+                                    class="text-center py-5 text-secondary">
+
+                                    <i class="bi bi-people fs-2 d-block mb-2"></i>
+
+                                    No users found.
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
 
 </body>
+
 </html>

@@ -1,336 +1,163 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/public_layout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/public_layout}">
 
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title th:text="${selectedCategory != null
+<title
+	th:text="${selectedCategory != null
                      ? selectedCategory.name
                      : 'All Products'}">
-        Products
-    </title>
+	Products</title>
 
-    <link rel="stylesheet" th:href="@{/css/products.css}">
-
+<link rel="stylesheet" th:href="@{/css/products.css}">
 </head>
 
 <body>
 
-<div layout:fragment="content">
+	<div layout:fragment="content">
 
-    <!-- PRODUCTS PAGE -->
-    <main class="products-page">
+		<!-- PRODUCTS PAGE -->
+		<main class="products-page">
+			<!-- PAGE TITLE -->
+			<section class="products-heading">
 
-        <!-- PAGE TITLE -->
-        <section class="products-heading">
+				<h1
+					th:text="${categoryName != null ? categoryName : 'ALL PRODUCTS'}">
+					WOMEN</h1>
 
-            <h1 th:text="${categoryName != null
-                          ? categoryName
-                          : 'ALL PRODUCTS'}">
-                WOMEN
-            </h1>
+			</section>
 
-        </section>
 
+			<!-- PRODUCT TOOLBAR -->
+			<section class="products-toolbar">
 
-        <!-- PRODUCT TOOLBAR -->
-        <section class="products-toolbar">
+				<div class="product-count">
 
-            <div class="product-count">
+					<span th:text="${productCount}"> 24 </span> PRODUCTS
 
-                <span th:text="${productCount}">
-                    24
-                </span>
+				</div>
 
-                PRODUCTS
+				<div class="product-sort">
 
-            </div>
+					<label for="sort"> SORT BY </label> <select id="sort" name="sort"
+						onchange="changeSort(this.value)">
 
+						<option value="newest">Newest</option>
 
-            <div class="product-sort">
+						<option value="price-low">Price: Low to High</option>
 
-                <label for="sort">
-                    SORT BY
-                </label>
+						<option value="price-high">Price: High to Low</option>
 
-                <select id="sort"
-                        name="sort"
-                        onchange="changeSort(this.value)">
+					</select>
 
-                    <option value="newest">
-                        Newest
-                    </option>
+				</div>
 
-                    <option value="price-low">
-                        Price: Low to High
-                    </option>
+			</section>
 
-                    <option value="price-high">
-                        Price: High to Low
-                    </option>
 
-                </select>
+			<!-- PRODUCT GRID -->
+			<section class="product-grid">
 
-            </div>
+				<article class="product-card" th:each="product : ${products}">
 
-        </section>
 
+					<a class="product-image"
+						th:href="@{/products/detail/{id}(id=${product.id})}"> <img
+						id="productImage"
+						th:src="@{'/images/product/' + ${product.image}}"
+						th:alt="${product != null ? product.name : 'BLACKJACK Product'}"
+						class="img-fluid rounded"
+						style="width: 100%; height: 100%; object-fit: cover;">
 
-        <!-- PRODUCT GRID -->
-        <section class="product-grid"
-                 id="productGrid">
+					</a>
 
-            <article class="product-card"
-                     th:each="product : ${products}"
-                     th:attr="data-price=${product.isDiscount == 1
-                             ? product.finalPrice
-                             : product.price},
-            data-created=${product.createdAt}">
 
-                <!-- PRODUCT IMAGE -->
+					<!-- <button type="button" class="wishlist-btn"
+							aria-label="Add to wishlist" onclick="event.preventDefault();">
+							♡</button> -->
 
-                <a class="product-image"
-                   th:href="@{/products/detail/{id}(id=${product.id})}">
+					</a>
 
-                    <img th:src="@{'/images/product/' + ${product.image}}"
-                         th:alt="${product.name}"
-                         class="img-fluid rounded"
-                         style="width: 100%;
-                                height: 100%;
-                                object-fit: cover;">
 
-                </a>
+					<!-- PRODUCT INFO -->
+					<div class="product-info">
 
 
-                <!-- PRODUCT INFO -->
+						<h2 class="product-name" th:text="${product.name}">Wide-Leg
+							Regular-Waist Jeans</h2>
 
-                <div class="product-info">
+						<!-- NORMAL PRICE -->
+						<div class="product-price" th:if="${product.isDiscount != 1}">
 
-                    <!-- PRODUCT NAME -->
+							<span
+								th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
+								45000 MMK </span>
 
-                    <h2 class="product-name"
-                        th:text="${product.name}">
+						</div>
 
-                        Wide-Leg Regular-Waist Jeans
 
-                    </h2>
+						<!-- DISCOUNT PRICE -->
+						<div class="product-price discount-price"
+							th:if="${product.isDiscount == 1}">
 
+							<span class="old-price"
+								th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
+								50,000 MMK </span> <span class="sale-price"
+								th:text="${#numbers.formatDecimal(product.discountPrice, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
+								45,000 MMK </span>
 
-                    <!-- NORMAL PRICE -->
+						</div>
 
-                    <div class="product-price"
-                         th:if="${product.isDiscount != 1}">
+					</div>
+				</article>
 
-                        <span th:text="${#numbers.formatDecimal(
-                                product.price,
-                                0,
-                                'COMMA',
-                                0,
-                                'POINT'
-                            ) + ' MMK'}">
+			</section>
 
-                            45,000 MMK
 
-                        </span>
+			<!-- EMPTY PRODUCTS -->
+			<section class="empty-products"
+				th:if="${products == null or products.isEmpty()}">
 
-                    </div>
+				<h2>No products found</h2>
 
+				<p>There are no products available.</p>
 
-                    <!-- DISCOUNT PRICE -->
+				<a th:href="@{/products}"> VIEW ALL PRODUCTS </a>
 
-                    <div class="product-price discount-price"
-                         th:if="${product.isDiscount == 1}">
+			</section>
 
-                        <span class="old-price"
-                              th:text="${#numbers.formatDecimal(
-                                  product.price,
-                                  0,
-                                  'COMMA',
-                                  0,
-                                  'POINT'
-                              ) + ' MMK'}">
 
-                            50,000 MMK
+			<!-- PAGINATION -->
+			<nav class="pagination"
+				th:if="${products != null and !products.isEmpty()}">
 
-                        </span>
+				<a href="#" class="page-arrow"> ‹ </a> <a href="#"
+					class="page-number active"> 1 </a> <a href="#" class="page-number">
+					2 </a> <a href="#" class="page-number"> 3 </a> <span class="page-dots">
+					... </span> <a href="#" class="page-number"> 19 </a> <a href="#"
+					class="page-arrow"> › </a>
 
+			</nav>
 
-                        <span class="sale-price"
-                              th:text="${#numbers.formatDecimal(
-                                  product.finalPrice,
-                                  0,
-                                  'COMMA',
-                                  0,
-                                  'POINT'
-                              ) + ' MMK'}">
+		</main>
 
-                            45,000 MMK
+	</div>
 
-                        </span>
 
-                    </div>
+	<script>
+		function changeSort(value) {
 
-                </div>
+			const url = new URL(window.location.href);
 
-            </article>
+			url.searchParams.set("sort", value);
 
-        </section>
-
-
-        <!-- EMPTY PRODUCTS -->
-
-        <section class="empty-products"
-                 th:if="${products == null or products.isEmpty()}">
-
-            <h2>
-                No products found
-            </h2>
-
-            <p>
-                There are no products available.
-            </p>
-
-            <a th:href="@{/products}">
-                VIEW ALL PRODUCTS
-            </a>
-
-        </section>
-
-
-        <!-- PAGINATION -->
-
-        <nav class="pagination"
-             th:if="${products != null and !products.isEmpty()}">
-
-            <a href="#"
-               class="page-arrow">
-                ‹
-            </a>
-
-            <a href="#"
-               class="page-number active">
-                1
-            </a>
-
-            <a href="#"
-               class="page-number">
-                2
-            </a>
-
-            <a href="#"
-               class="page-number">
-                3
-            </a>
-
-            <span class="page-dots">
-                ...
-            </span>
-
-            <a href="#"
-               class="page-number">
-                19
-            </a>
-
-            <a href="#"
-               class="page-arrow">
-                ›
-            </a>
-
-        </nav>
-
-    </main>
-
-</div>
-
-
-<script th:inline="javascript">
-
-    // Products from Thymeleaf
-    let products = /*[[${products}]]*/ [];
-
-
-    function changeSort(value) {
-
-        const productGrid =
-            document.getElementById("productGrid");
-
-        const productCards =
-            Array.from(
-                productGrid.querySelectorAll(".product-card")
-            );
-
-
-        // LOW TO HIGH
-        if (value === "price-low") {
-
-            productCards.sort(function(a, b) {
-
-                const priceA =
-                    parseFloat(a.dataset.price);
-
-                const priceB =
-                    parseFloat(b.dataset.price);
-
-                return priceA - priceB;
-
-            });
-
-        }
-
-
-        // HIGH TO LOW
-        else if (value === "price-high") {
-
-            productCards.sort(function(a, b) {
-
-                const priceA =
-                    parseFloat(a.dataset.price);
-
-                const priceB =
-                    parseFloat(b.dataset.price);
-
-                return priceB - priceA;
-
-            });
-
-        }
-
-
-        // NEWEST
-        else if (value === "newest") {
-
-            productCards.sort(function(a, b) {
-
-                const dateA =
-                    new Date(a.dataset.created);
-
-                const dateB =
-                    new Date(b.dataset.created);
-
-                return dateB - dateA;
-            });
-        }
-
-
-        // Put sorted cards back into product grid
-
-        productCards.forEach(function(card) {
-
-            productGrid.appendChild(card);
-
-        });
-
-    }
-
-</script>
+			window.location.href = url.toString();
+		}
+	</script>
 
 </body>
-
 </html>
