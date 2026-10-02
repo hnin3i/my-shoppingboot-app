@@ -101,20 +101,20 @@ function getSelectedPaymentMethod() {
     )?.value || "";
 }
 
-function loadLoggedInUserContact() {
+//function loadLoggedInUserContact() {
     // ဥပမာ - LocalStorage သို့မဟုတ် User Session မှ User Info ယူခြင်း
-    const currentUser = JSON.parse(localStorage.getItem("currentUser")) || {
-        email: "user@example.com",
-        phone: "09123456789"
-    };
+ //   const currentUser = JSON.parse(localStorage.getItem("currentUser")) || {
+//        email: "user@example.com",
+ //       phone: "09123456789"
+ //   };
 
-    const contactDisplay = document.getElementById("user-contact-display");
-    if (contactDisplay) {
-        contactDisplay.textContent = currentUser.email || currentUser.phone;
-    }
-}
+ //   const contactDisplay = document.getElementById("user-contact-display");
+ //   if (contactDisplay) {
+ //       contactDisplay.textContent = currentUser.email || currentUser.phone;
+ //   }
+//}
 
-// Page load ချိန်တွင် ပကတိအတိုင်း ခေါ်ပေးရန်
+
 
 
 function validateCheckoutForm() {
@@ -495,4 +495,4 @@ function showToast(message, type = "success") {
 
 document.addEventListener("click", handlePaymentSelection);
 document.addEventListener("change", handlePaymentProofChange);
-document.addEventListener("DOMContentLoaded", () => {loadLoggedInUserContact();});
+//document.addEventListener("DOMContentLoaded", () => {loadLoggedInUserContact();});

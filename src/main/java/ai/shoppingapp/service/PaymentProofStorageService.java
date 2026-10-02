@@ -76,4 +76,16 @@ public class PaymentProofStorageService {
 			throw new RuntimeException("Failed to save payment proof.", e);
 		}
 	}
+	
+	public void delete(String filePath) {
+		 if (filePath == null || filePath.isBlank()) {
+		        return;
+		    }
+		 try {
+			 Path path=Paths.get("uploads").resolve(filePath);
+			 Files.deleteIfExists(path);
+		 }catch(IOException e) {
+			 System.err.println("Failed to delete payment proof: "+filePath);
+		 }
+	}
 }

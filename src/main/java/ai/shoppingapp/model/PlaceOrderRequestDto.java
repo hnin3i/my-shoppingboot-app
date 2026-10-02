@@ -3,7 +3,7 @@ package ai.shoppingapp.model;
 import java.util.List;
 
 public class PlaceOrderRequestDto {
-	private String userId;
+	
 	private String fullName;
 	private String shippingAddress;
 	private String phoneNo;
@@ -13,14 +13,6 @@ public class PlaceOrderRequestDto {
 	private List<OrderItemRequestDto> items;
 	
 	public PlaceOrderRequestDto() {}
-
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
 
 	public String getFullName() {
 		return fullName;

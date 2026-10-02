@@ -54,8 +54,8 @@ public class WebConfig implements WebMvcConfigurer {
                     "/order-history",                  
                     "/api/orders/place",
                     "/cart",
-                    "/cart/checkout",
-                    "/cart/order-success",
+                    "/checkout",
+                    "/order-success",
                     "/index",
 
                     "/products/**",

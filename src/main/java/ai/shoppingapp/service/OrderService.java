@@ -44,94 +44,108 @@ public class OrderService {
     }
 
     @Transactional
-    public String placeOrder(PlaceOrderRequestDto requestDto,MultipartFile paymentProof) {
-        String orderId = UUID.randomUUID().toString();
-        String orderNumber = "ORD-" + System.currentTimeMillis();
-        LocalDateTime now = LocalDateTime.now();
-        BigDecimal subtotalAmount = BigDecimal.ZERO;
+    public String placeOrder(String userId,PlaceOrderRequestDto requestDto,MultipartFile paymentProof) {
+    	String paymentProofPath = null;
+       try {
+    	   
+    	   String orderId = UUID.randomUUID().toString();
+           String orderNumber = "ORD-" + System.currentTimeMillis();
+           LocalDateTime now = LocalDateTime.now();
+           BigDecimal subtotalAmount = BigDecimal.ZERO;
 
-        List<OrderItemEntity> orderItemToSave = new ArrayList<>();
-
-        
-        for (OrderItemRequestDto itemDto : requestDto.getItems()) {
-            
-            if (itemDto.getQuantity() <= 0) {
-                throw new RuntimeException("Invalid quantity.");
-            }
-
-            Stock stock =this.stockRepo.findById(itemDto.getStockId());
-            if (stock == null) {
-                throw new RuntimeException("Stock not found.");
-            }
-
-            if (stock.getStock_qty() < itemDto.getQuantity()) {
-                throw new RuntimeException("Not enough stock.");
-            }
-
-            Product product = this.orderProductRepo.findById(stock.getProduct_id());
-            if (product == null) {
-                throw new RuntimeException("Product not found.");
-            }
-
-            BigDecimal price = product.getPrice();
-            BigDecimal quantity = BigDecimal.valueOf(itemDto.getQuantity());
-            BigDecimal itemSubtotal = price.multiply(quantity);
+           List<OrderItemEntity> orderItemToSave = new ArrayList<>();
 
            
-            subtotalAmount = subtotalAmount.add(itemSubtotal);
-            
+           for (OrderItemRequestDto itemDto : requestDto.getItems()) {
+               
+               if (itemDto.getQuantity() <= 0) {
+                   throw new RuntimeException("Invalid quantity.");
+               }
+
+               Stock stock =this.stockRepo.findById(itemDto.getStockId());
+               if (stock == null) {
+                   throw new RuntimeException("Stock not found.");
+               }
+
+               if (stock.getStock_qty() < itemDto.getQuantity()) {
+                   throw new RuntimeException("Not enough stock.");
+               }
+
+               Product product = this.orderProductRepo.findById(stock.getProduct_id());
+               if (product == null) {
+                   throw new RuntimeException("Product not found.");
+               }
+
+               BigDecimal price = product.getPrice();
+               BigDecimal quantity = BigDecimal.valueOf(itemDto.getQuantity());
+               BigDecimal itemSubtotal = price.multiply(quantity);
+
+              
+               subtotalAmount = subtotalAmount.add(itemSubtotal);
+               
+              
+               
+               OrderItemEntity itemEntity = toOrderItemEntity(orderId, itemDto, price, itemSubtotal, now);
+               orderItemToSave.add(itemEntity);
+
+               
+//               Stock updated = this.stockRepo.findById(itemDto.getStockId());
+//               if (updated == 0) {
+//                   throw new RuntimeException("Not enough stock.");
+//               }
+           }
+
+     
+           BigDecimal taxRate = BigDecimal.valueOf(5);
+           BigDecimal shippingFee = BigDecimal.valueOf(5000);
+
            
-            
-            OrderItemEntity itemEntity = toOrderItemEntity(orderId, itemDto, price, itemSubtotal, now);
-            orderItemToSave.add(itemEntity);
+           BigDecimal taxAmount = subtotalAmount.multiply(taxRate)
+                                                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
 
-            
-//            Stock updated = this.stockRepo.findById(itemDto.getStockId());
-//            if (updated == 0) {
-//                throw new RuntimeException("Not enough stock.");
-//            }
-        }
+           BigDecimal grandTotal = subtotalAmount.add(shippingFee).add(taxAmount);
+           
+           
+           
+           if(!"COD".equals(requestDto.getPaymentMethod())) {
+           	if(paymentProof ==null || paymentProof.isEmpty()) {
+           		throw new RuntimeException("Payment proof is required.");
+           	}
+           	
+           	paymentProofPath=this.paymentProofStorageService.save(paymentProof);
+           }
 
-  
-        BigDecimal taxRate = BigDecimal.valueOf(5);
-        BigDecimal shippingFee = BigDecimal.valueOf(5000);
+          
+           OrderEntity order = toOrderEntity(
+                   requestDto,
+                   userId,
+                   orderId,
+                   orderNumber,
+                   subtotalAmount,
+                   taxAmount,
+                   shippingFee,
+                   grandTotal,
+               	   paymentProofPath,
+                   now
+           );
+          
 
-        
-        BigDecimal taxAmount = subtotalAmount.multiply(taxRate)
-                                             .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+           this.orderRepo.save(order);
+           for (OrderItemEntity item : orderItemToSave) {
+               orderItemRepo.save(item);
+           }
 
-        BigDecimal grandTotal = subtotalAmount.add(shippingFee).add(taxAmount);
-        
-        String paymentProofPath = null;
-        
-        if(!"COD".equals(requestDto.getPaymentMethod())) {
-        	if(paymentProof ==null || paymentProof.isEmpty()) {
-        		throw new RuntimeException("Payment proof is required.");
-        	}
-        	
-        	paymentProofPath=this.paymentProofStorageService.save(paymentProof);
-        }
+           return orderNumber;
+       }catch(Exception e){
+    	// DB transaction will rollback because exception is re-thrown
 
-       
-        OrderEntity order = toOrderEntity(
-                requestDto,
-                orderId,
-                orderNumber,
-                subtotalAmount,
-                taxAmount,
-                shippingFee,
-                grandTotal,
-            	   paymentProofPath,
-                now
-        );
-        order.setUser_id("382d6828-b8bc-11f1-ac2f-8038fbbba9bc");//Will change later
+           if (paymentProofPath != null) {
+               paymentProofStorageService.delete(paymentProofPath);
+           }
 
-        this.orderRepo.save(order);
-        for (OrderItemEntity item : orderItemToSave) {
-            orderItemRepo.save(item);
-        }
-
-        return orderNumber;
+           throw e;
+       }
+    	
     }
 
     private OrderItemEntity toOrderItemEntity(String orderId, OrderItemRequestDto dto, BigDecimal price, BigDecimal subtotal, LocalDateTime now) {
@@ -151,6 +165,7 @@ public class OrderService {
 
     private OrderEntity toOrderEntity(
             PlaceOrderRequestDto requestDto,
+            String userId,
             String orderId,
             String orderNumber, 
             BigDecimal subtotalAmount,
@@ -162,7 +177,7 @@ public class OrderService {
         
         OrderEntity entity = new OrderEntity();
         entity.setId(orderId);
-        entity.setUser_id(requestDto.getUserId());
+        entity.setUser_id(userId);
         entity.setOrder_number(orderNumber);
         
         entity.setSubtotal_amount(subtotalAmount);

@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import ai.shoppingapp.model.PlaceOrderRequestDto;
+import ai.shoppingapp.model.UserModel;
 import ai.shoppingapp.service.OrderService;
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/orders")
-@CrossOrigin(origins = "*")
 public class PlaceOrderController {
 	
 	private final OrderService orderService;
@@ -30,9 +31,19 @@ public class PlaceOrderController {
 	
 	@PostMapping(value="/place",consumes="multipart/form-data")
 	public ResponseEntity<Map<String, String>> placeOrder(@RequestPart("order") PlaceOrderRequestDto requestDto,
-			@RequestPart(value="paymentProof",required=false) MultipartFile paymentProof)
+			@RequestPart(value="paymentProof",required=false) MultipartFile paymentProof,
+			HttpSession session)
 	{
-		String orderNumber=this.orderService.placeOrder(requestDto,paymentProof);
+		UserModel loggedInUser=(UserModel) session.getAttribute("loggedInUser");
+		if(loggedInUser==null) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+					.body(
+							Map.of("message",
+									"Please login before placing an order"));
+		}
+		String userId=loggedInUser.getId();
+		
+		String orderNumber=this.orderService.placeOrder(userId,requestDto,paymentProof);
 		return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("orderNumber", orderNumber));
 	}
 }
