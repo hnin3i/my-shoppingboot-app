@@ -94,7 +94,7 @@
                                     <tr th:each="item, stat : ${order.items}">
                                         <td th:text="${stat.count}">1</td>
                                         <td>
-                                            <img th:src="${item.productImage ?: '/images/default.jpg'}" 
+                                            <img th:src="@{'/images/product/' + ${item.productImage ?: '/images/default.jpg'}}" 
                                                  class="rounded" width="60" height="60" 
                                                  style="object-fit: cover;" alt="Product Image" />
                                         </td>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+ xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ layout:decorate="~{layouts/public_layout}">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Orders - BLACKJACK</title>
+<link rel="stylesheet"
+ href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet"
+ href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+<link rel="stylesheet" th:href="@{/css/app.css}">
+<link rel="stylesheet" th:href="@{/css/profile.css}">
+<link rel="stylesheet" th:href="@{/css/account.css}">
+
+<style>
+.compact-table {
+    table-layout: fixed;
+    width: 100%;
+}
+.compact-table th, 
+.compact-table td {
+    font-size: 12px;
+    padding: 10px 6px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.compact-table th {
+    letter-spacing: 0.5px;
+}
+.compact-table .btn-sm {
+    font-size: 11px;
+    padding: 2px 8px;
+}
+.compact-table .badge {
+    font-size: 10px;
+    padding: 4px 6px;
+}
+</style>
+</head>
+
+<body>
+
+ <section layout:fragment="content" class="profile-page">
+
+  <div class="container">
+
+   <div class="row g-4">
+    
+    <!-- ================= LEFT ACCOUNT MENU ================= -->
+    <div class="col-lg-3">
+
+     <div class="account-menu">
+
+      <p class="menu-title">ACCOUNT</p>
+
+      <a th:href="@{/user/dashboard}" class="account-menu-link"> 
+       <span> OVERVIEW </span> <i class="bi bi-arrow-right"></i>
+      </a> 
+      
+      <a th:href="@{/user/profile}" class="account-menu-link">
+       <span> MY PROFILE </span> <i class="bi bi-arrow-right"></i>
+      </a> 
+      
+      <a th:href="@{/user/orders}" class="account-menu-link active"> 
+       <span> MY ORDERS </span> <i class="bi bi-arrow-right"></i>
+      </a> 
+      
+      <a href="#" class="account-menu-link logout-link"> 
+       <span> LOG OUT </span> <i class="bi bi-box-arrow-right"></i>
+      </a>
+
+     </div>
+
+    </div>
+
+    <!-- ================= RIGHT ORDER HISTORY CONTENT ================= -->
+    <div class="col-lg-9">
+
+     <!-- Page Heading -->
+     <div class="profile-page-header mb-3">
+      <div>
+       <p class="profile-eyebrow">ACCOUNT / ORDERS</p>
+       <h1 class="mb-1">MY ORDERS</h1>
+       <p class="profile-intro mb-0">View and track your previous purchase order history.</p>
+      </div>
+     </div>
+
+     <!-- Order Table Section -->
+     <div class="profile-section pt-0 mt-0">
+      <div class="table-responsive">
+       <table class="table table-bordered align-middle compact-table mb-0">
+        <thead class="table-dark text-uppercase fw-semibold">
+         <tr>
+          <th style="width: 13%;">Order No</th>
+          <th style="width: 14%;">Customer</th>
+          <th style="width: 18%;">Product</th>
+          <th style="width: 15%;">Total</th>
+          <th style="width: 12%;" class="text-center">Order Status</th>
+          <th style="width: 12%;" class="text-center">Payment</th>
+          <th style="width: 16%;">Date</th>
+          <th style="width: 10%;" class="text-center">Action</th>
+         </tr>
+        </thead>
+        <tbody>
+         <tr th:each="order : ${orders}">
+          <td class="fw-semibold" th:text="${order.orderNumber}" th:title="${order.orderNumber}"></td>
+          <td th:text="${order.customerName}" th:title="${order.customerName}"></td>
+          <td th:text="${order.productNames}" th:title="${order.productNames}"></td>
+          <td class="fw-bold" th:text="${#numbers.formatDecimal(order.totalAmount, 1, 2)} + ' MMK'"></td>
+          <td class="text-center">
+           <span class="badge bg-success" th:text="${order.orderStatus}">CONFIRMED</span>
+           </td>
+          <td class="text-center">
+           <span class="badge bg-info text-dark" th:text="${order.paymentStatus}">PAID</span>
+          </td>
+          <td th:text="${order.createdAt}"></td>
+          <td class="text-center">
+           <form th:action="@{/user/details}" method="post">
+            <input type="hidden" name="orderId" th:value="${order.orderId}" />
+            <button type="submit" class="btn btn-primary">View</button>
+           </form>
+          </td>
+         </tr>
+         
+         <tr th:if="${#lists.isEmpty(orders)}">
+          <td colspan="8" class="text-center text-muted py-4">No order history found.</td>
+         </tr>
+        </tbody>
+       </table>
+      </div>
+     </div>
+
+    </div>
+
+   </div>
+
+  </div>
+
+ </section>
+
+</body>
+</html>
