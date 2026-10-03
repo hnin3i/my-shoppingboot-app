@@ -7,6 +7,72 @@ body {
 	color: #333;
 }
 
+.admin-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-profile {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.admin-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-avatar-wrapper {
+    position: relative;
+    width: 42px;
+    height: 42px;
+}
+
+.admin-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.active-dot {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 11px;
+    height: 11px;
+    background: #22c55e;
+    border: 2px solid white;
+    border-radius: 50%;
+}
+
+.admin-details {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.admin-name {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.admin-status {
+    font-size: 12px;
+    color: #22c55e;
+}
+.admin-profile-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.admin-profile-link:hover {
+    color: inherit;
+}
 .admin-sidebar {
 	position: fixed;
 	left: 0;

@@ -1,382 +1,377 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <style>
 .header-search {
-    position: relative;
-    display: flex;
-    align-items: center;
+	position: relative;
+	display: flex;
+	align-items: center;
 }
-
 
 /* Search icon */
 .search-toggle {
-    width: 40px;
-    height: 40px;
-
-    padding: 0;
-    margin: 0;
-
-    border: 0;
-    outline: none;
-    background: transparent;
-
-    color: #fff;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
+	width: 40px;
+	height: 40px;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	outline: none;
+	background: transparent;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
 }
-
 
 .search-toggle svg {
-    width: 21px;
-    height: 21px;
-
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
+	width: 21px;
+	height: 21px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.8;
+	stroke-linecap: round;
 }
-
 
 /* ================= SEARCH FORM ================= */
-
 .search-form {
-    position: absolute;
-
-    top: 50%;
-    right: 0;
-
-    transform: translateY(-50%);
-
-    width: 0;
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-
-    overflow: hidden;
-
-    opacity: 0;
-    visibility: hidden;
-
-    transition: all 0.25s ease;
-
-    z-index: 9999;
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translateY(-50%);
+	width: 0;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-radius: 6px;
+	overflow: hidden;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.25s ease;
+	z-index: 9999;
 }
-
 
 /* OPEN */
 .header-search.active .search-form {
-    width: 280px;
-
-    opacity: 1;
-    visibility: visible;
+	width: 280px;
+	opacity: 1;
+	visibility: visible;
 }
-
 
 /* Input */
 .search-form input {
-    width: 100%;
-    height: 100%;
-
-    padding: 0 45px 0 14px;
-
-    border: 0;
-    outline: 0;
-
-    background: #fff;
-
-    color: #222;
-
-    font-size: 14px;
+	width: 100%;
+	height: 100%;
+	padding: 0 45px 0 14px;
+	border: 0;
+	outline: 0;
+	background: #fff;
+	color: #222;
+	font-size: 14px;
 }
-
 
 /* Submit icon */
 .search-submit {
-    position: absolute;
-
-    top: 0;
-    right: 0;
-
-    width: 42px;
-    height: 40px;
-
-    padding: 0;
-
-    border: 0;
-    background: transparent;
-
-    color: #222;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    cursor: pointer;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 42px;
+	height: 40px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: #222;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
 }
-
 
 .search-submit svg {
-    width: 18px;
-    height: 18px;
-
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.8;
-    stroke-linecap: round;
+	width: 18px;
+	height: 18px;
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.8;
+	stroke-linecap: round;
 }
 
-
 /* ================= MOBILE ================= */
-
-@media (max-width: 991px) {
-
-    .header-search.active .search-form {
-        width: 250px;
-    }
-
-}</style>
+@media ( max-width : 991px) {
+	.header-search.active .search-form {
+		width: 250px;
+	}
+}
+</style>
 
 <header th:fragment="header" class="shop-header">
 
-    <nav class="navbar navbar-expand-lg navbar-dark shop-navbar py-0">
+	<nav class="navbar navbar-expand-lg navbar-dark shop-navbar py-0">
 
-        <div class="container-fluid px-3 px-lg-4">
+		<div class="container-fluid px-3 px-lg-4">
 
-            <a class="navbar-brand shop-brand" th:href="@{/}">
-                BlackJack
-            </a>
+			<a class="navbar-brand shop-brand" th:href="@{/}"> BlackJack </a>
 
+			<!-- 	<li class="nav-item"><a class="nav-link " th:href="@{/}">HOME</a></li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/products?filter=new}"> NEW ARRIVALS </a></li>
 
-            <button class="navbar-toggler border-0 shadow-none"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#shopNavbar"
-                    aria-controls="shopNavbar"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
+					<li class="nav-item dropdown categories-hover"><a
+						class="nav-link dropdown-toggle" href="#" id="categoriesDropdown"
+						role="button" data-bs-toggle="dropdown" aria-expanded="false"> -->
 
+			<button class="navbar-toggler border-0 shadow-none" type="button"
+				data-bs-toggle="collapse" data-bs-target="#shopNavbar"
+				aria-controls="shopNavbar" aria-expanded="false"
+				aria-label="Toggle navigation">
 
-                <span class="navbar-toggler-icon"></span>
 
-            </button>
+				<span class="navbar-toggler-icon"></span>
 
+			</button>
 
-            <div class="collapse navbar-collapse" id="shopNavbar">
 
-                <ul class="navbar-nav shop-menu me-auto">
+			<div class="collapse navbar-collapse" id="shopNavbar">
 
-                    <li class="nav-item">
-                        <a class="nav-link" th:href="@{/}">
-                            HOME
-                        </a>
-                    </li>
+				<ul class="navbar-nav shop-menu me-auto">
 
+					<li class="nav-item"><a class="nav-link" th:href="@{/}">
+							HOME </a></li>
 
-                  <li class="nav-item">
-    <a class="nav-link"
-       th:href="@{/#new-in}">
-        NEW ARRIVALS
-    </a>
-</li>
 
+					<!-- 
+							<li th:if="${categories != null and #lists.size(categories) > 4}">
 
-                    <!-- ================= CATEGORIES ================= -->
+								<hr class="dropdown-divider">
 
+							</li>
 
-                    <li class="nav-item dropdown categories-hover">
 
-                        <a class="nav-link dropdown-toggle"
-                           href="#"
-                           id="categoriesDropdown"
-                           role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">
+							MORE CATEGORIES
+							<li id="moreCategories"><th:block
+									th:each="category, stat : ${categories}"
+									th:if="${stat.index >= 4}">
 
-                            CATEGORIES
+									<a class="dropdown-item"
+										th:href="@{/products(category=${category.name})}"
+										th:text="${category.name}"> Category </a>
 
+								</th:block></li>
 
-                        </a>
 
+							SEE MORE
+							<li th:if="${categories != null and #lists.size(categories) > 4}">
 
+								<a class="dropdown-item see-more" href="#"
+								id="seeMoreCategories"> SEE MORE → </a>
 
-                        <ul class="dropdown-menu categories-dropdown"
-                            aria-labelledby="categoriesDropdown">
+							</li>
 
 
-                      <!-- FIRST 4 CATEGORIES -->
+						</ul></li>
 
-<li>
-    <a class="dropdown-item"
-       th:href="@{/products/list}">
-        All
-    </a>
-</li>
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/products?filter=sale}"> SALE </a></li>
 
 
-<!-- Categories -->
-<li th:each="category, stat : ${categories}"
-    th:if="${stat.index < 4}">
 
 
-    <a class="dropdown-item"
-       href="#"
-       th:text="${category.name}"
-       th:attr="data-category-id=${category.id}"
-       onclick="changeCategory(this)">
-        Category
-    </a>
+				</ul>
 
-</li>
+				<ul class="navbar-nav shop-actions align-items-lg-center">
+					<li class="nav-item"><a class="nav-link shop-icon-link"
+						th:href="@{/products}" aria-label="Search"><svg
+								viewBox="0 0 24 24" aria-hidden="true">
+								<circle cx="11" cy="11" r="6.5" />
+								<path d="m16 16 4.5 4.5" /></svg><span class="d-lg-none ms-2">Search</span></a></li>
 
 
-<!-- DIVIDER -->
+					2. Account Icon: ONLY ONE of these three will ever render
 
-<li th:if="${categories != null and #lists.size(categories) > 4}">
 
-    <hr class="dropdown-divider">
+					Account
+					ADMIN
+					<li class="nav-item"
+						th:if="${session.loggedInUser != null and #strings.toUpperCase(#strings.toString(session.loggedInUser.role)).contains('ADMIN')}">
 
-</li>
+						<a class="nav-link shop-icon-link" th:href="@{/admin/dashboard}"
+						aria-label="Admin Dashboard" title="Admin Dashboard"> <svg
+								viewBox="0 0 24 24" width="20" height="20" stroke="currentColor"
+								stroke-width="2" fill="none" stroke-linecap="round"
+								stroke-linejoin="round">
 
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
 
-<!-- MORE CATEGORIES -->
+        </svg>
+					</a>
+					</li> -->
 
+					<li class="nav-item"><a class="nav-link" th:href="@{/#new-in}">
+							NEW ARRIVALS </a></li>
 
-<th:block th:each="category, stat : ${categories}"
-          th:if="${stat.index >= 4}">
 
-    <li class="more-category"
-        style="display: none;">
+					<!-- ================= CATEGORIES ================= -->
 
-        <a class="dropdown-item"
-           th:href="@{/(categoryId=${category.id})}"
-           th:text="${category.name}">
-            Category
-        </a>
+					<!-- 
+					<li class="nav-item"
+						th:if="${session.loggedInUser != null and !#strings.toUpperCase(#strings.toString(session.loggedInUser.role)).contains('ADMIN')}">
 
-    </li>
+						<a class="nav-link shop-icon-link" th:href="@{/user/profile}"
+						aria-label="Profile" title="Profile"> <svg viewBox="0 0 24 24"
+								width="20" height="20" stroke="currentColor" stroke-width="2"
+								fill="none" stroke-linecap="round" stroke-linejoin="round"> -->
+					<li class="nav-item dropdown categories-hover"><a
+						class="nav-link dropdown-toggle" href="#" id="categoriesDropdown"
+						role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
-</th:block>
+							CATEGORIES </a>
 
 
-<!-- SEE MORE -->
 
-<li id="seeMoreWrapper"
-    th:if="${categories != null and #lists.size(categories) > 4}">
+						<ul class="dropdown-menu categories-dropdown"
+							aria-labelledby="categoriesDropdown">
 
-    <a class="dropdown-item see-more"
-       href="#"
-       id="seeMoreCategories">
 
-        SEE MORE →
+							<!-- FIRST 4 CATEGORIES -->
 
-    </a>
+							<li><a class="dropdown-item" th:href="@{/products/list}">
+									All </a></li>
 
-</li>
 
+							<!-- Categories -->
+							<li th:each="category, stat : ${categories}"
+								th:if="${stat.index < 4}">
+								<!-- 
+					<li class="nav-item d-flex align-items-center gap-2"
+						th:if="${session.loggedInUser == null}"><a
+						class="btn btn-sm px-3 fw-semibold" th:href="@{/login}"
+						style="color: #fff; border: 1px solid #3f3f46; border-radius: 6px;">
+							Sign In </a> <a class="btn btn-sm px-3 fw-semibold"
+						th:href="@{/register}"
+						style="background-color: #e11d48; color: #fff; border-radius: 6px;">
+							Sign Up </a></li>
 
-                        </ul>
 
-                    </li>
+					1. Initial Auth Prompt Modal
 
 
-                    <li class="nav-item">
+					<li class="nav-item"><a
+						class="nav-link shop-icon-link position-relative"
+						th:href="@{/cart}" aria-label="Cart"><svg viewBox="0 0 24 24"
+								aria-hidden="true">
+								<path d="M3.5 8.5h17l-1 11H4.5l-1-11Z" />
+								<path d="M8 8.5V6a4 4 0 0 1 8 0v2.5" /></svg><span class="cart-count"
+							id="cartCount">0</span><span class="d-lg-none ms-2">Cart</span></a></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	shoon --> <a class="dropdown-item" href="#" th:text="${category.name}"
+								th:attr="data-category-id=${category.id}"
+								onclick="changeCategory(this)"> Category </a>
 
-    <a class="nav-link"
-       th:href="@{/#sale}">
+							</li>
 
-        SALE
 
-    </a>
+							<!-- DIVIDER -->
 
-</li>
+							<li th:if="${categories != null and #lists.size(categories) > 4}">
 
-                </ul>
+								<hr class="dropdown-divider">
 
+							</li>
 
 
-                <ul class="navbar-nav shop-actions align-items-lg-center">
-<!-- Search Box Section -->
-<li class="nav-item me-2">
+							<!-- MORE CATEGORIES -->
 
-    <form th:action="@{/products/list}"
-          method="get"
-          class="d-flex align-items-center">
+							<th:block th:each="category, stat : ${categories}"
+								th:if="${stat.index >= 4}">
 
-        <div class="input-group input-group-sm">
+								<li class="more-category" style="display: none;"><a
+									class="dropdown-item" th:href="@{/(categoryId=${category.id})}"
+									th:text="${category.name}"> Category </a></li>
 
-            <input type="text"
-                   name="keyword"
-                   th:value="${param.keyword}"
-                   class="form-control bg-dark text-white border-secondary"
-                   placeholder="Search products..."
-                   aria-label="Search">
+							</th:block>
 
-            <button class="btn btn-outline-secondary text-white"
-                    type="submit">
 
-                <svg viewBox="0 0 24 24"
-                     width="16"
-                     height="16"
-                     fill="none"
-                     stroke="currentColor"
-                     stroke-width="2"
-                     stroke-linecap="round"
-                     stroke-linejoin="round"
-                     aria-hidden="true">
+							<!-- SEE MORE -->
 
-                    <circle cx="11"
-                            cy="11"
-                            r="6.5" />
+							<li id="seeMoreWrapper"
+								th:if="${categories != null and #lists.size(categories) > 4}">
+
+								<a class="dropdown-item see-more" href="#"
+								id="seeMoreCategories"> SEE MORE → </a>
+
+							</li>
+
+
+						</ul></li>
+
+
+					<li class="nav-item"><a class="nav-link" th:href="@{/#sale}">
+
+							SALE </a></li>
+
+				</ul>
+
+
+
+				<ul class="navbar-nav shop-actions align-items-lg-center">
+					<!-- Search Box Section -->
+					<li class="nav-item me-2">
+
+						<form th:action="@{/products/list}" method="get"
+							class="d-flex align-items-center">
+
+							<div class="input-group input-group-sm">
+
+								<input type="text" name="keyword" th:value="${param.keyword}"
+									class="form-control bg-dark text-white border-secondary"
+									placeholder="Search products..." aria-label="Search">
+
+								<button class="btn btn-outline-secondary text-white"
+									type="submit">
+
+									<svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+										stroke="currentColor" stroke-width="2" stroke-linecap="round"
+										stroke-linejoin="round" aria-hidden="true">
+
+                    <circle cx="11" cy="11" r="6.5" />
 
                     <path d="m16 16 4.5 4.5" />
 
                 </svg>
 
-            </button>
+								</button>
 
-        </div>
+							</div>
 
-    </form>
+						</form>
 
-</li>
-                 
-
+					</li>
 
 
 
-                    <!-- Account -->
 
-                    <!-- ADMIN -->
 
-                    <li class="nav-item"
-                        th:if="${session.loggedInUser != null and #strings.toUpperCase(#strings.toString(session.loggedInUser.role)).contains('ADMIN')}">
+					<!-- Account -->
 
-                        <a class="nav-link shop-icon-link"
-                           th:href="@{/admin/dashboard}"
-                           aria-label="Admin Dashboard"
-                           title="Admin Dashboard">
+					<!-- ADMIN -->
 
-                            <svg viewBox="0 0 24 24"
-                                 width="20"
-                                 height="20"
-                                 stroke="currentColor"
-                                 stroke-width="2"
-                                 fill="none"
-                                 stroke-linecap="round"
-                                 stroke-linejoin="round">
+					<li class="nav-item"
+						th:if="${session.loggedInUser != null and #strings.toUpperCase(#strings.toString(session.loggedInUser.role)).contains('ADMIN')}">
 
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2">
+						<a class="nav-link shop-icon-link" th:href="@{/admin/dashboard}"
+						aria-label="Admin Dashboard" title="Admin Dashboard"> <svg
+								viewBox="0 0 24 24" width="20" height="20" stroke="currentColor"
+								stroke-width="2" fill="none" stroke-linecap="round"
+								stroke-linejoin="round">
+
+                                <path
+									d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2">
                                 </path>
 
                                 <circle cx="12" cy="7" r="4">
@@ -384,31 +379,23 @@
 
                             </svg>
 
-                        </a>
+					</a>
 
-                    </li>
+					</li>
 
 
-                    <!-- REGULAR USER -->
+					<!-- REGULAR USER -->
 
-                    <li class="nav-item"
-                        th:if="${session.loggedInUser != null and !#strings.toUpperCase(#strings.toString(session.loggedInUser.role)).contains('ADMIN')}">
+					<li class="nav-item"
+						th:if="${session.loggedInUser != null and !#strings.toUpperCase(#strings.toString(session.loggedInUser.role)).contains('ADMIN')}">
 
-                        <a class="nav-link shop-icon-link"
-                           th:href="@{/user/profile}"
-                           aria-label="Profile"
-                           title="Profile">
+						<a class="nav-link shop-icon-link" th:href="@{/user/profile}"
+						aria-label="Profile" title="Profile"> <svg viewBox="0 0 24 24"
+								width="20" height="20" stroke="currentColor" stroke-width="2"
+								fill="none" stroke-linecap="round" stroke-linejoin="round">
 
-                            <svg viewBox="0 0 24 24"
-                                 width="20"
-                                 height="20"
-                                 stroke="currentColor"
-                                 stroke-width="2"
-                                 fill="none"
-                                 stroke-linecap="round"
-                                 stroke-linejoin="round">
-
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2">
+                                <path
+									d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2">
                                 </path>
 
                                 <circle cx="12" cy="7" r="4">
@@ -416,219 +403,185 @@
 
                             </svg>
 
-                        </a>
+					</a>
 
-                    </li>
+					</li>
 
 
-                    <!-- GUEST -->
+					<!-- GUEST -->
 
-                    <li class="nav-item d-flex align-items-center gap-2"
-                        th:if="${session.loggedInUser == null}">
+					<li class="nav-item d-flex align-items-center gap-2"
+						th:if="${session.loggedInUser == null}"><a
+						class="btn btn-sm px-3 fw-semibold" th:href="@{/login}"
+						style="color: #fff; border: 1px solid #3f3f46; border-radius: 6px;">
 
-                        <a class="btn btn-sm px-3 fw-semibold"
-                           th:href="@{/login}"
-                           style="color: #fff; border: 1px solid #3f3f46; border-radius: 6px;">
+							Sign In </a> <a class="btn btn-sm px-3 fw-semibold"
+						th:href="@{/register}"
+						style="background-color: #e11d48; color: #fff; border-radius: 6px;">
 
-                            Sign In
-
-                        </a>
-
-                        <a class="btn btn-sm px-3 fw-semibold"
-                           th:href="@{/register}"
-                           style="background-color: #e11d48; color: #fff; border-radius: 6px;">
-
-                            Sign Up
-
-                        </a>
-
-                    </li>
+							Sign Up </a></li>
 
 
 
-                    <!-- Cart -->
+					<!-- Cart -->
 
-                    <li class="nav-item">
-
-                        <a class="nav-link shop-icon-link position-relative"
-                           th:href="@{/cart}"
-                           aria-label="Cart">
-
-                            <svg viewBox="0 0 24 24"
-                                 aria-hidden="true">
+					<li class="nav-item"><a
+						class="nav-link shop-icon-link position-relative"
+						th:href="@{/cart}" aria-label="Cart"> <svg viewBox="0 0 24 24"
+								aria-hidden="true">
 
                                 <path d="M3.5 8.5h17l-1 11H4.5l-1-11Z" />
 
                                 <path d="M8 8.5V6a4 4 0 0 1 8 0v2.5" />
 
-                            </svg>
+                            </svg> <span class="cart-count" id="cartCount">
 
-                            <span class="cart-count"
-                                  id="cartCount">
+								0 </span> <span class="d-lg-none ms-2"> Cart </span>
 
-                                0
+					</a></li>
 
-                            </span>
 
-                            <span class="d-lg-none ms-2">
-                                Cart
-                            </span>
+				</ul>
 
-                        </a>
+			</div>
 
-                    </li>
+		</div>
 
 
-                </ul>
+		<!-- ================= SEE MORE JAVASCRIPT ================= -->
 
-            </div>
+		<script>
+			document.addEventListener("DOMContentLoaded", function() {
 
-        </div>
+				const seeMoreCategories = document
+						.getElementById("seeMoreCategories");
 
+				const moreCategories = document
+						.querySelectorAll(".more-category");
 
-        <!-- ================= SEE MORE JAVASCRIPT ================= -->
+				const seeMoreWrapper = document
+						.getElementById("seeMoreWrapper");
 
-       <script>
-document.addEventListener("DOMContentLoaded", function () {
+				const categoriesDropdown = document
+						.getElementById("categoriesDropdown");
 
-    const seeMoreCategories =
-        document.getElementById("seeMoreCategories");
+				if (seeMoreCategories && moreCategories.length > 0
+						&& seeMoreWrapper) {
 
-    const moreCategories =
-        document.querySelectorAll(".more-category");
+					seeMoreCategories.addEventListener("click",
+							function(event) {
 
-    const seeMoreWrapper =
-        document.getElementById("seeMoreWrapper");
+								event.preventDefault();
 
-    const categoriesDropdown =
-        document.getElementById("categoriesDropdown");
+								// Prevent Bootstrap dropdown from closing
+								event.stopPropagation();
 
+								// Show remaining categories
+								moreCategories.forEach(function(category) {
+									category.style.display = "block";
+								});
 
-    if (seeMoreCategories && moreCategories.length > 0 && seeMoreWrapper) {
+								// Hide SEE MORE
+								seeMoreWrapper.style.display = "none";
 
-        seeMoreCategories.addEventListener("click", function (event) {
+							});
 
-            event.preventDefault();
+				}
 
-            // Prevent Bootstrap dropdown from closing
-            event.stopPropagation();
+			});
+			document.addEventListener("DOMContentLoaded", function() {
 
-            // Show remaining categories
-            moreCategories.forEach(function (category) {
-                category.style.display = "block";
-            });
+				/* ================= SEE MORE ================= */
 
-            // Hide SEE MORE
-            seeMoreWrapper.style.display = "none";
+				const seeMoreCategories = document
+						.getElementById("seeMoreCategories");
 
-        });
+				const moreCategories = document
+						.querySelectorAll(".more-category");
 
-    }
+				const seeMoreWrapper = document
+						.getElementById("seeMoreWrapper");
 
-});
-document.addEventListener("DOMContentLoaded", function () {
+				if (seeMoreCategories && moreCategories.length > 0
+						&& seeMoreWrapper) {
 
-    /* ================= SEE MORE ================= */
+					seeMoreCategories.addEventListener("click",
+							function(event) {
 
-    const seeMoreCategories =
-        document.getElementById("seeMoreCategories");
+								event.preventDefault();
+								event.stopPropagation();
 
-    const moreCategories =
-        document.querySelectorAll(".more-category");
+								moreCategories.forEach(function(category) {
+									category.style.display = "block";
+								});
 
-    const seeMoreWrapper =
-        document.getElementById("seeMoreWrapper");
+								seeMoreWrapper.style.display = "none";
 
+							});
 
-    if (seeMoreCategories &&
-        moreCategories.length > 0 &&
-        seeMoreWrapper) {
+				}
 
-        seeMoreCategories.addEventListener("click", function (event) {
+				/* ================= SEARCH ================= */
 
-            event.preventDefault();
-            event.stopPropagation();
+				const searchToggle = document.getElementById("searchToggle");
 
-            moreCategories.forEach(function (category) {
-                category.style.display = "block";
-            });
+				const headerSearch = document.getElementById("headerSearch");
 
-            seeMoreWrapper.style.display = "none";
+				const searchInput = document.getElementById("searchInput");
 
-        });
+				if (searchToggle && headerSearch) {
 
-    }
+					searchToggle.addEventListener("click", function(event) {
 
+						event.preventDefault();
+						event.stopPropagation();
 
-    /* ================= SEARCH ================= */
+						headerSearch.classList.toggle("active");
 
-    const searchToggle =
-        document.getElementById("searchToggle");
+						if (headerSearch.classList.contains("active")) {
 
-    const headerSearch =
-        document.getElementById("headerSearch");
+							setTimeout(function() {
 
-    const searchInput =
-        document.getElementById("searchInput");
+								if (searchInput) {
+									searchInput.focus();
+								}
 
+							}, 250);
 
-    if (searchToggle && headerSearch) {
+						}
 
-        searchToggle.addEventListener("click", function (event) {
+					});
 
-            event.preventDefault();
-            event.stopPropagation();
+					/* Click outside → close */
 
-            headerSearch.classList.toggle("active");
+					document.addEventListener("click", function(event) {
 
+						if (!headerSearch.contains(event.target)) {
 
-            if (headerSearch.classList.contains("active")) {
+							headerSearch.classList.remove("active");
 
-                setTimeout(function () {
+						}
 
-                    if (searchInput) {
-                        searchInput.focus();
-                    }
+					});
 
-                }, 250);
+				}
 
-            }
+			});
 
-        });
+			function changeCategory(element) {
+				const url = new URL(window.location.href);
 
+				url.searchParams.set("categoryId", element.dataset.categoryId);
 
-        /* Click outside → close */
+				window.location.href = url.toString();
+			}
+		</script>
 
-        document.addEventListener("click", function (event) {
 
-            if (!headerSearch.contains(event.target)) {
 
-                headerSearch.classList.remove("active");
 
-            }
+	</nav>
 
-        });
-
-    }
-
-});
-
-
-
-function changeCategory(element) {
-    const url = new URL(window.location.href);
-
-    url.searchParams.set("categoryId", element.dataset.categoryId);
-
-    window.location.href = url.toString();
-}
-
-</script>
-
-
-
-
-    </nav>
 
 
 </header>

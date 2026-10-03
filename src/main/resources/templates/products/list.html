@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/public_layout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/public_layout}">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title th:text="${product != null ? product.name + ' - BLACKJACK' : 'Product Detail - BLACKJACK'}">
         Product Detail - BLACKJACK
@@ -98,7 +96,7 @@
 
 <body>
 
-<div layout:fragment="content">
+	<div layout:fragment="content">
 
     <main class="product-detail-page">
 
@@ -180,7 +178,7 @@
         79,900 MMK
     </span>
 
-</div>
+						</div>
 
 
 <!-- DISCOUNT PRICE -->

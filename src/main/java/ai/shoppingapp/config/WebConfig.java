@@ -10,9 +10,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+	private final LoginInterceptor loginInterceptor;
+	private final AdminInterceptor adminInterceptor;
 
-    private final LoginInterceptor loginInterceptor;
-    private final AdminInterceptor adminInterceptor;
+
 
     public WebConfig(LoginInterceptor loginInterceptor, AdminInterceptor adminInterceptor) {
         this.loginInterceptor = loginInterceptor;
@@ -71,19 +72,20 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // Map standard static resources inside src/main/resources/static/
-        registry.addResourceHandler("/css/**")
-                .addResourceLocations("classpath:/static/css/");
-        registry.addResourceHandler("/js/**")
-                .addResourceLocations("classpath:/static/js/");
+	@Override
+	public void addResourceHandlers(ResourceHandlerRegistry registry) {
+		// Map standard static resources inside src/main/resources/static/
+		registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
+		registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
+
+		registry.addResourceHandler("/images/product/").addResourceLocations(
+				"file:///E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/product");
+		registry.addResourceHandler("/images/user/")
+				.addResourceLocations("file:///E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/user/");
 
 
-        registry.addResourceHandler("/images/product/")
-        .addResourceLocations("file:///D:/MyShop/my-shoppingboot-app/src/main/resources/static/images/product/");
-    registry.addResourceHandler("/images/user/")
-        .addResourceLocations("file:///D:/Myshop/my-shoppingboot-app/src/main/resources/static/images/user/");
-  }
+	}
+
+   
+
 }
-
