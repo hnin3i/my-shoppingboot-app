@@ -82,6 +82,19 @@ public class StockService {
 	public int getLowStockCount() {
 		return this.repo.getLowStockCount(LOW_STOCK_THRESHOLD);
 	}
+	
+	
+	public List<StockModel> findByProductId(String productId) {
+
+	    List<Stock> entities =
+	            this.repo.findByProductId(productId);
+
+	    return entities.stream()
+	            .map(this::toDto)
+	            .toList();
+	}
+
+
 
 	// Entity -> DTO
 	private StockModel toDto(Stock entity) {

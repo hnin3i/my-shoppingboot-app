@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
+
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <style>
 .header-search {
@@ -248,8 +249,8 @@
 </li>
 
 
-
 <!-- MORE CATEGORIES -->
+
 
 <th:block th:each="category, stat : ${categories}"
           th:if="${stat.index >= 4}">
@@ -629,5 +630,5 @@ function changeCategory(element) {
 
     </nav>
 
->>>>>>> 96580e3a09d201d07e9f097d97daa8a08263c13c
+
 </header>

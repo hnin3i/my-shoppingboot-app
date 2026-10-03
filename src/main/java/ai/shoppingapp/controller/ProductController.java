@@ -71,6 +71,7 @@ public class ProductController {
 
 			String fileName = imageFile.getOriginalFilename();
 
+
 			String uploadPath = "D:/MyShop/my-shoppingboot-app/src/main/resources/static/images/product/";
 
 

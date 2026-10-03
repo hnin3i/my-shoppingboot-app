@@ -11,6 +11,66 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
 
+<<<<<<< HEAD
+    private final LoginInterceptor loginInterceptor;
+    private final AdminInterceptor adminInterceptor;
+
+    public WebConfig(LoginInterceptor loginInterceptor, AdminInterceptor adminInterceptor) {
+        this.loginInterceptor = loginInterceptor;
+        this.adminInterceptor = adminInterceptor;
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 1. Login Interceptor - protects private user areas, allows public pages & assets
+        registry.addInterceptor(loginInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns(
+                    // Static Assets
+                    "/css/**",
+                    "/js/**",
+                    "/images/**",
+
+                    //Errors
+                    "/not-authorized",
+                    "/error/**",
+                    "/errors",
+                    "/errors/**",
+
+                    // Public Storefront Pages
+                    "/",
+                    "/home",
+                    "/products/**",
+                    "/categories/**",
+
+                    // Public Auth Pages
+                    "/user/**",
+                    "/login",
+                    "/register",
+                    "/verify-otp",
+                    "/forgot-password",
+                    "/reset-password",
+                    
+                    //Order History
+                    "/order-history",                  
+                    "/api/orders/place",
+                    "/cart",
+                    "/checkout",
+                    "/order-success",
+                    "/index",
+
+                    "/products/**",
+                    "/details"
+
+                    
+                );
+        		
+
+        // 2. Admin Interceptor - protects admin routes
+        registry.addInterceptor(adminInterceptor)
+                .addPathPatterns("/admin/**");
+    }
+=======
 //   private final LoginInterceptor loginInterceptor;
 //   private final AdminInterceptor adminInterceptor;
 //
@@ -61,6 +121,7 @@ public class WebConfig implements WebMvcConfigurer {
 //        registry.addInterceptor(adminInterceptor)
 //                .addPathPatterns("/admin/**");
 //    }
+>>>>>>> 96580e3a09d201d07e9f097d97daa8a08263c13c
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -70,6 +131,13 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/js/**")
                 .addResourceLocations("classpath:/static/js/");
 
+<<<<<<< HEAD
+		registry.addResourceHandler("static/images/**")
+				.addResourceLocations("file://C://Users/Admin/git/my-shoppingboot-app/src/main/resources/static/images/");
+		
+	}
+}
+=======
         registry.addResourceHandler("/images/product/")
         .addResourceLocations("file:///D:/MyShop/my-shoppingboot-app/src/main/resources/static/images/product/");
     registry.addResourceHandler("/images/user/")
@@ -77,3 +145,4 @@ public class WebConfig implements WebMvcConfigurer {
   }
 }
 
+>>>>>>> 96580e3a09d201d07e9f097d97daa8a08263c13c

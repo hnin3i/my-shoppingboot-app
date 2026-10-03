@@ -163,6 +163,26 @@ String sql = "SELECT COUNT(*) FROM stocks WHERE stock_qty < ? AND is_active = 1"
 
 Integer count = this.jdbcTemplate.queryForObject(sql, Integer.class, threshold);
 
-return count == null ? 0 : count;
-}
+		return count == null ? 0 : count;
+	}
+	
+//	public int decreaseStock(String stockId,int quantity) {
+//		String sql="UPDATE stocks\r\n"
+//				+ "                SET stock_qty = stock_qty - ?,\r\n"
+//				+ "                    updated_at = NOW()\r\n"
+//				+ "                WHERE id = ?\r\n"
+//				+ "                  AND stock_qty >= ?";
+//		
+//		Integer count=this.jdbcTemplate.update(sql,quantity,stockId,quantity);
+//		return count==null?0:count;
+//	}
+	
+	public List<Stock> findByProductId(String productId) { 
+		String sql = "SELECT s.*, p.name AS product_name "
+				+ "FROM stocks s JOIN products p ON s.product_id = p.id "
+				+ "WHERE s.product_id = ? "
+				+ "ORDER BY s.colour ASC, s.size ASC";
+       return this.jdbcTemplate.query( sql, new StockMapper(), productId );
+       
+	}
 }
