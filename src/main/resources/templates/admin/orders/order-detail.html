@@ -78,37 +78,45 @@
                     <div class="admin-card">
                         <div class="admin-card-title mb-3">Itemized Order List</div>
                         <div class="table-responsive mb-3">
-                            <table class="admin-table">
-                                <thead>
+                            <table class="table align-middle">
+                                <thead class="table-light sticky-top">
                                     <tr>
-                                        <th>Product</th>
-                                        <th>Unit Price</th>
-                                        <th>Qty</th>
-                                        <th class="text-end">Subtotal</th>
+                                        <th class="fw-bold">No.</th>
+                                        <th class="fw-bold">Image</th>
+                                        <th class="fw-bold">Product Name</th>
+                                        <th class="fw-bold">Spec</th>
+                                        <th class="fw-bold">Unit Price</th>
+                                        <th class="fw-bold">Qty</th>
+                                        <th class="text-end fw-bold">Subtotal</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr th:each="item : ${order.items}">
+                                    <tr th:each="item, stat : ${order.items}">
+                                        <td th:text="${stat.count}">1</td>
                                         <td>
-                                            <div class="d-flex align-items-center">
-                                                <img th:src="${item.productImage}" class="rounded me-3" style="width: 48px; height: 48px; object-fit: cover;" alt="Product">
-                                                <span class="fw-bold" th:text="${item.productName}">Product Name</span>
-                                            </div>
+                                            <img th:src="@{'/images/product/' + ${item.productImage ?: '/images/default.jpg'}}" 
+                                                 class="rounded" width="60" height="60" 
+                                                 style="object-fit: cover;" alt="Product Image" />
                                         </td>
-                                        <td th:text="${#numbers.formatDecimal(item.unitPrice, 1, 'COMMA', 0, 'POINT')} + ' Ks'"></td>
+                                        <td class="fw-semibold" th:text="${item.productName}">Product Name</td>
+                                        <td class="small text-muted">
+                                            <span th:text="${item.colour != null ? item.colour : '-'}"></span> / 
+                                            <span th:text="${item.size != null ? item.size : '-'}"></span>
+                                        </td>
+                                        <td th:text="${#numbers.formatDecimal(item.unitPrice, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></td>
                                         <td th:text="${item.quantity}"></td>
-                                        <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(item.subtotal, 1, 'COMMA', 0, 'POINT')} + ' Ks'"></td>
+                                        <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(item.subtotal, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
 
                         <!-- Price Breakdown -->
-                        <div class="border-top pt-3 text-end pe-2">
-                            <p class="mb-1 text-muted">Subtotal: <span class="fw-bold text-dark" th:text="${#numbers.formatDecimal(order.subtotalAmount, 1, 'COMMA', 0, 'POINT')} + ' Ks'"></span></p>
+                        <div class="pt-3 text-end pe-2">
+                            <p class="mb-1 text-muted">Subtotal: <span class="fw-bold text-dark" th:text="${#numbers.formatDecimal(order.subtotalAmount, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></span></p>
                             <p class="mb-1 text-muted">Tax: <span class="fw-bold text-dark" th:text="${order.taxAmount} + ' %'"></span></p>
-                            <p class="mb-1 text-muted">Shipping Fee: <span class="fw-bold text-dark" th:text="${#numbers.formatDecimal(order.shippingFee, 1, 'COMMA', 0, 'POINT')} + ' Ks'"></span></p>
-                            <h5 class="fw-bold text-purple mt-2">Grand Total: <span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 0, 'POINT')} + ' Ks'"></span></h5>
+                            <p class="mb-1 text-muted">Shipping Fee: <span class="fw-bold text-dark" th:text="${#numbers.formatDecimal(order.shippingFee, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></span></p>
+                            <h5 class="fw-bold text-purple mt-2">Grand Total: <span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></span></h5>
                         </div>
                     </div>
 

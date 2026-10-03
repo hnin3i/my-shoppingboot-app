@@ -14,9 +14,10 @@ public class WebConfig implements WebMvcConfigurer {
 	private final AdminInterceptor adminInterceptor;
 
 
-   public WebConfig(LoginInterceptor loginInterceptor, AdminInterceptor adminInterceptor) {
-   this.loginInterceptor = loginInterceptor;
-   this.adminInterceptor = adminInterceptor;
+
+    public WebConfig(LoginInterceptor loginInterceptor, AdminInterceptor adminInterceptor) {
+        this.loginInterceptor = loginInterceptor;
+        this.adminInterceptor = adminInterceptor;
     }
 
     @Override
@@ -43,6 +44,7 @@ public class WebConfig implements WebMvcConfigurer {
                     "/categories/**",
 
                     // Public Auth Pages
+                    "/user/**",
                     "/login",
                     "/register",
                     "/verify-otp",
@@ -50,9 +52,16 @@ public class WebConfig implements WebMvcConfigurer {
                     "/reset-password",
                     
                     //Order History
-                    "/order-history",
+                    "/order-history",                  
+                    "/api/orders/place",
+                    "/cart",
+                    "/checkout",
+                    "/order-success",
+                    "/index",
+
                     "/products/**",
                     "/details"
+
                     
                 );
         		
@@ -76,5 +85,7 @@ public class WebConfig implements WebMvcConfigurer {
 
 
 	}
-}
 
+   
+
+}

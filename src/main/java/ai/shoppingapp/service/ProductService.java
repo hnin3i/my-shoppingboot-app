@@ -100,6 +100,8 @@ public class ProductService {
 
 		BigDecimal salePrice = price.subtract(discountAmount);
 		product.setFinalPrice(salePrice);
+
+
 	}
 
 	public List<ProductModel> findByCategoryId1(String categoryId) {

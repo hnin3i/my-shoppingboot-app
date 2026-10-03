@@ -1,5 +1,6 @@
 package ai.shoppingapp.model;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -15,10 +16,10 @@ public class AdminOrderDetailDto {
     private String shippingAddress;
 
     // Amounts
-    private double subtotalAmount;
-    private double taxAmount;
-    private double shippingFee;
-    private double totalAmount;
+    private BigDecimal subtotalAmount;
+    private BigDecimal taxAmount;
+    private BigDecimal shippingFee;
+    private BigDecimal totalAmount;
 
     // Payment & Status
     private String paymentMethod;
@@ -30,8 +31,8 @@ public class AdminOrderDetailDto {
     private List<AdminOrderItemDetailDto> items;
 
     public AdminOrderDetailDto() {}
-    public AdminOrderDetailDto(String id,String orderNumber,Timestamp createdAt,String customerName,String customerPhone,String shippingAddress,double subtotalAmount,
-    		double taxAmount,double shippingFee,double totalAmount,String paymentMethod,String paymentConfirmPhoto,PaymentStatus paymentStatus,OrderStatus status,List<AdminOrderItemDetailDto> items) {
+    public AdminOrderDetailDto(String id,String orderNumber,Timestamp createdAt,String customerName,String customerPhone,String shippingAddress,BigDecimal subtotalAmount,
+    		BigDecimal taxAmount,BigDecimal shippingFee,BigDecimal totalAmount,String paymentMethod,String paymentConfirmPhoto,PaymentStatus paymentStatus,OrderStatus status,List<AdminOrderItemDetailDto> items) {
     	this.id=id;
     	this.orderNumber=orderNumber;
     	this.createdAt=createdAt;
@@ -84,28 +85,28 @@ public class AdminOrderDetailDto {
 	public void setShippingAddress(String shippingAddress) {
 		this.shippingAddress = shippingAddress;
 	}
-	public double getSubtotalAmount() {
+	public BigDecimal getSubtotalAmount() {
 		return subtotalAmount;
 	}
-	public void setSubtotalAmount(double subtotalAmount) {
+	public void setSubtotalAmount(BigDecimal subtotalAmount) {
 		this.subtotalAmount = subtotalAmount;
 	}
-	public double getTaxAmount() {
+	public BigDecimal getTaxAmount() {
 		return taxAmount;
 	}
-	public void setTaxAmount(double taxAmount) {
+	public void setTaxAmount(BigDecimal taxAmount) {
 		this.taxAmount = taxAmount;
 	}
-	public double getShippingFee() {
+	public BigDecimal getShippingFee() {
 		return shippingFee;
 	}
-	public void setShippingFee(double shippingFee) {
+	public void setShippingFee(BigDecimal shippingFee) {
 		this.shippingFee = shippingFee;
 	}
-	public double getTotalAmount() {
+	public BigDecimal getTotalAmount() {
 		return totalAmount;
 	}
-	public void setTotalAmount(double totalAmount) {
+	public void setTotalAmount(BigDecimal totalAmount) {
 		this.totalAmount = totalAmount;
 	}
 	public String getPaymentMethod() {

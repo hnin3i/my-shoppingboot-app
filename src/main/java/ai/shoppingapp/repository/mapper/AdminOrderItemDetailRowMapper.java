@@ -14,9 +14,11 @@ public class AdminOrderItemDetailRowMapper implements RowMapper<AdminOrderItemDe
         AdminOrderItemDetailDto item = new AdminOrderItemDetailDto();
         item.setProductName(rs.getString("product_name"));
         item.setProductImage(rs.getString("product_image"));
+        item.setColour(rs.getString("colour"));
+        item.setSize(rs.getString("size"));
         item.setQuantity(rs.getInt("quantity"));
-        item.setUnitPrice(rs.getDouble("unit_price"));
-        item.setSubtotal(rs.getDouble("subtotal"));
+        item.setUnitPrice(rs.getBigDecimal("unit_price"));
+        item.setSubtotal(rs.getBigDecimal("subtotal"));
         return item;
     }
 }

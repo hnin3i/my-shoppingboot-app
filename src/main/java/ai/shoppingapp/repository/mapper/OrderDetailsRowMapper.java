@@ -14,9 +14,9 @@ public class OrderDetailsRowMapper implements RowMapper<OrderDetailsEntity> {
         item.setImage(rs.getString("image"));
         item.setColour(rs.getString("colour"));
         item.setSize(rs.getString("size"));
-        item.setPrice(rs.getDouble("price"));
+        item.setPrice(rs.getBigDecimal("price"));
         item.setQuantity(rs.getInt("quantity"));
-        item.setSubtotal(rs.getDouble("subtotal"));
+        item.setSubtotal(rs.getBigDecimal("subtotal"));
         return item;
         
        

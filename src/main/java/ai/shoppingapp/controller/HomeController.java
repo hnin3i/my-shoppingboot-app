@@ -74,5 +74,13 @@ public class HomeController {
 
         return "home";
 
+
     }
+    @GetMapping("/error")
+	public String handleDirectErrorAccess(Model model) {
+	    model.addAttribute("status", 404);
+	    model.addAttribute("title", "Page Not Found");
+	    model.addAttribute("message", "The requested resource could not be found.");
+	    return "error";
+	}
 }
