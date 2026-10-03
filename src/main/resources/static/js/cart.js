@@ -184,7 +184,7 @@ function renderCart() {
                                     </span>
                                 </td>
                                 <td>
-                                    ${item.price.toLocaleString()} MMK
+                                    ${Number(item.price).toLocaleString()} MMK
                                 </td>
                                 <td>
                                     <div class="d-flex align-items-center gap-1">
@@ -204,7 +204,7 @@ function renderCart() {
                                     </div>
                                 </td>
                                 <td class="fw-bold">
-                                    ${item.subtotal.toLocaleString()} MMK
+                                   ${Number(item.subtotal).toLocaleString()} MMK
                                 </td>
                                 <td>
                                     <button
@@ -257,3 +257,56 @@ function handleCartAction(event) {
 	
 	
 }
+function handleGlobalClick(event) {
+    const addButton = event.target.closest(
+        "[data-action='add-to-cart']"
+    );
+
+    if (addButton) {
+        handleProductClick(event);
+        return;
+    }
+
+    const cartAction = event.target.closest(
+        "[data-cart-action]"
+    );
+
+    if (cartAction) {
+        handleCartAction(event);
+        return;
+    }
+
+    const orderButton = event.target.closest(
+        "[data-action='place-order']"
+    );
+
+    if (orderButton) {
+        placeOrder();
+    }
+}
+
+function initializePage() {
+
+    if (typeof renderProducts === "function") {
+        renderProducts();
+    }
+
+    if (typeof renderCart === "function") {
+        renderCart();
+    }
+
+    if (typeof renderOrderSummary === "function") {
+        renderOrderSummary();
+    }
+
+    if (typeof updateBadge === "function") {
+        updateBadge();
+    }
+}
+
+document.addEventListener("click", handleGlobalClick);
+
+document.addEventListener(
+    "DOMContentLoaded",
+    initializePage
+);

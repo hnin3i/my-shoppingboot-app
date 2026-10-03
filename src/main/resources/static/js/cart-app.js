@@ -25,7 +25,7 @@ function handleGlobalClick(event) {
 }
 
 function initializePage() {
-    renderProducts();
+    //renderProducts();
     renderCart();
     renderOrderSummary();
     updateBadge();

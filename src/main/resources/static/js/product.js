@@ -1,132 +1,867 @@
-const MOCK_PRODUCTS = [
-    {
-        productId: "a9ae2897-b7c0-11f1-bcf3-8038fbbba9bc",
-        productName: "Classic T-Shirt",
-        image: "/images/temporary/miu-top.jpg",
-        price: 15000,
-        stocks: [
-            { stockId: "9c8ee5a7-b7c0-11f1-bcf3-8038fbbba9bc", colour: "Red", size: "M", stock_qty: 10 },
-            { stockId: "185238e6-b8ae-11f1-ac2f-8038fbbba9bc", colour: "Blue", size: "L", stock_qty: 5 }
-        ]
-    },
-    {
-        productId: "prod-002",
-        productName: "Denim Jeans",
-        image: "/images/temporary/miu-top.jpg",
-        price: 35000,
-        stocks: [
-            { stockId: "stk-002a", colour: "Dark Blue", size: "32", stock_qty: 8 },
-            { stockId: "stk-002b", colour: "Black", size: "34", stock_qty: 3 }
-        ]
-    },
-    {
-        productId: "prod-003",
-        productName: "Sneakers",
-        image: "/images/temporary/women-top-with-knot.jpg",
-        price: 55000,
-        stocks: [
-            { stockId: "stk-003a", colour: "White", size: "42", stock_qty: 6 },
-            { stockId: "stk-003b", colour: "Black", size: "43", stock_qty: 2 }
-        ]
+
+/* =========================================================
+   PRODUCT DETAIL STATE
+   ========================================================= */
+
+let selectedColor = "";
+let selectedSize = "";
+
+
+/* =========================================================
+   FIND SELECTED STOCK
+   ========================================================= */
+
+function findSelectedStock() {
+
+    if (typeof DETAIL_PRODUCT === "undefined") {
+        throw new Error("Product information not found.");
     }
-];
 
-function renderProducts() {
-    const grid = document.getElementById("product-grid");
+    if (!Array.isArray(DETAIL_PRODUCT.stocks)) {
+        throw new Error("Product stock information not found.");
+    }
 
-    if (!grid) return;
+    return DETAIL_PRODUCT.stocks.find(function(stock) {
 
-    grid.innerHTML = MOCK_PRODUCTS.map(product => `
-        <div class="col-sm-6 col-md-4">
-            <div class="card product-card h-100 shadow-sm">
-                <img
-                    src="${product.image}"
-                    class="card-img-top"
-                    alt="${product.productName}"
-                >
-                <div class="card-body">
-                    <h6 class="card-title">${product.productName}</h6>
-                    <p class="text-primary fw-bold">
-                        ${product.price.toLocaleString()} MMK
-                    </p>
-                    <div class="mb-2">
-                        <label class="form-label small">Select Variant</label>
-                        <select
-                            id="variant-${product.productId}"
-                            class="form-select form-select-sm"
-                        >
-                            ${product.stocks.map(stock => `
-                                <option
-                                    value="${stock.stockId}"
-                                    data-colour="${stock.colour}"
-                                    data-size="${stock.size}"
-                                    data-maxqty="${stock.stock_qty}"
-                                >
-                                    ${stock.colour} / ${stock.size}
-                                    (Stock: ${stock.stock_qty})
-                                </option>
-                            `).join("")}
-                        </select>
-                    </div>
-                    <button
-                        class="btn btn-primary btn-sm w-100"
-                        data-action="add-to-cart"
-                        data-product-id="${product.productId}"
-                    >
-                        Add to Cart
-                    </button>
-                </div>
-            </div>
-        </div>
-    `).join("");
+        return stock.colour === selectedColor
+            && stock.size === selectedSize;
+
+    });
 }
 
-function handleAddToCart(productId) {
-    const product = MOCK_PRODUCTS.find(
-        item => item.productId === productId
-    );
 
-    if (!product) {
-        throw new Error("Product not found.");
+/* =========================================================
+   RENDER COLORS FROM DATABASE
+   ========================================================= */
+
+function renderColors() {
+
+    const container =
+        document.querySelector(".color-options");
+
+    if (!container) {
+        return;
     }
 
-    const select = document.getElementById(`variant-${productId}`);
-
-    if (!select) {
-        throw new Error("Product variant not found.");
+    if (typeof DETAIL_PRODUCT === "undefined") {
+        return;
     }
 
-    const option = select.options[select.selectedIndex];
-
-    if (!option) {
-        throw new Error("Please select a product variant.");
+    if (!Array.isArray(DETAIL_PRODUCT.stocks)) {
+        return;
     }
+
+
+    const colors = [];
+
+
+    DETAIL_PRODUCT.stocks.forEach(function(stock) {
+
+        if (!colors.includes(stock.colour)) {
+
+            colors.push(stock.colour);
+
+        }
+
+    });
+
+
+    if (colors.length === 0) {
+
+        container.innerHTML =
+            "<span>No color available</span>";
+
+        return;
+    }
+
+
+    container.innerHTML = colors.map(function(color) {
+
+        return `
+            <button
+                type="button"
+                class="color-option"
+                data-color="${color}"
+                aria-label="${color}"
+            >
+            </button>
+        `;
+
+    }).join("");
+
+
+    /*
+     * Select first available color
+     */
+
+    const firstColor =
+        container.querySelector(".color-option");
+
+    if (firstColor) {
+
+        handleColorSelection(firstColor);
+
+    }
+}
+
+
+/* =========================================================
+   COLOR SELECTION
+   ========================================================= */
+
+function handleColorSelection(button) {
+
+    const color =
+        button.dataset.color;
+
+    if (!color) {
+        return;
+    }
+
+
+    document
+        .querySelectorAll(".color-option")
+        .forEach(function(item) {
+
+            item.classList.remove("active");
+
+        });
+
+
+    button.classList.add("active");
+
+    selectedColor = color;
+
+
+    const selectedColorText =
+        document.getElementById("selectedColor");
+
+    if (selectedColorText) {
+
+        selectedColorText.textContent =
+            selectedColor;
+
+    }
+
+
+    /*
+     * Color changed.
+     * Reset selected size.
+     */
+
+    selectedSize = "";
+
+    document
+        .querySelectorAll(".size-btn")
+        .forEach(function(item) {
+
+            item.classList.remove("active");
+
+        });
+
+
+    renderSizes();
+
+
+    const quantityInput =
+        document.getElementById("quantity");
+
+    if (quantityInput) {
+
+        quantityInput.value = 1;
+
+        quantityInput.max = 20;
+
+    }
+
+
+    const sizeMessage =
+        document.getElementById("sizeMessage");
+
+    if (sizeMessage) {
+
+        sizeMessage.innerHTML =
+            '<i class="bi bi-info-circle"></i> Please select a size';
+
+    }
+}
+
+
+/* =========================================================
+   RENDER SIZES FROM DATABASE
+   ========================================================= */
+
+function renderSizes() {
+
+    const container =
+        document.getElementById("sizeOptions");
+
+    if (!container) {
+        return;
+    }
+
+    if (typeof DETAIL_PRODUCT === "undefined") {
+        return;
+    }
+
+    if (!Array.isArray(DETAIL_PRODUCT.stocks)) {
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    const sizes = [];
+
+
+    DETAIL_PRODUCT.stocks.forEach(function(stock) {
+
+        /*
+         * Only show sizes belonging to
+         * selected color.
+         */
+
+        if (stock.colour !== selectedColor) {
+            return;
+        }
+
+
+        if (!sizes.includes(stock.size)) {
+
+            sizes.push(stock.size);
+
+        }
+
+    });
+
+
+    sizes.forEach(function(size) {
+
+        const stock =
+            DETAIL_PRODUCT.stocks.find(function(item) {
+
+                return item.colour === selectedColor
+                    && item.size === size;
+
+            });
+
+
+        const button =
+            document.createElement("button");
+
+        button.type = "button";
+
+        button.className = "size-btn";
+
+        button.dataset.size = size;
+
+        button.textContent = size;
+
+
+        /*
+         * Disable if stock is 0.
+         */
+
+        if (!stock || Number(stock.stockQty) <= 0) {
+
+            button.disabled = true;
+
+            button.classList.add("disabled");
+
+        }
+
+
+        container.appendChild(button);
+
+    });
+}
+
+
+/* =========================================================
+   SIZE SELECTION
+   ========================================================= */
+
+function handleSizeSelection(button) {
+
+    if (button.disabled) {
+        return;
+    }
+
+
+    const size =
+        button.dataset.size;
+
+    if (!size) {
+        return;
+    }
+
+
+    const stock =
+        DETAIL_PRODUCT.stocks.find(function(item) {
+
+            return item.colour === selectedColor
+                && item.size === size;
+
+        });
+
+
+    if (!stock) {
+
+        showToast(
+            "This color and size are not available.",
+            "danger"
+        );
+
+        return;
+    }
+
+
+    const stockQty =
+        Number(stock.stockQty);
+
+
+    if (stockQty <= 0) {
+
+        showToast(
+            "This size is out of stock.",
+            "warning"
+        );
+
+        return;
+    }
+
+
+    document
+        .querySelectorAll(".size-btn")
+        .forEach(function(item) {
+
+            item.classList.remove("active");
+
+        });
+
+
+    button.classList.add("active");
+
+    selectedSize = size;
+
+
+    /*
+     * Set quantity according to
+     * real database stock.
+     */
+
+    const quantityInput =
+        document.getElementById("quantity");
+
+    if (quantityInput) {
+
+        quantityInput.value = 1;
+
+        quantityInput.max = stockQty;
+
+    }
+
+
+    const sizeMessage =
+        document.getElementById("sizeMessage");
+
+    if (sizeMessage) {
+
+        sizeMessage.innerHTML =
+            '<i class="bi bi-check-circle"></i> Size selected';
+
+    }
+}
+
+
+/* =========================================================
+   GET QUANTITY
+   ========================================================= */
+
+function getQuantity() {
+
+    const quantityInput =
+        document.getElementById("quantity");
+
+    if (!quantityInput) {
+
+        throw new Error(
+            "Quantity input not found."
+        );
+
+    }
+
+
+    let quantity =
+        Number(quantityInput.value);
+
+
+    if (!Number.isInteger(quantity)
+        || quantity < 1) {
+
+        quantity = 1;
+
+    }
+
+
+    return quantity;
+}
+
+
+/* =========================================================
+   GET MAX QUANTITY
+   ========================================================= */
+
+function getMaxQuantity() {
+
+    if (!selectedColor || !selectedSize) {
+
+        return 20;
+
+    }
+
+
+    const stock =
+        findSelectedStock();
+
+
+    if (!stock) {
+
+        return 0;
+
+    }
+
+
+    return Number(stock.stockQty);
+}
+
+
+/* =========================================================
+   DECREASE QUANTITY
+   ========================================================= */
+
+function decreaseQuantity() {
+
+    const quantityInput =
+        document.getElementById("quantity");
+
+    if (!quantityInput) {
+        return;
+    }
+
+
+    let quantity =
+        Number(quantityInput.value);
+
+
+    if (!Number.isInteger(quantity)
+        || quantity < 1) {
+
+        quantity = 1;
+
+    }
+
+
+    if (quantity > 1) {
+
+        quantity--;
+
+    }
+
+
+    quantityInput.value = quantity;
+}
+
+
+/* =========================================================
+   INCREASE QUANTITY
+   ========================================================= */
+
+function increaseQuantity() {
+
+    const quantityInput =
+        document.getElementById("quantity");
+
+    if (!quantityInput) {
+        return;
+    }
+
+
+    let quantity =
+        Number(quantityInput.value);
+
+
+    if (!Number.isInteger(quantity)
+        || quantity < 1) {
+
+        quantity = 1;
+
+    }
+
+
+    const maxQuantity =
+        getMaxQuantity();
+
+
+    if (quantity < maxQuantity) {
+
+        quantity++;
+
+    }
+}
+
+
+/* =========================================================
+   MANUAL QUANTITY INPUT
+   ========================================================= */
+
+function handleQuantityInput(event) {
+
+    if (event.target.id !== "quantity") {
+        return;
+    }
+
+
+    let value =
+        event.target.value.replace(
+            /[^0-9]/g,
+            ""
+        );
+
+
+    if (value === "") {
+
+        event.target.value = "";
+
+        return;
+    }
+
+
+    let quantity =
+        Number(value);
+
+
+    if (quantity < 1) {
+
+        quantity = 1;
+
+    }
+
+
+    const maxQuantity =
+        getMaxQuantity();
+
+
+    if (maxQuantity > 0
+        && quantity > maxQuantity) {
+
+        quantity = maxQuantity;
+
+    }
+
+
+    event.target.value =
+        quantity;
+}
+
+
+/* =========================================================
+   QUANTITY BLUR
+   ========================================================= */
+
+function handleQuantityBlur(event) {
+
+    if (event.target.id !== "quantity") {
+        return;
+    }
+
+
+    let quantity =
+        Number(event.target.value);
+
+
+    if (!Number.isInteger(quantity)
+        || quantity < 1) {
+
+        quantity = 1;
+
+    }
+
+
+    const maxQuantity =
+        getMaxQuantity();
+
+
+    if (maxQuantity > 0
+        && quantity > maxQuantity) {
+
+        quantity = maxQuantity;
+
+    }
+
+
+    event.target.value =
+        quantity;
+}
+
+
+/* =========================================================
+   ADD TO CART
+   ========================================================= */
+
+function handleDetailAddToCart() {
+
+    if (typeof DETAIL_PRODUCT === "undefined") {
+
+        throw new Error(
+            "Product information not found."
+        );
+
+    }
+
+
+    if (!selectedColor) {
+
+        showToast(
+            "Please select a color.",
+            "warning"
+        );
+
+        return;
+    }
+
+
+    if (!selectedSize) {
+
+        showToast(
+            "Please select a size.",
+            "warning"
+        );
+
+        return;
+    }
+
+
+    const stock =
+        findSelectedStock();
+
+
+    if (!stock) {
+
+        showToast(
+            "This color and size are not available.",
+            "danger"
+        );
+
+        return;
+    }
+
+
+    const maxQty =
+        Number(stock.stockQty);
+
+
+    if (maxQty <= 0) {
+
+        showToast(
+            "This item is out of stock.",
+            "warning"
+        );
+
+        return;
+    }
+
+
+    const quantity =
+        getQuantity();
+
+
+    if (quantity > maxQty) {
+
+        showToast(
+            "Requested quantity is greater than available stock.",
+            "warning"
+        );
+
+        return;
+    }
+
+
+    /*
+     * Product information comes from
+     * DETAIL_PRODUCT.
+     *
+     * Stock information comes from
+     * database stocks.
+     */
 
     const stockInfo = {
-        stockId: option.value,
-        productId: product.productId,
-        productName: product.productName,
-        image: product.image,
-        colour: option.dataset.colour,
-        size: option.dataset.size,
-        maxQty: Number(option.dataset.maxqty),
-        price: product.price
+
+        stockId: stock.id,
+
+        productId: DETAIL_PRODUCT.productId,
+
+        productName: DETAIL_PRODUCT.productName,
+
+        image: DETAIL_PRODUCT.image,
+
+        colour: stock.colour,
+
+        size: stock.size,
+
+        maxQty: maxQty,
+
+        price: Number(DETAIL_PRODUCT.price)
+
     };
 
-    const result = addToCart(stockInfo);
+
+    const result =
+        addToCart(
+            stockInfo,
+            quantity
+        );
+
 
     showToast(
+
         result.message,
-        result.success ? "success" : "danger"
+
+        result.success
+            ? "success"
+            : "danger"
+
     );
 }
 
-function handleProductClick(event) {
-    const button = event.target.closest(
-        "[data-action='add-to-cart']"
-    );
 
-    if (!button) return;
+/* =========================================================
+   EVENT DELEGATION
+   ========================================================= */
 
-    handleAddToCart(button.dataset.productId);
+function handleProductDetailClick(event) {
+
+    const colorButton =
+        event.target.closest(".color-option");
+
+    if (colorButton) {
+
+        handleColorSelection(
+            colorButton
+        );
+
+        return;
+    }
+
+
+    const sizeButton =
+        event.target.closest(".size-btn");
+
+    if (sizeButton) {
+
+        handleSizeSelection(
+            sizeButton
+        );
+
+        return;
+    }
+
+
+    const decreaseButton =
+        event.target.closest("#decreaseQuantity");
+
+    if (decreaseButton) {
+
+        decreaseQuantity();
+
+        return;
+    }
+
+
+    const increaseButton =
+        event.target.closest("#increaseQuantity");
+
+    if (increaseButton) {
+
+        increaseQuantity();
+
+        return;
+    }
+
+
+    const addButton =
+        event.target.closest("#addToCartBtn");
+
+    if (addButton) {
+
+        handleDetailAddToCart();
+
+    }
 }
+
+
+/* =========================================================
+   INITIALIZE
+   ========================================================= */
+
+function initializeProductDetail() {
+
+    if (typeof DETAIL_PRODUCT === "undefined") {
+
+        return;
+
+    }
+
+
+    if (!Array.isArray(DETAIL_PRODUCT.stocks)) {
+
+        return;
+
+    }
+
+
+    if (DETAIL_PRODUCT.stocks.length === 0) {
+
+        return;
+
+    }
+
+
+    renderColors();
+
+}
+
+
+/* =========================================================
+   DOM READY
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        initializeProductDetail();
+
+
+        document.addEventListener(
+            "click",
+            handleProductDetailClick
+        );
+
+
+        document.addEventListener(
+            "input",
+            handleQuantityInput
+        );
+
+
+        document.addEventListener(
+            "blur",
+            handleQuantityBlur,
+            true
+        );
+
+    }
+);
+

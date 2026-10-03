@@ -172,4 +172,13 @@ public class StockRepository {
 //		Integer count=this.jdbcTemplate.update(sql,quantity,stockId,quantity);
 //		return count==null?0:count;
 //	}
+	
+	public List<Stock> findByProductId(String productId) { 
+		String sql = "SELECT s.*, p.name AS product_name "
+				+ "FROM stocks s JOIN products p ON s.product_id = p.id "
+				+ "WHERE s.product_id = ? "
+				+ "ORDER BY s.colour ASC, s.size ASC";
+       return this.jdbcTemplate.query( sql, new StockMapper(), productId );
+       
+	}
 }
