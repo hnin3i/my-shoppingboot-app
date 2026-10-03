@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import ai.shoppingapp.model.CategoryModel;
 import ai.shoppingapp.model.ProductModel;
 import ai.shoppingapp.model.StockModel;
 import ai.shoppingapp.repository.entity.Stock;
@@ -17,7 +18,7 @@ import ai.shoppingapp.service.CategoryService;
 
 @Controller
 public class UserProductController {
-	
+
 	private final ProductService productService;
 	private final CategoryService categoryService;
 	private final StockService stockService;
@@ -31,10 +32,9 @@ public class UserProductController {
 		this.stockService=stockService;
 	}
 
-	
 	@GetMapping("products/detail/{id}")
 	public String productDetail(@PathVariable String id, Model model) {
-		
+
 		ProductModel product = productService.findById(id);
 		if(product==null) {
 			return "redirect:/products/list";
@@ -46,28 +46,73 @@ public class UserProductController {
 		model.addAttribute("stocks", stocks);
 
 		return "products/detail";
-		
 	}
-	
+
 	@GetMapping("products/list")
-	public String productList(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+	public String productList(
+	        @RequestParam(value = "categoryId", required = false) String categoryID,
+	        @RequestParam(value = "keyword", required = false) String keyword,
+	        @RequestParam(value = "newProducts", required = false) Boolean showNewProducts,
+	        @RequestParam(value = "sale", required = false) Boolean showSale,
+	        Model model) {
 
-		if (keyword == null || keyword.trim().isEmpty()) {
+	    List<ProductModel> products;
 
-			model.addAttribute("products", productService.findAll());
+	    List<CategoryModel> categories =
+	            categoryService.getAllActiveCategories();
 
-		} else {
+	    List<ProductModel> newProducts =
+	            productService.findNewProducts();
 
-			model.addAttribute("products", productService.search(keyword.trim()));
-		}
-	
+	    // NEW PRODUCTS
+	    if (Boolean.TRUE.equals(showNewProducts)) {
 
-		model.addAttribute("categories", categoryService.findAll());
+	        products = productService.findNewProducts();
 
-		model.addAttribute("keyword", keyword);
+	    }
 
-		return "products/list";
+	    // SALE PRODUCTS
+	    else if (Boolean.TRUE.equals(showSale)) {
+
+	        products = productService.findSaleProducts();
+
+	    }
+
+	    // SEARCH
+	    else if (keyword != null && !keyword.trim().isEmpty()) {
+
+	        products = productService.searchproduct(keyword.trim());
+
+	        if (products.isEmpty()) {
+	            products = productService.findAll();
+	        }
+
+	    }
+
+	    // CATEGORY
+	    else if (categoryID != null && !categoryID.isEmpty()) {
+
+	        products = productService.findByCategoryId1(categoryID);
+
+	        CategoryModel selectedCategory =
+	                categoryService.findById(categoryID);
+
+	        model.addAttribute("selectedCategory", selectedCategory);
+
+	    }
+
+	    // ALL PRODUCTS
+	    else {
+
+	        products = productService.findAll();
+
+	    }
+
+	    model.addAttribute("products", products);
+	    model.addAttribute("keyword", keyword);
+	    model.addAttribute("categories", categories);
+	    model.addAttribute("newProducts", newProducts);
+
+	    return "products/list";
 	}
-	 
-
 }

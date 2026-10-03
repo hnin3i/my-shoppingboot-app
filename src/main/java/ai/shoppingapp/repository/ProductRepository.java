@@ -12,6 +12,7 @@ import ai.shoppingapp.repository.mapper.ProductMapper;
 public class ProductRepository {
 
     private final JdbcTemplate jdbcTemplate;
+    private final ProductMapper productMapper = new ProductMapper();
 
     public ProductRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -140,7 +141,7 @@ public class ProductRepository {
                 : products.get(0);
     }
     public List<ProductModel> findByCategoryId(String categoryId) {
-        String sql = "SELECT * FROM products WHERE category_id = ? AND is_delete = 0";
+        String sql = "SELECT * FROM products WHERE category_id = ? AND is_active = 1";
         return jdbcTemplate.query(sql, new ProductMapper(), categoryId);
     }
 
@@ -292,5 +293,87 @@ public class ProductRepository {
                 sql,
                 id
         );
+    }
+    public List<ProductModel> findByCategoryId1(String categoryId) {
+
+        String sql = """
+            SELECT p.*,
+                   c.name AS category_name
+            FROM products p
+            JOIN categories c
+              ON p.category_id = c.id
+            WHERE p.category_id = ?
+              AND p.is_active = 1
+            ORDER BY p.created_at DESC
+            """;
+
+        return jdbcTemplate.query(
+                sql,
+                new ProductMapper(),
+                categoryId
+        );
+    }
+    public List<ProductModel> searchproduct(String keyword) {
+
+        String sql = """
+            SELECT p.*,
+                   c.name AS category_name
+            FROM products p
+            LEFT JOIN categories c
+                ON p.category_id = c.id
+            WHERE p.is_active = 1
+              AND (
+                  p.name LIKE ?
+                  OR p.description LIKE ?
+                  OR c.name LIKE ?
+              )
+            ORDER BY p.created_at DESC
+            """;
+
+        String searchKeyword = "%" + keyword + "%";
+
+        return jdbcTemplate.query(
+            sql,
+            new ProductMapper(),
+            searchKeyword,
+            searchKeyword,
+            searchKeyword
+        );
+    }
+    public List<ProductModel> findNewProducts() {
+
+        String sql = """
+          SELECT *
+FROM products
+WHERE is_active = 1
+AND created_at >= DATE_SUB(NOW(), INTERVAL 3 DAY)
+ORDER BY created_at DESC
+            """;
+
+        return jdbcTemplate.query(sql, new ProductMapper());
+    }
+    public List<ProductModel> findDiscountProducts() {
+
+        String sql = """
+            SELECT *
+            FROM products
+            WHERE is_active = 1
+            AND is_discount = 1
+            ORDER BY created_at DESC
+            """;
+
+        return jdbcTemplate.query(sql, new ProductMapper());
+    }
+    public List<ProductModel> findSaleProducts() {
+
+        String sql = """
+                SELECT *
+                FROM products
+                WHERE is_active = 1
+                  AND is_discount = 1
+                ORDER BY created_at DESC
+                """;
+
+        return jdbcTemplate.query(sql, new ProductMapper());
     }
 }

@@ -104,9 +104,28 @@ public class ProductService {
 		
 		
 	}
-	
-	public List<ProductModel> getProductsByCategoryId(String categoryId) {
+	public List<ProductModel> findByCategoryId1(String categoryId) {
+	    return productRepository.findByCategoryId1(categoryId);
 
-	    return productRepository.findByCategoryId(categoryId);
 	}
+	public List<ProductModel> searchproduct(String keyword) {
+
+		if (keyword == null || keyword.trim().isEmpty()) {
+
+			return findAll();
+		}
+
+		return productRepository.searchproduct(keyword.trim());
+	}
+	public List<ProductModel> findNewProducts() {
+	    return productRepository.findNewProducts();
+	}
+	public List<ProductModel> findDiscountProducts() {
+	    return productRepository.findDiscountProducts();
+	}
+	public List<ProductModel> findSaleProducts() {
+	    return productRepository.findSaleProducts();
+	}
+	
+	
 }
