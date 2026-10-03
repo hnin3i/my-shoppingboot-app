@@ -5,139 +5,238 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title layout:title-pattern="$CONTENT_TITLE - BlackJack">
-	BlackJack</title>
+<title layout:title-pattern="$CONTENT_TITLE - BlackJack">BlackJack</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
 <link rel="stylesheet" th:href="@{/css/app.css}">
+<style>
+/* Scroll လုပ်သည့်အခါ နူးညံ့စွာ သွားစေရန် */
+html {
+	scroll-behavior: smooth;
+}
+/* Header ရဲ့ အမြင့်ကြောင့် Target Section ကွယ်မသွားစေရန် Spacing ပေးခြင်း */
+#new-in {
+	scroll-margin-top: 70px;
+}
+</style>
 </head>
 <body>
 	<div layout:fragment="content" class="home-page">
+
+		<!-- HERO SECTION -->
 		<section class="home-hero">
-
-			<img class="hero-background" src="/images/hero-girl.png"
+			<img class="hero-background" src="/images/hero-fashion.png"
 				alt="BLACKJACK fashion campaign">
-
 			<div class="hero-overlay"></div>
-
 			<div class="hero-copy">
 				<p class="eyebrow">BLACKJACK SALE EVENT</p>
-
 				<h1>
 					Elevate Your<br> Everyday Style
 				</h1>
-
 				<p>Fresh fashion pieces, selected for your everyday look.</p>
-
-
-				<a class="btn hero-button" th:href="@{/products?category=women}">
-					SHOP NOW </a>
+				<a class="btn hero-button" th:href="@{/products/list}">SHOP NOW</a>
 			</div>
-
 		</section>
-		<section class="home-section featured-section">
+
+
+		<!-- NEW IN / CATEGORY SECTION -->
+		<section id="new-in" class="home-section featured-section">
+
 			<div class="section-heading">
-				<p class="eyebrow">JUST ARRIVED</p>
-				<h2>NEW IN</h2>
+
+				<!-- When no category is selected -->
+				<p class="eyebrow" th:if="${selectedCategory == null}">JUST
+					ARRIVED</p>
+
+				<!-- When category is selected -->
+				<p class="eyebrow" th:if="${selectedCategory != null}">CATEGORY
+				</p>
+
+
+				<!-- NEW IN -->
+				<h2 th:if="${selectedCategory == null}">NEW IN</h2>
+
+				<!-- CATEGORY NAME -->
+				<h2 th:if="${selectedCategory != null}"
+					th:text="${selectedCategory.name}">Category</h2>
+
 			</div>
 
-		
+
+			<!-- Products -->
 			<div class="row g-3 g-lg-4"
 				th:if="${newProducts != null and !#lists.isEmpty(newProducts)}">
 
-				<div class="col-6 col-md-3" th:each="product : ${newProducts}">
+				<div class="col-6 col-md-3" th:each="product, stat : ${newProducts}"
+					th:if="${stat.index < 8}">
 
 					<a class="text-decoration-none text-dark d-block"
-						th:href="@{/products/{id}(id=${product.id})}">
+						th:href="@{/products/detail/{id}(id=${product.id})}">
 
 						<article class="product-card">
 
 							<img class="w-100 object-fit-cover mb-3" style="height: 300px;"
-								th:src="@{'/images/product/' + ${product.image}}" th:alt="${product.name}">
+								th:src="@{'/images/product/' + ${product.image}}"
+								th:alt="${product.name}">
 
 							<h3 th:text="${product.name}">Product name</h3>
 
-							<p th:text="${product.price + ' MMK'}">0 MMK</p>
+							<!-- NORMAL PRICE -->
+							<div class="product-price" th:if="${product.isDiscount != 1}">
+
+								<span
+									th:text="${#numbers.formatDecimal(
+                            product.price,
+                            0,
+                            'COMMA',
+                            0,
+                            'POINT'
+                        ) + ' MMK'}">
+
+									45,000 MMK </span>
+
+							</div>
+
+
+							<!-- DISCOUNT PRICE -->
+							<div class="product-price discount-price"
+								th:if="${product.isDiscount == 1}">
+
+								<!-- Sale Price -->
+								<span class="sale-price"
+									th:text="${#numbers.formatDecimal(
+                            product.finalPrice,
+                            0,
+                            'COMMA',
+                            0,
+                            'POINT'
+                        ) + ' MMK'}">
+
+									45,000 MMK </span>
+
+								<!-- Original Price -->
+								<del class="old-price"
+									th:text="${#numbers.formatDecimal(
+                            product.price,
+                            0,
+                            'COMMA',
+                            0,
+                            'POINT'
+                        ) + ' MMK'}">
+
+									50,000 MMK </del>
+
+
+							</div>
 
 						</article>
 
 					</a>
 
 				</div>
+
 			</div>
 
-			
+
+			<!-- View All -->
 			<div class="text-center mt-4">
-				<a class="btn hero-button" th:href="@{/products}">VIEW ALL</a>
+
+				<a class="btn hero-button"
+					th:href="${selectedCategory != null
+                    ? '/products/list?categoryId=' + selectedCategory.id
+                    : '/products/list?newProducts=true'}">
+					VIEW ALL </a>
+
 			</div>
+
 		</section>
-		<section class="home-section featured-section">
+
+		<!-- LIMITED TIME SALE SECTION -->
+		<section id="sale" class="home-section featured-section">
+
 			<div class="section-heading section-heading-row">
+
 				<div>
+
 					<p class="eyebrow">--LIMITED TIME--</p>
+
 					<h2>Shop the Sale</h2>
+
 				</div>
-				<a class="text-link" th:href="@{/products}">VIEW ALL PRODUCTS</a>
+
+				<a class="text-link" th:href="@{/products/list(sale=true)}">
+					VIEW ALL SALE PRODUCTS </a>
+
 			</div>
-			<div class="row g-3 g-lg-4">
-				<div class="col-6 col-md-3">
-					<article class="product-card">
-						<div class="product-placeholder product-shirt">
-							<span>T-SHIRT</span>
-						</div>
-						<h3>Essential T-Shirt</h3>
-						<p>
-							<span class="sale-price">25,000 MMK</span>
-							<del>35,000 MMK</del>
-						</p>
-						<small>FINAL SALE</small>
-					</article>
+
+
+			<div class="row g-3 g-lg-4"
+				th:if="${saleProducts != null and !#lists.isEmpty(saleProducts)}">
+
+				<!-- SALE PRODUCT -->
+				<div class="col-6 col-md-3"
+					th:each="product, stat : ${saleProducts}" th:if="${stat.index < 4}">
+
+					<a class="text-decoration-none text-dark d-block"
+						th:href="@{/products/detail/{id}(id=${product.id})}">
+
+						<article class="product-card">
+
+							<!-- Product Image -->
+							<div class="product-image">
+
+								<img class="w-100" style="height: 300px; object-fit: cover;"
+									th:src="@{'/images/product/' + ${product.image}}"
+									th:alt="${product.name}">
+
+							</div>
+
+
+							<!-- Product Name -->
+							<h3 th:text="${product.name}">Product Name</h3>
+
+
+							<!-- Product Price -->
+							<p>
+
+								<!-- Discount Price -->
+								<span class="sale-price"
+									th:text="${product.finalPrice != null
+                    ? #numbers.formatDecimal(product.finalPrice, 0, 'COMMA', 0, 'POINT') + ' MMK'
+                    : #numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
+									25,000 MMK </span>
+
+								<!-- Original Price -->
+								<del th:if="${product.isDiscount == 1}"
+									th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
+									35,000 MMK </del>
+
+							</p>
+
+
+						</article>
+
+					</a>
+
 				</div>
-				<div class="col-6 col-md-3">
-					<article class="product-card">
-						<div class="product-placeholder product-bag">
-							<span>BAG</span>
-						</div>
-						<h3>Signature Bag</h3>
-						<p>
-							<span class="sale-price">45,000 MMK</span>
-							<del>60,000 MMK</del>
-						</p>
-						<small>FINAL SALE</small>
-					</article>
-				</div>
-				<div class="col-6 col-md-3">
-					<article class="product-card">
-						<div class="product-placeholder product-shoe">
-							<span>SNEAKERS</span>
-						</div>
-						<h3>Everyday Sneakers</h3>
-						<p>
-							<span class="sale-price">55,000 MMK</span>
-							<del>70,000 MMK</del>
-						</p>
-						<small>FINAL SALE</small>
-					</article>
-				</div>
-				<div class="col-6 col-md-3">
-					<article class="product-card">
-						<div class="product-placeholder product-watch">
-							<span>WATCH</span>
-						</div>
-						<h3>Classic Watch</h3>
-						<p>
-							<span class="sale-price">60,000 MMK</span>
-							<del>80,000 MMK</del>
-						</p>
-						<small>FINAL SALE</small>
-					</article>
-				</div>
+
 			</div>
+
+
+			<!-- No Sale Products -->
+			<div th:if="${saleProducts == null or #lists.isEmpty(saleProducts)}"
+				class="text-center py-5">
+
+				<p>No sale products available.</p>
+
+			</div>
+
 		</section>
+
+
+		<!-- MEN'S CAMPAIGN BANNER -->
 		<section class="men-sale-banner">
 			<div class="men-sale-copy">
 				<p class="eyebrow">MEN'S SEASONAL EDIT</p>
@@ -145,14 +244,17 @@
 					Modern<br>Essentials
 				</h2>
 				<p>Easy, fresh styles made for every day.</p>
-				<a class="btn hero-button" th:href="@{/products?category=men}">SHOP
-					MEN'S SALE</a>
 			</div>
+
 			<div class="men-sale-visual">
-				<span>MEN'S CAMPAIGN IMAGE</span>
-				<div></div>
+
+				<img src="/images/MenF.png" alt="Men's campaign"
+					class="men-campaign-image">
+
 			</div>
 		</section>
+
+		<!-- WHY SHOP WITH US SECTION -->
 		<section class="home-section why-section">
 			<div class="section-heading">
 				<p class="eyebrow">THE BLACKJACK PROMISE</p>
@@ -182,7 +284,8 @@
 				</div>
 			</div>
 		</section>
+
 	</div>
-	<!-- shoon -->
+
 </body>
 </html>

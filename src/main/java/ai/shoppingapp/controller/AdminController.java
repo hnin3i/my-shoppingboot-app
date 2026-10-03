@@ -21,6 +21,10 @@ public class AdminController {
     public String dashboard() {
         return "admin/dashboard/dashboard";
     }
+    @GetMapping("/profile")
+    public String adminProfile() {
+        return "admin/profile/profile";
+    }
 
     @GetMapping("/users")
     public String users(Model model) {

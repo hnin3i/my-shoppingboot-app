@@ -13,36 +13,55 @@ public class WebConfig implements WebMvcConfigurer {
 	private final LoginInterceptor loginInterceptor;
 	private final AdminInterceptor adminInterceptor;
 
-	public WebConfig(LoginInterceptor loginInterceptor, AdminInterceptor adminInterceptor) {
-		this.loginInterceptor = loginInterceptor;
-		this.adminInterceptor = adminInterceptor;
-	}
 
-	@Override
-	public void addInterceptors(InterceptorRegistry registry) {
-		// 1. Login Interceptor - protects private user areas, allows public pages &
-		// assets
-		registry.addInterceptor(loginInterceptor).addPathPatterns("/**").excludePathPatterns(
-				// Static Assets
-				"/css/**", "/js/**", "/images/**",
+   public WebConfig(LoginInterceptor loginInterceptor, AdminInterceptor adminInterceptor) {
+   this.loginInterceptor = loginInterceptor;
+   this.adminInterceptor = adminInterceptor;
+    }
 
-				// Errors
-				"/not-authorized", "/error/**", "/errors", "/errors/**",
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 1. Login Interceptor - protects private user areas, allows public pages & assets
+        registry.addInterceptor(loginInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns(
+                    // Static Assets
+                    "/css/**",
+                    "/js/**",
+                    "/images/**",
 
-				// Public Storefront Pages
-				"/", "/home", "/products/**", "/categories/**",
+                    //Errors
+                    "/not-authorized",
+                    "/error/**",
+                    "/errors",
+                    "/errors/**",
 
-				// Public Auth Pages
-				"/login", "/register", "/verify-otp", "/forgot-password", "/reset-password",
+                    // Public Storefront Pages
+                    "/",
+                    "/home",
+                    "/products/**",
+                    "/categories/**",
 
-				// Order History
-				"/order-history", "/products/**", "/details"
+                    // Public Auth Pages
+                    "/login",
+                    "/register",
+                    "/verify-otp",
+                    "/forgot-password",
+                    "/reset-password",
+                    
+                    //Order History
+                    "/order-history",
+                    "/products/**",
+                    "/details"
+                    
+                );
+        		
 
-		);
+        // 2. Admin Interceptor - protects admin routes
+        registry.addInterceptor(adminInterceptor)
+                .addPathPatterns("/admin/**");
+    }
 
-		// 2. Admin Interceptor - protects admin routes
-		registry.addInterceptor(adminInterceptor).addPathPatterns("/admin/**");
-	}
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -55,5 +74,7 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/images/user/")
 				.addResourceLocations("file:///E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/user/");
 
+
 	}
 }
+
