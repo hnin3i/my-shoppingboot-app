@@ -51,9 +51,9 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
 
 		registry.addResourceHandler("/images/product/").addResourceLocations(
-				"file:///D:/Shopping/my-shoppingboot-app/src/main/resources/static/images/product/");
+				"file:///E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/product");
 		registry.addResourceHandler("/images/user/")
-				.addResourceLocations("file:///D:/Shopping/my-shoppingboot-app/src/main/resources/static/images/user/");
+				.addResourceLocations("file:///E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/user/");
 
 	}
 }
