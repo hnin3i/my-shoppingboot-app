@@ -19,7 +19,7 @@ public class AdminOrderListRowMapper implements RowMapper<AdminOrderListDto> {
         dto.setCustomerName(rs.getString("customer_name"));
         dto.setCustomerPhone(rs.getString("phone_no"));
         dto.setCreatedAt(rs.getTimestamp("created_at"));
-        dto.setTotalAmount(rs.getDouble("total_amount"));
+        dto.setTotalAmount(rs.getBigDecimal("total_amount"));
         dto.setPaymentStatus(PaymentStatus.valueOf(rs.getString("payment_status")));
         dto.setStatus(OrderStatus.valueOf(rs.getString("status")));
         dto.setPaymentConfirmPhoto(rs.getString("payment_confirm_photo"));

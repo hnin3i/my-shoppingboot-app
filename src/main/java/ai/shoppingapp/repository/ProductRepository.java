@@ -6,7 +6,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import ai.shoppingapp.model.ProductModel;
-import ai.shoppingapp.repository.entity.Product;
 import ai.shoppingapp.repository.mapper.ProductMapper;
 
 @Repository

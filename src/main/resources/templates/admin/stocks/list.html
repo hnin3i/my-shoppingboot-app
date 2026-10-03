@@ -19,293 +19,360 @@
 	<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
 
-	<main class="admin-main">
+<main class="admin-main">
 
 
-		<!-- Topbar -->
+    <!-- Topbar -->
 
-		<header class="admin-topbar">
+    <header class="admin-topbar">
 
-			<div class="search-box">
+        <div class="search-box">
 
-				<i class="bi bi-search"></i> <input type="text"
-					placeholder="Search stock...">
+            <i class="bi bi-search"></i>
 
-			</div>
+            <input
+                type="text"
+                placeholder="Search stock...">
 
+        </div>
 
-			<div class="admin-profile">
 
-				<i class="bi bi-bell fs-5"></i>
+        <div class="admin-profile">
 
-				<div class="admin-avatar">A</div>
+            <i class="bi bi-bell fs-5"></i>
 
-			</div>
+            <div class="admin-avatar">
+                A
+            </div>
 
-		</header>
+        </div>
 
+    </header>
 
-		<!-- Content -->
 
-		<section class="admin-content">
+    <!-- Content -->
 
+    <section class="admin-content">
 
-			<div class="d-flex justify-content-between align-items-center mb-4">
 
-				<div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
 
-					<h1 class="page-title">Stock Items</h1>
+            <div>
 
-					<p class="page-subtitle mb-0">Manage product stock and
-						quantities</p>
+                <h1 class="page-title">
+                    Stock Items
+                </h1>
 
-				</div>
+                <p class="page-subtitle mb-0">
+                    Manage product stock and quantities
+                </p>
 
+            </div>
 
-				<button class="btn btn-purple">
 
-					<i class="bi bi-plus-lg"></i> Add Stock
+            <button class="btn btn-purple">
 
-				</button>
+                <i class="bi bi-plus-lg"></i>
 
-			</div>
+                Add Stock
 
+            </button>
 
-			<!-- Stock Statistics -->
+        </div>
 
-			<div class="row g-4 mb-4">
 
+        <!-- Stock Statistics -->
 
-				<div class="col-md-3">
+        <div class="row g-4 mb-4">
 
-					<div class="stat-card">
 
-						<div class="stat-icon">
+            <div class="col-md-3">
 
-							<i class="bi bi-box-seam"></i>
+                <div class="stat-card">
 
-						</div>
+                    <div class="stat-icon">
 
-						<div class="stat-title">Total Quantity</div>
+                        <i class="bi bi-box-seam"></i>
 
-						<div class="stat-number">156</div>
+                    </div>
 
-					</div>
+                    <div class="stat-title">
+                        Total Quantity
+                    </div>
 
-				</div>
+                    <div class="stat-number">
+                        156
+                    </div>
 
+                </div>
 
-				<div class="col-md-3">
+            </div>
 
-					<div class="stat-card">
 
-						<div class="stat-icon">
+            <div class="col-md-3">
 
-							<i class="bi bi-bag"></i>
+                <div class="stat-card">
 
-						</div>
+                    <div class="stat-icon">
 
-						<div class="stat-title">Products</div>
+                        <i class="bi bi-bag"></i>
 
-						<div class="stat-number">24</div>
+                    </div>
 
-					</div>
+                    <div class="stat-title">
+                        Products
+                    </div>
 
-				</div>
+                    <div class="stat-number">
+                        24
+                    </div>
 
+                </div>
 
-				<div class="col-md-3">
+            </div>
 
-					<div class="stat-card">
 
-						<div class="stat-icon">
+            <div class="col-md-3">
 
-							<i class="bi bi-tags"></i>
+                <div class="stat-card">
 
-						</div>
+                    <div class="stat-icon">
 
-						<div class="stat-title">Categories</div>
+                        <i class="bi bi-tags"></i>
 
-						<div class="stat-number">6</div>
+                    </div>
 
-					</div>
+                    <div class="stat-title">
+                        Categories
+                    </div>
 
-				</div>
+                    <div class="stat-number">
+                        6
+                    </div>
 
+                </div>
 
-				<div class="col-md-3">
+            </div>
 
-					<div class="stat-card">
 
-						<div class="stat-icon text-danger" style="background: #fff0f0;">
+            <div class="col-md-3">
 
-							<i class="bi bi-exclamation-triangle"></i>
+                <div class="stat-card">
 
-						</div>
+                    <div class="stat-icon text-danger"
+                         style="background:#fff0f0;">
 
-						<div class="stat-title">Low Stock</div>
+                        <i class="bi bi-exclamation-triangle"></i>
 
-						<div class="stat-number text-danger">5</div>
+                    </div>
 
-					</div>
+                    <div class="stat-title">
+                        Low Stock
+                    </div>
 
-				</div>
+                    <div class="stat-number text-danger">
+                        5
+                    </div>
 
-			</div>
+                </div>
 
+            </div>
 
-			<!-- Stock Table -->
+        </div>
 
-			<div class="admin-card">
 
+        <!-- Stock Table -->
 
-				<!-- Search -->
+        <div class="admin-card">
 
-				<div class="row g-3 mb-4">
 
-					<div class="col-md-8">
+            <!-- Search -->
 
-						<div class="search-box w-100">
+            <div class="row g-3 mb-4">
 
-							<i class="bi bi-search"></i> <input type="text"
-								placeholder="Search product...">
+                <div class="col-md-8">
 
-						</div>
+                    <div class="search-box w-100">
 
-					</div>
+                        <i class="bi bi-search"></i>
 
+                        <input
+                            type="text"
+                            placeholder="Search product...">
 
-					<div class="col-md-4">
+                    </div>
 
-						<select class="form-select" style="height: 45px;">
+                </div>
 
-							<option>All Categories</option>
 
-							<option>Shirts</option>
+                <div class="col-md-4">
 
-							<option>Pants</option>
+                    <select class="form-select"
+                            style="height:45px;">
 
-							<option>Dresses</option>
+                        <option>All Categories</option>
 
-						</select>
+                        <option>Shirts</option>
 
-					</div>
+                        <option>Pants</option>
 
-				</div>
+                        <option>Dresses</option>
 
+                    </select>
 
-				<!-- Table -->
+                </div>
 
-				<div class="table-responsive">
+            </div>
 
-					<table class="admin-table">
 
-						<thead>
+            <!-- Table -->
 
-							<tr>
+            <div class="table-responsive">
 
-								<th>PRODUCT</th>
+                <table class="admin-table">
 
-								<th>CATEGORY</th>
+                    <thead>
 
-								<th>QUANTITY</th>
+                    <tr>
 
-								<th>STATUS</th>
+                        <th>PRODUCT</th>
 
-								<th>ACTION</th>
+                        <th>CATEGORY</th>
 
-							</tr>
+                        <th>QUANTITY</th>
 
-						</thead>
+                        <th>STATUS</th>
 
+                        <th>ACTION</th>
 
-						<tbody>
+                    </tr>
 
+                    </thead>
 
-							<tr>
 
-								<td>T-Shirt</td>
+                    <tbody>
 
-								<td>Shirt</td>
 
-								<td>25</td>
+                    <tr>
 
-								<td><span class="status status-success"> In Stock </span></td>
+                        <td>
+                            T-Shirt
+                        </td>
 
-								<td>
+                        <td>
+                            Shirt
+                        </td>
 
-									<button class="btn btn-sm btn-light">
+                        <td>
+                            25
+                        </td>
 
-										<i class="bi bi-pencil"></i>
+                        <td>
 
-									</button>
+                            <span class="status status-success">
+                                In Stock
+                            </span>
 
-								</td>
+                        </td>
 
-							</tr>
+                        <td>
 
+                            <button class="btn btn-sm btn-light">
 
-							<tr>
+                                <i class="bi bi-pencil"></i>
 
-								<td>Oversized Hoodie</td>
+                            </button>
 
-								<td>Hoodie</td>
+                        </td>
 
-								<td>4</td>
+                    </tr>
 
-								<td><span class="status status-danger"> Low Stock </span></td>
 
-								<td>
+                    <tr>
 
-									<button class="btn btn-sm btn-light">
+                        <td>
+                            Oversized Hoodie
+                        </td>
 
-										<i class="bi bi-pencil"></i>
+                        <td>
+                            Hoodie
+                        </td>
 
-									</button>
+                        <td>
+                            4
+                        </td>
 
-								</td>
+                        <td>
 
-							</tr>
+                            <span class="status status-danger">
+                                Low Stock
+                            </span>
 
+                        </td>
 
-							<tr>
+                        <td>
 
-								<td>Summer Dress</td>
+                            <button class="btn btn-sm btn-light">
 
-								<td>Dress</td>
+                                <i class="bi bi-pencil"></i>
 
-								<td>12</td>
+                            </button>
 
-								<td><span class="status status-success"> In Stock </span></td>
+                        </td>
 
-								<td>
+                    </tr>
 
-									<button class="btn btn-sm btn-light">
 
-										<i class="bi bi-pencil"></i>
+                    <tr>
 
-									</button>
+                        <td>
+                            Summer Dress
+                        </td>
 
-								</td>
+                        <td>
+                            Dress
+                        </td>
 
-							</tr>
+                        <td>
+                            12
+                        </td>
 
+                        <td>
 
-						</tbody>
+                            <span class="status status-success">
+                                In Stock
+                            </span>
 
-					</table>
+                        </td>
 
-				</div>
+                        <td>
 
+                            <button class="btn btn-sm btn-light">
 
-			</div>
+                                <i class="bi bi-pencil"></i>
 
+                            </button>
 
-		</section>
+                        </td>
 
+                    </tr>
 
-	</main>
 
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+	
 
 </body>
 </html>

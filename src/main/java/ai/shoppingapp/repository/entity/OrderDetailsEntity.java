@@ -1,5 +1,6 @@
 package ai.shoppingapp.repository.entity;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class OrderDetailsEntity {
@@ -7,9 +8,9 @@ public class OrderDetailsEntity {
 	private String id;
 	private String order_id;
 	private String stock_id;
-	private double price;
+	private BigDecimal price;
 	private Integer quantity;
-	private double subtotal;
+	private BigDecimal subtotal;
 	private Timestamp created_at;
 	private Timestamp updated_at;
 	
@@ -19,8 +20,8 @@ public class OrderDetailsEntity {
 	private String size;
 	
 	public OrderDetailsEntity() {}
-	public OrderDetailsEntity(String id,String order_id,String stock_id,double price,Integer quantity,
-			double subtotal,Timestamp created_at,Timestamp updated_at,String productName,String image,String colour,String size) {
+	public OrderDetailsEntity(String id,String order_id,String stock_id,BigDecimal price,Integer quantity,
+			BigDecimal subtotal,Timestamp created_at,Timestamp updated_at,String productName,String image,String colour,String size) {
 		this.id=id;
 		this.order_id=order_id;
 		this.stock_id=stock_id;
@@ -52,10 +53,10 @@ public class OrderDetailsEntity {
 	public void setStock_id(String stock_id) {
 		this.stock_id = stock_id;
 	}
-	public double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
-	public void setPrice(double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 	public Integer getQuantity() {
@@ -64,10 +65,10 @@ public class OrderDetailsEntity {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-	public double getSubtotal() {
+	public BigDecimal getSubtotal() {
 		return subtotal;
 	}
-	public void setSubtotal(double subtotal) {
+	public void setSubtotal(BigDecimal subtotal) {
 		this.subtotal = subtotal;
 	}
 	public Timestamp getCreated_at() {
