@@ -17,9 +17,10 @@ public class LoginInterceptor implements HandlerInterceptor{
 		
 		HttpSession session = request.getSession(false);
 		
-		if(session == null || session.getAttribute("loggedInUser") == null)
-			response.sendRedirect("/login");
+		if(session == null || session.getAttribute("loggedInUser") == null) {
+			 response.sendRedirect(request.getContextPath() + "/error/error");
 			return false;
-		
+		}
+		return true;
 	}
 }
