@@ -12,13 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import ai.shoppingapp.exception.ResourceNotFoundException;
 import ai.shoppingapp.model.ProductModel;
-import ai.shoppingapp.model.Role;
-import ai.shoppingapp.model.UserModel;
 import ai.shoppingapp.service.CategoryService;
 import ai.shoppingapp.service.ProductService;
-import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ProductController {
@@ -69,16 +65,13 @@ public class ProductController {
 
 @PostMapping("/admin/products/add")
 	public String addProduct(@ModelAttribute("product") ProductModel product,
-			@RequestParam(value = "imageFile", required = false) MultipartFile imageFile, HttpSession session) throws IOException {
-	UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
-    if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
-        throw new ResourceNotFoundException("Page not found");
-    }
+			@RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+
 	if (imageFile != null && !imageFile.isEmpty()) {
 
 			String fileName = imageFile.getOriginalFilename();
 
-			String uploadPath = "C:\\Users\\Admin\\git\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\product";
+			String uploadPath = "D:/MyShop/my-shoppingboot-app/src/main/resources/static/images/product/";
 
 			File uploadDir = new File(uploadPath);
 
@@ -92,9 +85,9 @@ public class ProductController {
 
 			product.setImage(fileName);
 		}
-		String currentUserId = String.valueOf(currentUser.getId());
-		product.setCreatedUserId(currentUserId);
-		product.setUpdatedUserId(currentUserId);
+
+		product.setCreatedUserId("1");
+		product.setUpdatedUserId("1");
 
 		productService.save(product);
 
@@ -127,16 +120,13 @@ public class ProductController {
 
 @PostMapping("/admin/products/edit")
 	public String editProduct(@ModelAttribute("product") ProductModel product,
-			@RequestParam(value = "imageFile", required = false) MultipartFile imageFile, HttpSession session) throws IOException {
-		UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
-	    if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
-	        throw new ResourceNotFoundException("Page not found");
-	    }
+			@RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws IOException {
+
 		if (imageFile != null && !imageFile.isEmpty()) {
 
 			String fileName = imageFile.getOriginalFilename();
 
-			String uploadPath = "D:/shopping/my-shoppingboot-app/src/main/resources/static/images/product/";
+			String uploadPath = "D:/MyShop/my-shoppingboot-app/src/main/resources/static/images/product/";
 
 			File uploadDir = new File(uploadPath);
 
@@ -150,8 +140,8 @@ public class ProductController {
 
 			product.setImage(fileName);
 		}
-		String currentUserId = String.valueOf(currentUser.getId());
-		product.setUpdatedUserId(currentUserId);
+
+		product.setUpdatedUserId("1");
 
 		System.out.println(" duration .. " + product.getDiscountDuration());
 		productService.update(product);
