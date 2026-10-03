@@ -17,10 +17,10 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping("/dashboard")
+    /*@GetMapping("/dashboard")
     public String dashboard() {
         return "admin/dashboard/dashboard";
-    }
+    }*/
     @GetMapping("/profile")
     public String adminProfile() {
         return "admin/profile/profile";

@@ -93,7 +93,7 @@
 
 						<div class="stat-title">Total Products</div>
 
-						<div class="stat-number">24</div>
+						<div class="stat-number" th:text="${dashboard.totalProducts}">24</div>
 
 					</div>
 
@@ -114,7 +114,7 @@
 
 						<div class="stat-title">Categories</div>
 
-						<div class="stat-number">6</div>
+						<div class="stat-number" th:text="${dashboard.totalCategories}">6</div>
 
 					</div>
 
@@ -135,7 +135,7 @@
 
 						<div class="stat-title">Users</div>
 
-						<div class="stat-number">128</div>
+						<div class="stat-number" th:text="${dashboard.totalUsers}">128</div>
 
 					</div>
 
@@ -156,7 +156,7 @@
 
 						<div class="stat-title">Orders</div>
 
-						<div class="stat-number">42</div>
+						<div class="stat-number" th:text="${dashboard.totalOrders}">42</div>
 
 					</div>
 
@@ -211,51 +211,23 @@
 
 								<tbody>
 
-									<tr>
+									<tr th:if="${#lists.isEmpty(dashboard.recentOrders)}">
+										<td colspan="5" class="text-center text-muted">No recent orders found.</td>
+                                	</tr>
+                                	<tr th:each="order : ${dashboard.recentOrders}">
+										<td th:text="${order.orderNumber}">#ORD001</td>
 
-										<td>#ORD001</td>
+										<td th:text="${order.customerName}">May</td>
 
-										<td>May</td>
+										<td th:text="${#dates.format(order.createdAt, 'dd MMM yyyy HH:mm')}">13 Sep 2026</td>
 
-										<td>13 Sep 2026</td>
+										<td th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')} + ' MMK'">85,000 MMK</td>
 
-										<td>85,000 MMK</td>
-
-										<td><span class="status status-success"> Completed
-										</span></td>
-
-									</tr>
-
-
-									<tr>
-
-										<td>#ORD002</td>
-
-										<td>Su Su</td>
-
-										<td>12 Sep 2026</td>
-
-										<td>120,000 MMK</td>
-
-										<td><span class="status status-warning"> Pending </span>
-
+										<td><span class="status status-success"
+													th:classappend="${order.status.name() == 'DELIVERED' or order.status.name() == 'CONFIRMED' ? 'status-success' : (order.status.name() == 'CANCELLED' ? 'status-danger' : 'status-warning')}"
+                                              		th:text="${order.status}"> Completed
+											</span>
 										</td>
-
-									</tr>
-
-
-									<tr>
-
-										<td>#ORD003</td>
-
-										<td>Ei Ei</td>
-
-										<td>12 Sep 2026</td>
-
-										<td>56,000 MMK</td>
-
-										<td><span class="status status-danger"> Cancelled
-										</span></td>
 
 									</tr>
 
@@ -283,7 +255,7 @@
 
 							<div class="d-flex justify-content-between">
 
-								<span>Total Stock</span> <strong>156</strong>
+								<span>Total Stock</span> <strong th:text="${dashboard.totalStock}">156</strong>
 
 							</div>
 
@@ -301,7 +273,7 @@
 
 							<div class="d-flex justify-content-between">
 
-								<span>Low Stock</span> <strong class="text-danger"> 5 </strong>
+								<span>Low Stock</span> <strong class="text-danger" th:text="${dashboard.lowStockCount}"> 5 </strong>
 
 							</div>
 
