@@ -24,7 +24,17 @@ public class SecurityConfig {
             // 3. Disable Spring Security's default login form and basic auth popups
             .formLogin(form -> form.disable())
             .httpBasic(basic -> basic.disable());
+        
+        http
+        .logout(logout -> logout
+            .logoutUrl("/logout")
+            .logoutSuccessUrl("/") // Logout ပြီးရင် Home သို ပိုရန်
+            .invalidateHttpSession(true)
+            .deleteCookies("JSESSIONID")
+        );
 
         return http.build();
+        
+        
     }
 }
