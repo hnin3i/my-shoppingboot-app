@@ -20,7 +20,7 @@ public class AdminInterceptor implements HandlerInterceptor{
 		HttpSession session = request.getSession(false);
 		if(session == null || session.getAttribute("loggedInUser") == null) {
 			
-			response.sendRedirect("/login");
+			response.sendRedirect("/error/error");
 			return false;
 			
 		}

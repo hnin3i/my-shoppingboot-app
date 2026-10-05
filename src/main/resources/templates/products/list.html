@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layouts/public_layout}">
+xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="~{layouts/public_layout}">
 
 <head>
 
@@ -9,608 +9,240 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title th:text="${product != null ? product.name + ' - BLACKJACK' : 'Product Detail - BLACKJACK'}">
-        Product Detail - BLACKJACK
-    </title>
+<title
+th:text="${selectedCategory != null
+? selectedCategory.name
+: 'All Products'}">
+Products</title>
 
-    <!-- Bootstrap -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-        rel="stylesheet">
-
-    <!-- Product Detail CSS -->
-    <link rel="stylesheet" th:href="@{/css/product-detail.css}">
-    <link rel="stylesheet" th:href="@{/css/app.css}">
+<link rel="stylesheet" th:href="@{/css/products.css}">
 
 </head>
 
-<style>
-    /* ================= QUANTITY ================= */
-
-    .quantity-section {
-         background: #f5f5f5;
-    }
-
-    .quantity-control {
-        display: flex;
-        align-items: center;
-        width: 150px;
-        height: 48px;
-        border: 1px solid #ccc;
-    }
-
-    .quantity-btn {
-        width: 48px;
-        height: 100%;
-        border: none;
-        background: #fff;
-        font-size: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-    }
-
-    .quantity-btn:hover {
-        background: #f5f5f5;
-    }
-
-     /* Quantity input */
-    #quantity {
-        flex: 1;
-        width: 50px;
-        height: 100%;
-        border: none;
-        outline: none;
-        text-align: center;
-        font-size: 16px;
-    }
-
-    /* Remove number input arrows */
-    #quantity::-webkit-inner-spin-button,
-    #quantity::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    #quantity[type="number"] {
-        -moz-appearance: textfield;
-    }
-
-   .old-price {
-    text-decoration: line-through !important;
-    color: #888;
-    margin-right: 10px;
-}
-
-.sale-price {
-    color: #d63384;
-    font-weight: 600;
-}
-</style>
-
 <body>
 
-	<div layout:fragment="content">
+<div layout:fragment="content">
 
-    <main class="product-detail-page">
+<script>
+function changeSort(value) {
 
-        <div class="container-fluid px-3 px-lg-5">
+const productGrid = document.getElementById("productGrid");
 
-            <!-- ================= PRODUCT ROW ================= -->
+if (!productGrid) {
+return;
+}
 
-            <div class="row product-detail-wrapper">
+const productCards = Array.from(
+productGrid.querySelectorAll(".product-card")
+);
 
+if (value === "price-low") {
 
-                <!-- ================================================= -->
-                <!-- LEFT : PRODUCT IMAGE -->
-                <!-- ================================================= -->
+productCards.sort(function(a, b) {
 
-                <div class="col-lg-7 product-gallery">
+const priceA = Number(a.getAttribute("data-price")) || 0;
+const priceB = Number(b.getAttribute("data-price")) || 0;
 
-                    <div class="main-product-image">
+return priceA - priceB;
+});
 
-                        <img id="productImage" th:src="@{'/images/product/' + ${product.image}}" th:alt="${product != null ? product.name : 'BLACKJACK Product'}" class="img-fluid rounded" style="width: 100%; height: 100%; object-fit: contain;">
+} else if (value === "price-high") {
 
-                    </div>
+productCards.sort(function(a, b) {
 
+const priceA = Number(a.getAttribute("data-price")) || 0;
+const priceB = Number(b.getAttribute("data-price")) || 0;
 
-                    <!-- Wishlist -->
+return priceB - priceA;
+});
 
-                    <button class="image-wishlist"
-                            type="button"
-                            aria-label="Add to wishlist">
+} else if (value === "newest") {
 
-                        <i class="bi bi-heart"></i>
+productCards.sort(function(a, b) {
 
-                    </button>
+const dateA = new Date(
+a.getAttribute("data-created")
+);
 
-                </div>
+const dateB = new Date(
+b.getAttribute("data-created")
+);
 
+return dateB - dateA;
+});
+}
 
-                <!-- ================================================= -->
-                <!-- RIGHT : PRODUCT INFORMATION -->
-                <!-- ================================================= -->
-
-                <div class="col-lg-5 product-information">
-
-                    <div class="product-info-inner">
-
-
-                        <!-- ================= PRODUCT NAME ================= -->
-
-                        <div class="product-title-row">
-
-                            <div>
-
-                                <h1 th:text="${product != null ? product.name : 'Oversized Mohair-Blend Sweater'}">
-                                    Oversized Mohair-Blend Sweater
-                                </h1>
-
-                                <div class="product-code">
-                                    Product No. BJ-001
-                                </div>
-
-                            </div>
-
-                        </div>
+productCards.forEach(function(card) {
+productGrid.appendChild(card);
+});
+}
+</script>
 
 
-                        <!-- ================= PRICE ================= -->
+<!-- PRODUCTS PAGE -->
+<main class="products-page">
 
-                        
+<!-- PAGE TITLE -->
+<section class="products-heading">
+
+<h1
+th:text="${selectedCategory != null
+? selectedCategory.name
+: 'ALL PRODUCTS'}">
+ALL PRODUCTS</h1>
+
+</section>
+
+
+<!-- PRODUCT TOOLBAR -->
+<section class="products-toolbar">
+
+<div class="product-count">
+
+
+<span th:text="${#lists.size(products.?[isActive == 1])}"> 0
+</span> PRODUCTS
+
+</div>
+
+
+<div class="product-sort">
+
+<label for="sort"> SORT BY </label> <select id="sort" name="sort"
+onchange="changeSort(this.value)">
+
+<option value="newest">Newest</option>
+
+<option value="price-low">Price: Low to High</option>
+
+<option value="price-high">Price: High to Low</option>
+
+</select>
+
+</div>
+
+</section>
+
+
+<!-- PRODUCT GRID -->
+<section class="product-grid" id="productGrid">
+
+
+<article class="product-card" th:each="product : ${products}"
+th:if="${product.isActive == 1}"
+th:attr="data-price=${product.isDiscount == 1 ? product.finalPrice : product.price},
+data-created=${product.createdAt}">
+
+
+<!-- PRODUCT IMAGE -->
+
+<a class="product-image"
+th:href="@{/products/detail/{id}(id=${product.id})}"> <img
+th:src="@{'/images/product/' + ${product.image}}"
+th:alt="${product.name}" class="img-fluid rounded"
+style="width: 100%; height: 100%; object-fit: cover;">
+
+</a>
+
+
+<!-- PRODUCT INFO -->
+
+
+<div class="product-info">
+
+<!-- PRODUCT NAME -->
+
+<h2 class="product-name" th:text="${product.name}">Wide-Leg
+Regular-Waist Jeans</h2>
+
+
 <!-- NORMAL PRICE -->
-<div class="product-price"
-     th:if="${product != null and product.isDiscount != 1}">
 
-    <span th:text="${#numbers.formatDecimal(
-                        product.price,
-                        0,
-                        'COMMA',
-                        0,
-                        'POINT'
-                    ) + ' MMK'}">
-        79,900 MMK
-    </span>
 
-						</div>
+<!-- NORMAL PRICE -->
+<div class="product-price" th:if="${product.isDiscount != 1}">
+
+<span
+th:text="${#numbers.formatDecimal(
+product.price,
+0,
+'COMMA',
+0,
+'POINT'
+) + ' MMK'}">
+
+45,000 MMK </span>
+
+</div>
 
 
 <!-- DISCOUNT PRICE -->
 <div class="product-price discount-price"
-     th:if="${product != null and product.isDiscount == 1}">
+th:if="${product.isDiscount == 1}">
 
-    <!-- Normal Price - Cross Line -->
-    <span class="old-price">
-    <del th:text="${#numbers.formatDecimal(
-        product.price,
-        0,
-        'COMMA',
-        0,
-        'POINT'
-    ) + ' MMK'}">
-        79,900 MMK
-    </del>
-</span>
+<!-- Original Price -->
+<del class="old-price"
+th:text="${#numbers.formatDecimal(
+product.price,
+0,
+'COMMA',
+0,
+'POINT'
+) + ' MMK'}">
 
-    <!-- Discount Price -->
-    <span class="sale-price"
-          th:text="${#numbers.formatDecimal(
-                      product.finalPrice,
-                      0,
-                      'COMMA',
-                      0,
-                      'POINT'
-                  ) + ' MMK'}">
-        69,900 MMK
-    </span>
+50,000 MMK </del>
+
+
+<!-- Sale Price -->
+<span class="sale-price" style="color: red !important;"
+th:text="${#numbers.formatDecimal(
+product.finalPrice,
+0,
+'COMMA',
+0,
+'POINT'
+) + ' MMK'}">
+45,000 MMK </span>
 
 </div>
-        <!-- ================= DESCRIPTION ================= -->
+</article>
 
-                        <div class="product-description">
-
-                            <p th:if="${product != null and product.description != null}"
-                               th:text="${product.description}">
-                                Soft oversized sweater designed for a relaxed everyday look.
-                            </p>
-
-                            <p th:unless="${product != null and product.description != null}">
-                                Soft oversized sweater designed for a relaxed everyday look.
-                                A simple and elegant piece that can be styled for everyday wear.
-                            </p>
-
-                        </div>
+</section>
 
 
-                        <!-- ================= COLOR ================= -->
+<!-- EMPTY PRODUCTS -->
 
-                        <div class="product-option">
+<section class="empty-products"
+th:if="${products == null or products.isEmpty()}">
 
-                            <div class="option-title">
+<h2>No products found</h2>
 
-                                COLOR:
-                                <span id="selectedColor">
-                                    Navy Blue
-                                </span>
+<p>There are no products available.</p>
 
-                            </div>
+<a th:href="@{/products}"> VIEW ALL PRODUCTS </a>
 
-
-                            <div class="color-options">
-
-                                <button type="button"
-                                        class="color-option active"
-                                        data-color="Navy Blue"
-                                        style="background: rgb(0, 0, 255);">
-                                </button>
-
-                                <button type="button"
-                                        class="color-option"
-                                        data-color="Black"
-                                        style="background: #111;">
-                                </button>
-
-                                <button type="button"
-                                        class="color-option"
-                                        data-color="White"
-                                        style="background: #FBF6F6;">
-                                </button>
-
-                            </div>
-
-                        </div>
+</section>
 
 
-                        <!-- ================================================= -->
-                        <!-- SIZE -->
-                        <!-- ================================================= -->
+<!-- PAGINATION -->
 
-                        <section class="product-option size-section">
+<nav class="pagination"
+th:if="${products != null and !products.isEmpty()}">
+<a href="#" class="page-arrow"> ‹ </a> <a href="#"
+class="page-number active"> 1 </a> <a href="#" class="page-number">
+2 </a> <a href="#" class="page-number"> 3 </a> <span class="page-dots">
+... </span> <a href="#" class="page-number"> 19 </a> <a href="#"
+class="page-arrow"> › </a>
 
-                            <div class="option-heading">
+</nav>
 
-                                <span>SIZE</span>
-
-                                <a href="#"
-                                   class="size-guide">
-                                    Size Guide
-                                </a>
-
-                            </div>
-
-
-                            <div class="size-options">
-
-                                <button type="button"
-                                        class="size-btn">
-                                    XS
-                                </button>
-
-                                <button type="button"
-                                        class="size-btn">
-                                    S
-                                </button>
-
-                                <button type="button"
-                                        class="size-btn active">
-                                    M
-                                </button>
-
-                                <button type="button"
-                                        class="size-btn">
-                                    L
-                                </button>
-
-                            </div>
-
-
-                            <div class="size-message">
-
-                                <i class="bi bi-info-circle"></i>
-                                Please select a size
-
-                            </div>
-
-                        </section>
-
-
-                        <!-- ================================================= -->
-                        <!-- QUANTITY -->
-                        <!-- ================================================= -->
-
-                       <div class="product-option quantity-section">
-
-  
-<div class="option-heading">
-    <span>QUANTITY</span>
-</div>
-<div class="quantity-control">
-
-    <!-- Decrease -->
-    <button type="button"
-            class="quantity-btn"
-            id="decreaseQuantity"
-            aria-label="Decrease quantity">
-        <i class="bi bi-dash"></i>
-    </button>
-
-    <!-- Quantity Input -->
-    <input type="number"
-           id="quantity"
-           name="quantity"
-           value="1"
-           min="1"
-           max="20"
-           step="1"
-           inputmode="numeric">
-
-    <!-- Increase -->
-    <button type="button"
-            class="quantity-btn"
-            id="increaseQuantity"
-            aria-label="Increase quantity">
-        <i class="bi bi-plus"></i>
-    </button>
+</main>
 
 </div>
 
 
 
 
-
-                        <!-- ================================================= -->
-                        <!-- ADD TO CART -->
-                        <!-- ================================================= -->
-
-                        <div class="product-actions">
-
-                            <button class="add-to-cart-btn"
-                                    type="button">
-
-                                <i class="bi bi-bag"></i>
-
-                                <span>
-                                    ADD TO CARD
-                                </span>
-
-                            </button>
-
-
-                            <button class="buy-now-btn"
-                                    type="button">
-
-                                BUY NOW
-
-                            </button>
-
-                        </div>
-
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </main>
-    
-
-
-    <!-- ================================================= -->
-    <!-- JAVASCRIPT -->
-    <!-- ================================================= -->
-
-    <script>
-
-        console.log("PRODUCT DETAIL JS LOADED");
-
-
-        /* =================================================
-           COLOR
-        ================================================= */
-
-        const colorOptions =
-            document.querySelectorAll(".color-option");
-
-        const selectedColor =
-            document.getElementById("selectedColor");
-
-        const productImage =
-            document.getElementById("productImage");
-
-
-        const colorImages = {
-
-            "Navy Blue": "/img/products/navy.jpg",
-
-            "Black": "/img/products/black.jpg",
-
-            "White": "/img/products/white.jpg"
-
-        };
-
-
-        colorOptions.forEach(function(option) {
-
-            option.addEventListener("click", function() {
-
-                colorOptions.forEach(function(item) {
-
-                    item.classList.remove("active");
-
-                });
-
-                this.classList.add("active");
-
-
-                const color =
-                    this.dataset.color;
-
-
-                selectedColor.textContent =
-                    color;
-
-
-               /*  const newImage =
-                    colorImages[color];
-
-
-                if (productImage && newImage) {
-
-                    productImage.src =
-                        newImage;
-
-                } */
-
-            });
-
-        }); 
- 
-
-        /* =================================================
-           SIZE
-        ================================================= */
-
-        const sizeButtons =
-            document.querySelectorAll(".size-btn");
-
-
-        sizeButtons.forEach(function(button) {
-
-            button.addEventListener("click", function() {
-
-                sizeButtons.forEach(function(item) {
-
-                    item.classList.remove("active");
-
-                });
-
-
-                this.classList.add("active");
-
-            });
-
-        });
-
-
-        /* =================================================
-           QUANTITY
-        ================================================= */
-
-        
-        
-        const quantityInput = document.getElementById("quantity");
-        const decreaseBtn = document.getElementById("decreaseQuantity");
-        const increaseBtn = document.getElementById("increaseQuantity");
-
-        const MIN_QUANTITY = 1;
-        const MAX_QUANTITY = 20;
-
-
-        /* ================= DECREASE ================= */
-
-        decreaseBtn.addEventListener("click", function () {
-
-            let quantity = parseInt(quantityInput.value) || MIN_QUANTITY;
-
-            if (quantity > MIN_QUANTITY) {
-                quantityInput.value = quantity - 1;
-            }
-
-        });
-
-
-        /* ================= INCREASE ================= */
-
-        increaseBtn.addEventListener("click", function () {
-
-            let quantity = parseInt(quantityInput.value) || MIN_QUANTITY;
-
-            if (quantity < MAX_QUANTITY) {
-                quantityInput.value = quantity + 1;
-            }
-
-        });
-
-
-        /* ================= MANUAL INPUT ================= */
-
-        quantityInput.addEventListener("input", function () {
-
-            // Allow numbers only
-            this.value = this.value.replace(/[^0-9]/g, "");
-
-            // Empty
-            if (this.value === "") {
-                return;
-            }
-
-            let quantity = parseInt(this.value);
-
-            // Less than 1
-            if (quantity < MIN_QUANTITY) {
-                this.value = MIN_QUANTITY;
-            }
-
-            // Greater than 20
-            else if (quantity > MAX_QUANTITY) {
-                this.value = MAX_QUANTITY;
-            }
-
-        });
-
-
-        /* ================= BLUR ================= */
-
-        quantityInput.addEventListener("blur", function () {
-
-            let quantity = parseInt(this.value);
-
-            if (isNaN(quantity) || quantity < MIN_QUANTITY) {
-                this.value = MIN_QUANTITY;
-            }
-
-            else if (quantity > MAX_QUANTITY) {
-                this.value = MAX_QUANTITY;
-            }
-
-        });
-
-
-        /* ================= PREVENT INVALID KEYS ================= */
-
-        quantityInput.addEventListener("keydown", function (event) {
-
-            const allowedKeys = [
-                "Backspace",
-                "Delete",
-                "ArrowLeft",
-                "ArrowRight",
-                "Tab"
-            ];
-
-            if (allowedKeys.includes(event.key)) {
-                return;
-            }
-
-            // Only allow 0-9
-            if (!/^[0-9]$/.test(event.key)) {
-                event.preventDefault();
-            }
-
-        });
-        
-
-    </script>
-</div>
 
 </body>
 

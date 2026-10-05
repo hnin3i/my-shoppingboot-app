@@ -21,7 +21,7 @@ public class CartController {
         return "cart/cart"; 
     }
 	
-	@GetMapping("/checkout")
+	@GetMapping("/cart/checkout")
     public String viewCheckout(HttpSession session,
     		Model model) {
 		UserModel loggedInUser=(UserModel) session.getAttribute("loggedInUser");
