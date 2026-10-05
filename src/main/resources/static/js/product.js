@@ -108,272 +108,120 @@ function renderColors() {
 /* =========================================================
    COLOR SELECTION
    ========================================================= */
+   function handleColorSelection(button) {
+       const color = button.dataset.color;
+       if (!color) return;
 
-function handleColorSelection(button) {
+       document.querySelectorAll(".color-option").forEach(item => item.classList.remove("active"));
+       button.classList.add("active");
+       selectedColor = color;
 
-    const color =
-        button.dataset.color;
+       const selectedColorText = document.getElementById("selectedColor");
+       if (selectedColorText) selectedColorText.textContent = selectedColor;
 
-    if (!color) {
-        return;
-    }
+       selectedSize = "";
+       document.querySelectorAll(".size-btn").forEach(item => item.classList.remove("active"));
 
+       // Size များကို ပြန်လည် render လုပ်မည်
+       renderSizes();
 
-    document
-        .querySelectorAll(".color-option")
-        .forEach(function(item) {
+       const quantityInput = document.getElementById("quantity");
+       if (quantityInput) {
+           quantityInput.value = 1;
+           quantityInput.max = 20;
+       }
 
-            item.classList.remove("active");
+       // Add to Cart မနှိပ်သေးသရွေ့ Message ကို ကွက်လပ်ထားမည်
+       const sizeMessage = document.getElementById("sizeMessage");
+       if (sizeMessage) {
+           sizeMessage.className = "size-message";
+           sizeMessage.innerHTML = "";
+       }
+   }
 
-        });
+/* =========================================================
+   RENDER SIZES (SHOW ALL SIZES WITH STRIKETHROUGH IF OUT OF STOCK)
+   ========================================================= */
 
+  function renderSizes() {
+       const container = document.getElementById("sizeOptions");
 
-    button.classList.add("active");
+       if (!container || typeof DETAIL_PRODUCT === "undefined" || !Array.isArray(DETAIL_PRODUCT.stocks)) {
+           return;
+       }
 
-    selectedColor = color;
+       container.innerHTML = "";
 
+       const ALL_SIZES = ["XS", "S", "M", "L", "XL", "XXL"];
 
-    const selectedColorText =
-        document.getElementById("selectedColor");
+       ALL_SIZES.forEach(function(size) {
+           const stock = DETAIL_PRODUCT.stocks.find(function(item) {
+               return item.colour === selectedColor && item.size === size;
+           });
 
-    if (selectedColorText) {
+           const button = document.createElement("button");
+           button.type = "button";
+           button.className = "size-btn";
+           button.dataset.size = size;
+           button.textContent = size;
 
-        selectedColorText.textContent =
-            selectedColor;
+           // Stock မရှိပါက သို့မဟုတ် Stock Qty <= 0 ဖြစ်ပါက out-of-stock class ထည့်မည်
+           if (!stock || Number(stock.stockQty) <= 0) {
+               button.classList.add("out-of-stock");
+               button.setAttribute("data-out-of-stock", "true");
+           }
 
-    }
-
-
-    /*
-     * Color changed.
-     * Reset selected size.
-     */
-
-    selectedSize = "";
-
-    document
-        .querySelectorAll(".size-btn")
-        .forEach(function(item) {
-
-            item.classList.remove("active");
-
-        });
-
-
-    renderSizes();
-
-
-    const quantityInput =
-        document.getElementById("quantity");
-
-    if (quantityInput) {
-
-        quantityInput.value = 1;
-
-        quantityInput.max = 20;
-
-    }
-
-
-    const sizeMessage =
-        document.getElementById("sizeMessage");
-
-    if (sizeMessage) {
-
-        sizeMessage.innerHTML =
-            '<i class="bi bi-info-circle"></i> Please select a size';
-
-    }
-}
+           container.appendChild(button);
+       });
+   }
 
 
 /* =========================================================
-   RENDER SIZES FROM DATABASE
+   SIZE SELECTION (HANDLES BOTH IN-STOCK & OUT-OF-STOCK)
    ========================================================= */
-
-function renderSizes() {
-
-    const container =
-        document.getElementById("sizeOptions");
-
-    if (!container) {
-        return;
-    }
-
-    if (typeof DETAIL_PRODUCT === "undefined") {
-        return;
-    }
-
-    if (!Array.isArray(DETAIL_PRODUCT.stocks)) {
-        return;
-    }
-
-
-    container.innerHTML = "";
-
-
-    const sizes = [];
-
-
-    DETAIL_PRODUCT.stocks.forEach(function(stock) {
-
-        /*
-         * Only show sizes belonging to
-         * selected color.
-         */
-
-        if (stock.colour !== selectedColor) {
-            return;
-        }
-
-
-        if (!sizes.includes(stock.size)) {
-
-            sizes.push(stock.size);
-
-        }
-
-    });
-
-
-    sizes.forEach(function(size) {
-
-        const stock =
-            DETAIL_PRODUCT.stocks.find(function(item) {
-
-                return item.colour === selectedColor
-                    && item.size === size;
-
-            });
-
-
-        const button =
-            document.createElement("button");
-
-        button.type = "button";
-
-        button.className = "size-btn";
-
-        button.dataset.size = size;
-
-        button.textContent = size;
-
-
-        /*
-         * Disable if stock is 0.
-         */
-
-        if (!stock || Number(stock.stockQty) <= 0) {
-
-            button.disabled = true;
-
-            button.classList.add("disabled");
-
-        }
-
-
-        container.appendChild(button);
-
-    });
-}
-
-
-/* =========================================================
-   SIZE SELECTION
-   ========================================================= */
-
-function handleSizeSelection(button) {
-
-    if (button.disabled) {
-        return;
-    }
-
-
-    const size =
-        button.dataset.size;
-
-    if (!size) {
-        return;
-    }
-
-
-    const stock =
-        DETAIL_PRODUCT.stocks.find(function(item) {
-
-            return item.colour === selectedColor
-                && item.size === size;
-
-        });
-
-
-    if (!stock) {
-
-        showToast(
-            "This color and size are not available.",
-            "danger"
-        );
-
-        return;
-    }
-
-
-    const stockQty =
-        Number(stock.stockQty);
-
-
-    if (stockQty <= 0) {
-
-        showToast(
-            "This size is out of stock.",
-            "warning"
-        );
-
-        return;
-    }
-
-
-    document
-        .querySelectorAll(".size-btn")
-        .forEach(function(item) {
-
-            item.classList.remove("active");
-
-        });
-
-
-    button.classList.add("active");
-
-    selectedSize = size;
-
-
-    /*
-     * Set quantity according to
-     * real database stock.
-     */
-
-    const quantityInput =
-        document.getElementById("quantity");
-
-    if (quantityInput) {
-
-        quantityInput.value = 1;
-
-        quantityInput.max = stockQty;
-
-    }
-
-
-    const sizeMessage =
-        document.getElementById("sizeMessage");
-
-    if (sizeMessage) {
-
-        sizeMessage.innerHTML =
-            '<i class="bi bi-check-circle"></i> Size selected';
-
-    }
-}
-
+   function handleSizeSelection(button) {
+       const size = button.dataset.size;
+       if (!size) return;
+
+       const sizeMessage = document.getElementById("sizeMessage");
+
+       // Stock မရှိသော (Strikethrough) Size ကို နှိပ်ပါက
+       if (button.classList.contains("out-of-stock") || button.getAttribute("data-out-of-stock") === "true") {
+           document.querySelectorAll(".size-btn").forEach(item => item.classList.remove("active"));
+           selectedSize = "";
+
+           if (sizeMessage) {
+               sizeMessage.className = "size-message text-danger";
+               sizeMessage.innerHTML = '<i class="bi bi-exclamation-circle"></i> This item is out of stock.';
+           }
+
+           const quantityInput = document.getElementById("quantity");
+           if (quantityInput) quantityInput.value = 1;
+           return;
+       }
+
+       // Stock ရှိသော Size ကို နှိပ်ပါက
+       const stock = DETAIL_PRODUCT.stocks.find(item => item.colour === selectedColor && item.size === size);
+       if (!stock) return;
+
+       const stockQty = Number(stock.stockQty);
+
+       document.querySelectorAll(".size-btn").forEach(item => item.classList.remove("active"));
+       button.classList.add("active");
+       selectedSize = size;
+
+       const quantityInput = document.getElementById("quantity");
+       if (quantityInput) {
+           quantityInput.value = 1;
+           quantityInput.max = stockQty;
+       }
+
+       // ရွေးချယ်မှု မှန်ကန်ပါက အနက်ရောင်ဖြင့် ပြမည်
+       if (sizeMessage) {
+           sizeMessage.className = "size-message text-dark";
+           sizeMessage.innerHTML = '<i class="bi bi-check-circle"></i> Size selected';
+       }
+   }
 
 /* =========================================================
    GET QUANTITY
@@ -442,33 +290,16 @@ function getMaxQuantity() {
    ========================================================= */
 
 function decreaseQuantity() {
+    const quantityInput = document.getElementById("quantity");
+    if (!quantityInput) return;
 
-    const quantityInput =
-        document.getElementById("quantity");
+    let quantity = Number(quantityInput.value);
 
-    if (!quantityInput) {
-        return;
-    }
-
-
-    let quantity =
-        Number(quantityInput.value);
-
-
-    if (!Number.isInteger(quantity)
-        || quantity < 1) {
-
+    if (isNaN(quantity) || quantity <= 1) {
         quantity = 1;
-
-    }
-
-
-    if (quantity > 1) {
-
+    } else {
         quantity--;
-
     }
-
 
     quantityInput.value = quantity;
 }
@@ -479,38 +310,27 @@ function decreaseQuantity() {
    ========================================================= */
 
 function increaseQuantity() {
+    const quantityInput = document.getElementById("quantity");
+    if (!quantityInput) return;
 
-    const quantityInput =
-        document.getElementById("quantity");
+    let quantity = Number(quantityInput.value);
 
-    if (!quantityInput) {
-        return;
-    }
-
-
-    let quantity =
-        Number(quantityInput.value);
-
-
-    if (!Number.isInteger(quantity)
-        || quantity < 1) {
-
+    if (isNaN(quantity) || quantity < 1) {
         quantity = 1;
-
     }
 
-
-    const maxQuantity =
-        getMaxQuantity();
-
+    const maxQuantity = getMaxQuantity();
 
     if (quantity < maxQuantity) {
-
         quantity++;
-
+    } else {
+        if (typeof showToast === "function") {
+            showToast(`Max available stock is ${maxQuantity}`, "warning");
+        }
     }
-}
 
+    quantityInput.value = quantity;
+}
 
 /* =========================================================
    MANUAL QUANTITY INPUT
@@ -610,134 +430,89 @@ function handleQuantityBlur(event) {
    ADD TO CART
    ========================================================= */
 
-function handleDetailAddToCart() {
+   function handleDetailAddToCart() {
 
-    if (typeof DETAIL_PRODUCT === "undefined") {
+       if (typeof DETAIL_PRODUCT === "undefined") {
+           throw new Error("Product information not found.");
+       }
 
-        throw new Error(
-            "Product information not found."
-        );
+       // 1. Color မရွေးရသေးပါက
+       if (!selectedColor) {
+           if (typeof showToast === "function") {
+               showToast("Please select a color.", "warning");
+           }
+           return;
+       }
 
-    }
+       // 2. Size မရွေးရသေးပါက sizeMessage ကို အနီရောင်ဖြင့် "Please select a size" ပြမည်
+       if (!selectedSize) {
+           const sizeMessage = document.getElementById("sizeMessage");
+           if (sizeMessage) {
+               sizeMessage.className = "size-message text-danger";
+               sizeMessage.innerHTML = '<i class="bi bi-info-circle"></i> Please select a size';
+               
+               // Size Section ထံ သို့ စက်ဝိုင်းသဖွယ် Smooth Scroll သွားရန် (Optional)
+               sizeMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+           }
 
+           if (typeof showToast === "function") {
+               showToast("Please select a size.", "warning");
+           }
+           return;
+       }
 
-    if (!selectedColor) {
+       // 3. ရွေးချယ်ထားသော Color နဲ့ Size အတွက် Stock ရှာမည်
+       const stock = findSelectedStock();
 
-        showToast(
-            "Please select a color.",
-            "warning"
-        );
+       if (!stock) {
+           if (typeof showToast === "function") {
+               showToast("This color and size are not available.", "danger");
+           }
+           return;
+       }
 
-        return;
-    }
+       const maxQty = Number(stock.stockQty);
 
+       if (maxQty <= 0) {
+           const sizeMessage = document.getElementById("sizeMessage");
+           if (sizeMessage) {
+               sizeMessage.className = "size-message text-danger";
+               sizeMessage.innerHTML = '<i class="bi bi-exclamation-circle"></i> This item is out of stock.';
+           }
+           return;
+       }
 
-    if (!selectedSize) {
+       const quantity = getQuantity();
 
-        showToast(
-            "Please select a size.",
-            "warning"
-        );
+       if (quantity > maxQty) {
+           if (typeof showToast === "function") {
+               showToast("Requested quantity is greater than available stock.", "warning");
+           }
+           return;
+       }
 
-        return;
-    }
+       // 4. Cart ထဲသို့ ထည့်သွင်းမည်
+       const stockInfo = {
+           stockId: stock.id,
+           productId: DETAIL_PRODUCT.productId,
+           productName: DETAIL_PRODUCT.productName,
+           image: DETAIL_PRODUCT.image,
+           colour: stock.colour,
+           size: stock.size,
+           maxQty: maxQty,
+           price: Number(DETAIL_PRODUCT.price)
+       };
 
+       const result = addToCart(stockInfo, quantity);
 
-    const stock =
-        findSelectedStock();
-
-
-    if (!stock) {
-
-        showToast(
-            "This color and size are not available.",
-            "danger"
-        );
-
-        return;
-    }
-
-
-    const maxQty =
-        Number(stock.stockQty);
-
-
-    if (maxQty <= 0) {
-
-        showToast(
-            "This item is out of stock.",
-            "warning"
-        );
-
-        return;
-    }
-
-
-    const quantity =
-        getQuantity();
-
-
-    if (quantity > maxQty) {
-
-        showToast(
-            "Requested quantity is greater than available stock.",
-            "warning"
-        );
-
-        return;
-    }
-
-
-    /*
-     * Product information comes from
-     * DETAIL_PRODUCT.
-     *
-     * Stock information comes from
-     * database stocks.
-     */
-
-    const stockInfo = {
-
-        stockId: stock.id,
-
-        productId: DETAIL_PRODUCT.productId,
-
-        productName: DETAIL_PRODUCT.productName,
-
-        image: DETAIL_PRODUCT.image,
-
-        colour: stock.colour,
-
-        size: stock.size,
-
-        maxQty: maxQty,
-
-        price: Number(DETAIL_PRODUCT.price)
-
-    };
-
-
-    const result =
-        addToCart(
-            stockInfo,
-            quantity
-        );
-
-
-    showToast(
-
-        result.message,
-
-        result.success
-            ? "success"
-            : "danger"
-
-    );
-}
+       if (typeof showToast === "function") {
+           showToast(result.message, result.success ? "success" : "danger");
+       }
+   }
 
 
 /* =========================================================
-   EVENT DELEGATION
+   EVENT DELEGATION (FIXED)
    ========================================================= */
 
 function handleProductDetailClick(event) {
@@ -746,60 +521,44 @@ function handleProductDetailClick(event) {
         event.target.closest(".color-option");
 
     if (colorButton) {
-
-        handleColorSelection(
-            colorButton
-        );
-
+        handleColorSelection(colorButton);
         return;
     }
-
 
     const sizeButton =
         event.target.closest(".size-btn");
 
     if (sizeButton) {
-
-        handleSizeSelection(
-            sizeButton
-        );
-
+        handleSizeSelection(sizeButton);
         return;
     }
 
-
+    // .closest() သုံးထားသည့်အတွက် <button> ရော ၎င်း၏ <i> Icon ကိုပါ ဖမ်းမိမည်ဖြစ်သည်
     const decreaseButton =
         event.target.closest("#decreaseQuantity");
 
     if (decreaseButton) {
-
+        event.preventDefault();
         decreaseQuantity();
-
         return;
     }
-
 
     const increaseButton =
         event.target.closest("#increaseQuantity");
 
     if (increaseButton) {
-
+        event.preventDefault();
         increaseQuantity();
-
         return;
     }
-
 
     const addButton =
         event.target.closest("#addToCartBtn");
 
     if (addButton) {
-
         handleDetailAddToCart();
-
     }
 }
-
 
 /* =========================================================
    INITIALIZE
@@ -865,3 +624,33 @@ document.addEventListener(
     }
 );
 
+/* =========================================================
+   DESCRIPTION ACCORDION TOGGLE (FIXED PURE JS)
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+    const trigger = document.querySelector(".accordion-trigger");
+    const content = document.querySelector("#descriptionCollapse");
+
+    if (trigger && content) {
+        trigger.addEventListener("click", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            // Check if currently open
+            const isOpen = trigger.classList.contains("is-open");
+
+            if (isOpen) {
+                // Close accordion
+                trigger.classList.remove("is-open");
+                content.classList.remove("is-open");
+                trigger.setAttribute("aria-expanded", "false");
+            } else {
+                // Open accordion
+                trigger.classList.add("is-open");
+                content.classList.add("is-open");
+                trigger.setAttribute("aria-expanded", "true");
+            }
+        });
+    }
+});

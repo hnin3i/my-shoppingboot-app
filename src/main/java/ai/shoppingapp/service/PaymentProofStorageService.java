@@ -15,7 +15,7 @@ public class PaymentProofStorageService {
 
 	private final Path uploadPath = Paths.get("uploads/payment-proofs");
 
-	private static final long MAX_FILE_SIZE = 5 * 1024 * 1024;
+	private static final long MAX_FILE_SIZE = 25 * 1024 * 1024;
 
 	public String save(MultipartFile file) {
 		try {
@@ -27,7 +27,7 @@ public class PaymentProofStorageService {
 			// File size
             if (file.getSize() > MAX_FILE_SIZE) {
                 throw new RuntimeException(
-                        "Payment proof must be smaller than 5 MB."
+                        "Payment proof must be smaller than 25 MB."
                 );
             }
             //File Type

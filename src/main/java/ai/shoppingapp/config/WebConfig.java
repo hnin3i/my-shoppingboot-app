@@ -1,11 +1,12 @@
 package ai.shoppingapp.config;
 
-import ai.shoppingapp.interceptor.AdminInterceptor;
-import ai.shoppingapp.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import ai.shoppingapp.interceptor.AdminInterceptor;
+import ai.shoppingapp.interceptor.LoginInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -55,7 +56,7 @@ public class WebConfig implements WebMvcConfigurer {
                     "/order-history",                  
                     "/api/orders/place",
                     "/cart",
-                    "/checkout",
+                    "/cart/checkout",
                     "/order-success",
                     "/index",
 
