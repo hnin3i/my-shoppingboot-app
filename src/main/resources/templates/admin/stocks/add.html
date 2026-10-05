@@ -18,15 +18,8 @@
 
 	<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-	<div class="admin-main">
-
-		<div class="admin-topbar">
-			<div class="admin-profile" style="margin-left: auto;">
-				<div class="admin-avatar">A</div>
-				<div><strong>Admin</strong></div>
-			</div>
-		</div>
-
+	<div class="admin-main">		
+	<div th:replace="~{fragments/adminheader :: adminheader}"></div>
 		<div class="admin-content">
 
 			<div class="d-flex justify-content-between align-items-center mb-4">

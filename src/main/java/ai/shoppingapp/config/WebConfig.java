@@ -44,8 +44,8 @@ public class WebConfig implements WebMvcConfigurer {
                     "/categories/**",
 
                     // Public Auth Pages
-                    "/user/**",
                     "/login",
+                    "/logout",
                     "/register",
                     "/verify-otp",
                     "/forgot-password",
@@ -78,10 +78,10 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
 		registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
 
-		registry.addResourceHandler("/images/product/").addResourceLocations(
-				"file:///E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/product");
-		registry.addResourceHandler("/images/user/")
-				.addResourceLocations("file:///E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/user/");
+		registry.addResourceHandler("/images/product/**").addResourceLocations(
+				"file:///E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/product/");
+		registry.addResourceHandler("/images/profile/**")
+				.addResourceLocations("file:///E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/profile/");
 
 
 	}

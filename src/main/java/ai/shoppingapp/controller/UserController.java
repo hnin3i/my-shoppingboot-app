@@ -77,6 +77,10 @@ public class UserController {
 	public String profile() {
 		return "user/profile";
 	}
+    @GetMapping("/dashboard")
+   	public String dashboard() {
+   		return "user/dashboard";
+   	}
 
 //	@GetMapping("/orders")
 //	public String orders() {
