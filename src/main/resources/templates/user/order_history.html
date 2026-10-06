@@ -95,7 +95,7 @@
        <span> MY ORDERS </span> <i class="bi bi-arrow-right"></i>
       </a> 
       
-      <a href="#" class="account-menu-link logout-link"> 
+      <a th:href="@{/logout}" class="account-menu-link logout-link"> 
        <span> LOG OUT </span> <i class="bi bi-box-arrow-right"></i>
       </a>
 
@@ -122,10 +122,13 @@
         <thead class="table-dark text-uppercase fw-semibold">
          <tr>
           <th style="width: 13%;">Order No</th>
+
           <!-- <th style="width: 14%;">Customer</th> -->
           <th style="width: 18%;">Product</th>
           <th style="width: 15%;">Total</th>
           <th style="width: 12%;" class="text-center">Order Status</th>
+
+          
           <th style="width: 12%;" class="text-center">Payment</th>
           <th style="width: 16%;">Date</th>
           <th style="width: 10%;" class="text-center">Action</th>

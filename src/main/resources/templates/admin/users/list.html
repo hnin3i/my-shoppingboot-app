@@ -29,17 +29,7 @@
 
 	<!-- Main Container -->
 	<main class="admin-main">
-
-		<!-- Topbar -->
-		<div class="admin-topbar">
-			<div class="admin-profile" style="margin-left: auto;">
-				<div class="admin-avatar">A</div>
-				<div>
-					<strong>Admin</strong>
-				</div>
-			</div>
-		</div>
-
+	<div th:replace="~{fragments/adminheader :: adminheader}"></div>
 		<div class="admin-content">
 
 			<!-- Page Header -->
@@ -55,7 +45,6 @@
 				</div>
 
 			</div>
-
 
 			<!-- User Card -->
 			<div class="admin-card">
@@ -214,7 +203,8 @@
 	<!-- Bootstrap 5 JS Bundle -->
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-    </script>
+		
+	</script>
 
 </body>
 

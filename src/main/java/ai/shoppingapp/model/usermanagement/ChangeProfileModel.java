@@ -9,7 +9,7 @@ public class ChangeProfileModel {
 	private String profile;
 	
 	public ChangeProfileModel() {};
-	public ChangeProfileModel(String name, String email, String phone, String address, String profile) {
+	public ChangeProfileModel(String id,String name, String email, String phone, String address, String profile) {
 		
 		this.id = id;
 		this.name = name;

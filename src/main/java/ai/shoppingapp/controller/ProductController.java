@@ -43,6 +43,7 @@ public class ProductController {
 		model.addAttribute("categories", categoryService.findAll());
 
 		model.addAttribute("keyword", keyword);
+		 model.addAttribute("activePage", "products");
 
 		return "admin/products/list";
 	}
@@ -59,6 +60,7 @@ public class ProductController {
 		model.addAttribute("product", newProduct);
 
 		model.addAttribute("categories", categoryService.findAll());
+		model.addAttribute("activePage", "products");
 
 		return "admin/products/add";
 	}
@@ -71,7 +73,7 @@ public class ProductController {
 
 			String fileName = imageFile.getOriginalFilename();
 
-			String uploadPath = "C:\\\\JWD-69\\\\FinalProject\\\\shopping_app\\\\my-shoppingboot-app\\\\src\\\\main\\\\resources\\\\static\\\\images\\\\product";
+			String uploadPath = "E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/product/";
 			
 
 			File uploadDir = new File(uploadPath);
@@ -101,7 +103,8 @@ public class ProductController {
 		ProductModel product = productService.findById(id);
 
 		model.addAttribute("product", product);
-
+		model.addAttribute("activePage", "products");
+		
 		return "admin/products/detail";
 	}
 
@@ -115,6 +118,8 @@ public class ProductController {
 		model.addAttribute("product", product);
 
 		model.addAttribute("categories", categoryService.findAll());
+		
+		model.addAttribute("activePage", "products");
 
 		return "admin/products/edit";
 	}
@@ -127,7 +132,7 @@ public class ProductController {
 
 			String fileName = imageFile.getOriginalFilename();
 
-			String uploadPath = "C:\\\\JWD-69\\\\FinalProject\\\\shopping_app\\\\my-shoppingboot-app\\\\src\\\\main\\\\resources\\\\static\\\\images\\\\product";
+			String uploadPath = "E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/product/";
 
 			File uploadDir = new File(uploadPath);
 
@@ -156,15 +161,17 @@ public class ProductController {
 		ProductModel product = productService.findById(id);
 
 		model.addAttribute("product", product);
+		model.addAttribute("activePage", "products");
 
 		return "admin/products/delete";
 	}
 
 @GetMapping("/admin/products/delete-confirm/{id}")
-	public String deleteConfirm(@PathVariable String id) {
+	public String deleteConfirm(@PathVariable String id, Model model) {
 
 		productService.delete(id);
-
+		model.addAttribute("activePage", "products");
+		
 		return "redirect:/admin/products";
 	}
 }

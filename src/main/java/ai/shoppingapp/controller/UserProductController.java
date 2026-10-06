@@ -23,26 +23,25 @@ public class UserProductController {
 	private final CategoryService categoryService;
 	private final StockService stockService;
 
-	public UserProductController(ProductService productService,
-			CategoryService categoryService,
+	public UserProductController(ProductService productService, CategoryService categoryService,
 			StockService stockService) {
 
 		this.productService = productService;
 		this.categoryService = categoryService;
-		this.stockService=stockService;
+		this.stockService = stockService;
 	}
 
 	@GetMapping("products/detail/{id}")
 	public String productDetail(@PathVariable String id, Model model) {
 
 		ProductModel product = productService.findById(id);
-		if(product==null) {
+		if (product == null) {
 			return "redirect:/products/list";
-			
+
 		}
 		model.addAttribute("product", product);
-		
-		List<StockModel> stocks=stockService.findByProductId(id);
+
+		List<StockModel> stocks = stockService.findByProductId(id);
 		model.addAttribute("stocks", stocks);
 
 		return "products/detail";
@@ -52,30 +51,29 @@ public class UserProductController {
 	public String productList(
 	        @RequestParam(value = "categoryId", required = false) String categoryID,
 	        @RequestParam(value = "keyword", required = false) String keyword,
-	        @RequestParam(value = "newProducts", required = false) Boolean showNewProducts,
+	        @RequestParam(value = "newArrivals", required = false) Boolean showNewArrivals,
 	        @RequestParam(value = "sale", required = false) Boolean showSale,
 	        Model model) {
 
 	    List<ProductModel> products;
+	    List<CategoryModel> categories = categoryService.getAllActiveCategories();
 
-	    List<CategoryModel> categories =
-	            categoryService.getAllActiveCategories();
-
-	    List<ProductModel> newProducts =
-	            productService.findNewProducts();
-
-	    // NEW PRODUCTS
-	    if (Boolean.TRUE.equals(showNewProducts)) {
+	    // NEW ARRIVALS
+	    if (Boolean.TRUE.equals(showNewArrivals)) {
 
 	        products = productService.findNewProducts();
 
+	        model.addAttribute("pageTitle", "NEW IN");
+	        model.addAttribute("pageSubtitle", "JUST ARRIVED");
 	    }
 
-	    // SALE PRODUCTS
+	    // SALE
 	    else if (Boolean.TRUE.equals(showSale)) {
 
 	        products = productService.findSaleProducts();
 
+	        model.addAttribute("pageTitle", "SALE");
+	        model.addAttribute("pageSubtitle", "LIMITED TIME");
 	    }
 
 	    // SEARCH
@@ -83,10 +81,8 @@ public class UserProductController {
 
 	        products = productService.searchproduct(keyword.trim());
 
-	        if (products.isEmpty()) {
-	            products = productService.findAll();
-	        }
-
+	        model.addAttribute("pageTitle", "SEARCH RESULTS");
+	        model.addAttribute("pageSubtitle", "SEARCH");
 	    }
 
 	    // CATEGORY
@@ -94,11 +90,11 @@ public class UserProductController {
 
 	        products = productService.findByCategoryId1(categoryID);
 
-	        CategoryModel selectedCategory =
-	                categoryService.findById(categoryID);
+	        CategoryModel selectedCategory = categoryService.findById(categoryID);
 
 	        model.addAttribute("selectedCategory", selectedCategory);
-
+	        model.addAttribute("pageTitle", selectedCategory.getName());
+	        model.addAttribute("pageSubtitle", "CATEGORY");
 	    }
 
 	    // ALL PRODUCTS
@@ -106,14 +102,14 @@ public class UserProductController {
 
 	        products = productService.findAll();
 
+	        model.addAttribute("pageTitle", "ALL PRODUCTS");
+	        model.addAttribute("pageSubtitle", "SHOP");
 	    }
 
 	    model.addAttribute("products", products);
 	    model.addAttribute("keyword", keyword);
 	    model.addAttribute("categories", categories);
-	    model.addAttribute("newProducts", newProducts);
 
 	    return "products/list";
 	}
-
 }

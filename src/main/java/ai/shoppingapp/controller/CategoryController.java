@@ -24,6 +24,7 @@ public class CategoryController {
 	public String categoryList(Model model) {
 
 		model.addAttribute("categories", categoryService.findAll());
+		 model.addAttribute("activePage", "categories");
 
 		return "admin/categories/list";
 	}
@@ -37,6 +38,7 @@ public class CategoryController {
 		newCategory.setIsActive(1);
 
 		model.addAttribute("category", newCategory);
+		 model.addAttribute("activePage", "categories");
 
 		return "admin/categories/add";
 	}
@@ -69,6 +71,7 @@ public class CategoryController {
 		CategoryModel category = categoryService.findById(id);
 
 		model.addAttribute("category", category);
+		 model.addAttribute("activePage", "categories");
 
 		return "admin/categories/detail";
 	}
@@ -80,6 +83,7 @@ public class CategoryController {
 		CategoryModel category = categoryService.findById(id);
 
 		model.addAttribute("category", category);
+		 model.addAttribute("activePage", "categories");
 
 		return "admin/categories/edit";
 	}
@@ -111,6 +115,7 @@ public class CategoryController {
 		CategoryModel category = categoryService.findById(id);
 
 		model.addAttribute("category", category);
+		 model.addAttribute("activePage", "categories");
 
 		return "admin/categories/delete";
 	}

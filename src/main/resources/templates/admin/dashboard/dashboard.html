@@ -26,43 +26,7 @@
 
 	<main class="admin-main">
 
-		<!-- Topbar -->
-		<header class="admin-topbar">
-
-			<div></div>
-
-			<div class="admin-profile">
-
-				<i class="bi bi-bell fs-5"></i>
-
-				<div class="admin-info">
-
-					<!-- Profile Photo -->
-					<div class="admin-avatar-wrapper">
-
-						<a th:href="@{/admin/profile}" class="admin-profile-link"> <img
-							src="/images/admin/admin.jpg" alt="Admin" class="admin-avatar">
-
-						</a> <span class="active-dot"></span>
-
-					</div>
-
-					<!-- Admin Name -->
-					<div class="admin-details">
-
-						<a th:href="@{/admin/profile}" class="admin-profile-link"> <span
-							class="admin-name">Admin</span> 
-							<!-- <span class="admin-status">Active</span> -->
-
-						</a>
-
-					</div>
-
-				</div>
-
-			</div>
-
-		</header>
+		<div th:replace="~{fragments/adminheader :: adminheader}"></div>
 
 		<!-- Content -->
 

@@ -43,6 +43,7 @@ public class AdminOrderUpdateController {
         model.addAttribute("selectedPaymentStatus", paymentStatus);
         model.addAttribute("selectedStartDate", startDate);
         model.addAttribute("selectedEndDate", endDate);
+        model.addAttribute("activePage", "orders");
         
         return "admin/orders/order-list";
     }

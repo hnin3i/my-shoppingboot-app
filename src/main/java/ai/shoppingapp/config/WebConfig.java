@@ -1,11 +1,12 @@
 package ai.shoppingapp.config;
 
-import ai.shoppingapp.interceptor.AdminInterceptor;
-import ai.shoppingapp.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import ai.shoppingapp.interceptor.AdminInterceptor;
+import ai.shoppingapp.interceptor.LoginInterceptor;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
@@ -44,8 +45,8 @@ public class WebConfig implements WebMvcConfigurer {
                     "/categories/**",
 
                     // Public Auth Pages
-                    "/user/**",
                     "/login",
+                    "/logout",
                     "/register",
                     "/verify-otp",
                     "/forgot-password",
@@ -78,10 +79,12 @@ public class WebConfig implements WebMvcConfigurer {
 		registry.addResourceHandler("/css/**").addResourceLocations("classpath:/static/css/");
 		registry.addResourceHandler("/js/**").addResourceLocations("classpath:/static/js/");
 
-		registry.addResourceHandler("/images/product/").addResourceLocations(
-				"C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\product");
-		registry.addResourceHandler("/images/user/")
-				.addResourceLocations("file:///E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/user/");
+
+		registry.addResourceHandler("/images/product/**").addResourceLocations(
+				"file:///E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/product/");
+		registry.addResourceHandler("/images/profile/**")
+				.addResourceLocations("file:///E:/BlackJack_shop/my-shoppingboot-app/src/main/resources/static/images/profile/");
+
 
 
 	}

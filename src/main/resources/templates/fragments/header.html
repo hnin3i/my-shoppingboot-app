@@ -114,14 +114,6 @@
 
 			<a class="navbar-brand shop-brand" th:href="@{/}"> BlackJack </a>
 
-			<!-- 	<li class="nav-item"><a class="nav-link " th:href="@{/}">HOME</a></li>
-					<li class="nav-item"><a class="nav-link"
-						th:href="@{/products?filter=new}"> NEW ARRIVALS </a></li>
-
-					<li class="nav-item dropdown categories-hover"><a
-						class="nav-link dropdown-toggle" href="#" id="categoriesDropdown"
-						role="button" data-bs-toggle="dropdown" aria-expanded="false"> -->
-
 			<button class="navbar-toggler border-0 shadow-none" type="button"
 				data-bs-toggle="collapse" data-bs-target="#shopNavbar"
 				aria-controls="shopNavbar" aria-expanded="false"
@@ -137,168 +129,49 @@
 
 				<ul class="navbar-nav shop-menu me-auto">
 
+					<!-- HOME -->
 					<li class="nav-item"><a class="nav-link" th:href="@{/}">
 							HOME </a></li>
 
-
-					<!-- 
-							<li th:if="${categories != null and #lists.size(categories) > 4}">
-
-								<hr class="dropdown-divider">
-
-							</li>
-
-
-							MORE CATEGORIES
-							<li id="moreCategories"><th:block
-									th:each="category, stat : ${categories}"
-									th:if="${stat.index >= 4}">
-
-									<a class="dropdown-item"
-										th:href="@{/products(category=${category.name})}"
-										th:text="${category.name}"> Category </a>
-
-								</th:block></li>
-
-
-							SEE MORE
-							<li th:if="${categories != null and #lists.size(categories) > 4}">
-
-								<a class="dropdown-item see-more" href="#"
-								id="seeMoreCategories"> SEE MORE → </a>
-
-							</li>
-
-
-						</ul></li>
-
+					<!-- NEW ARRIVALS -->
 					<li class="nav-item"><a class="nav-link"
-						th:href="@{/products?filter=sale}"> SALE </a></li>
+						th:href="@{/products/list(newArrivals=true)}"> NEW ARRIVALS </a></li>
 
-
-
-
-				</ul>
-
-				<ul class="navbar-nav shop-actions align-items-lg-center">
-					<li class="nav-item"><a class="nav-link shop-icon-link"
-						th:href="@{/products}" aria-label="Search"><svg
-								viewBox="0 0 24 24" aria-hidden="true">
-								<circle cx="11" cy="11" r="6.5" />
-								<path d="m16 16 4.5 4.5" /></svg><span class="d-lg-none ms-2">Search</span></a></li>
-
-
-					2. Account Icon: ONLY ONE of these three will ever render
-
-
-					Account
-					ADMIN
-					<li class="nav-item"
-						th:if="${session.loggedInUser != null and #strings.toUpperCase(#strings.toString(session.loggedInUser.role)).contains('ADMIN')}">
-
-						<a class="nav-link shop-icon-link" th:href="@{/admin/dashboard}"
-						aria-label="Admin Dashboard" title="Admin Dashboard"> <svg
-								viewBox="0 0 24 24" width="20" height="20" stroke="currentColor"
-								stroke-width="2" fill="none" stroke-linecap="round"
-								stroke-linejoin="round">
-
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-
-        </svg>
-					</a>
-					</li> -->
-
-					<li class="nav-item"><a class="nav-link" th:href="@{/#new-in}">
-							NEW ARRIVALS </a></li>
-
-
-					<!-- ================= CATEGORIES ================= -->
-
-					<!-- 
-					<li class="nav-item"
-						th:if="${session.loggedInUser != null and !#strings.toUpperCase(#strings.toString(session.loggedInUser.role)).contains('ADMIN')}">
-
-						<a class="nav-link shop-icon-link" th:href="@{/user/profile}"
-						aria-label="Profile" title="Profile"> <svg viewBox="0 0 24 24"
-								width="20" height="20" stroke="currentColor" stroke-width="2"
-								fill="none" stroke-linecap="round" stroke-linejoin="round"> -->
+					<!-- CATEGORIES -->
 					<li class="nav-item dropdown categories-hover"><a
 						class="nav-link dropdown-toggle" href="#" id="categoriesDropdown"
 						role="button" data-bs-toggle="dropdown" aria-expanded="false">
-
 							CATEGORIES </a>
-
-
 
 						<ul class="dropdown-menu categories-dropdown"
 							aria-labelledby="categoriesDropdown">
 
-
-							<!-- FIRST 4 CATEGORIES -->
-
+							<!-- ALL -->
 							<li><a class="dropdown-item" th:href="@{/products/list}">
 									All </a></li>
 
-
-							<!-- Categories -->
-							<li th:each="category, stat : ${categories}"
-								th:if="${stat.index < 4}">
-								<!-- 
-					<li class="nav-item d-flex align-items-center gap-2"
-						th:if="${session.loggedInUser == null}"><a
-						class="btn btn-sm px-3 fw-semibold" th:href="@{/login}"
-						style="color: #fff; border: 1px solid #3f3f46; border-radius: 6px;">
-							Sign In </a> <a class="btn btn-sm px-3 fw-semibold"
-						th:href="@{/register}"
-						style="background-color: #e11d48; color: #fff; border-radius: 6px;">
-							Sign Up </a></li>
-
-
-					1. Initial Auth Prompt Modal
-
-
-					<li class="nav-item"><a
-						class="nav-link shop-icon-link position-relative"
-						th:href="@{/cart}" aria-label="Cart"><svg viewBox="0 0 24 24"
-								aria-hidden="true">
-								<path d="M3.5 8.5h17l-1 11H4.5l-1-11Z" />
-								<path d="M8 8.5V6a4 4 0 0 1 8 0v2.5" /></svg><span class="cart-count"
-							id="cartCount">0</span><span class="d-lg-none ms-2">Cart</span></a></li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	shoon --> <a class="dropdown-item" href="#" th:text="${category.name}"
-								th:attr="data-category-id=${category.id}"
-								onclick="changeCategory(this)"> Category </a>
-
-							</li>
-
-
-							<!-- DIVIDER -->
-
-							<li th:if="${categories != null and #lists.size(categories) > 4}">
-
+							<li>
 								<hr class="dropdown-divider">
-
 							</li>
 
+							<!-- FIRST 4 -->
+							<li th:each="category, stat : ${categories}"
+								th:if="${stat.index < 4}"><a class="dropdown-item"
+								th:href="@{/products/list(categoryId=${category.id})}"
+								th:text="${category.name}"> Category </a></li>
 
 							<!-- MORE CATEGORIES -->
-
 							<th:block th:each="category, stat : ${categories}"
 								th:if="${stat.index >= 4}">
 
 								<li class="more-category" style="display: none;"><a
-									class="dropdown-item" th:href="@{/(categoryId=${category.id})}"
+									class="dropdown-item"
+									th:href="@{/products/list(categoryId=${category.id})}"
 									th:text="${category.name}"> Category </a></li>
 
 							</th:block>
 
-
 							<!-- SEE MORE -->
-
 							<li id="seeMoreWrapper"
 								th:if="${categories != null and #lists.size(categories) > 4}">
 
@@ -307,13 +180,11 @@
 
 							</li>
 
-
 						</ul></li>
 
-
-					<li class="nav-item"><a class="nav-link" th:href="@{/#sale}">
-
-							SALE </a></li>
+					<!-- SALE -->
+					<li class="nav-item"><a class="nav-link"
+						th:href="@{/products/list(sale=true)}"> SALE </a></li>
 
 				</ul>
 
@@ -389,7 +260,7 @@
 					<li class="nav-item"
 						th:if="${session.loggedInUser != null and !#strings.toUpperCase(#strings.toString(session.loggedInUser.role)).contains('ADMIN')}">
 
-						<a class="nav-link shop-icon-link" th:href="@{/user/profile}"
+						<a class="nav-link shop-icon-link" th:href="@{/user/dashboard}"
 						aria-label="Profile" title="Profile"> <svg viewBox="0 0 24 24"
 								width="20" height="20" stroke="currentColor" stroke-width="2"
 								fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -434,9 +305,8 @@
 
                                 <path d="M8 8.5V6a4 4 0 0 1 8 0v2.5" />
 
-                            </svg> <span class="cart-count" id="cartCount">
+                            </svg><span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger badge-cart">0</span>
 
-								0 </span> <span class="d-lg-none ms-2"> Cart </span>
 
 					</a></li>
 
@@ -576,6 +446,14 @@
 				window.location.href = url.toString();
 			}
 		</script>
+		
+		<script src="/js/storage.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/product.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/checkout.js"></script>
+<script src="/js/error-handler.js"></script>
+<script src="/js/cart-app.js"></script>
 
 
 

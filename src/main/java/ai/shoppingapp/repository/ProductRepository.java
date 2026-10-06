@@ -346,7 +346,7 @@ public class ProductRepository {
           SELECT *
 FROM products
 WHERE is_active = 1
-AND created_at >= DATE_SUB(NOW(), INTERVAL 3 DAY)
+AND created_at >= DATE_SUB(NOW(), INTERVAL 5 DAY)
 ORDER BY created_at DESC
             """;
 
