@@ -199,10 +199,10 @@
 								<div>
 									<span class="order-status"
 										th:classappend="${order.orderStatus != null
-                    ? (order.orderStatus.name() == 'DELIVERED'
-                        or order.orderStatus.name() == 'CONFIRMED'
+                    ? (order.orderStatus == 'DELIVERED'
+                        or order.orderStatus == 'CONFIRMED'
                         ? ' status-success'
-                        : (order.orderStatus.name() == 'CANCELLED'
+                        : (order.orderStatus == 'CANCELLED'
                             ? ' status-danger'
                             : ' status-warning'))
                     : ' status-warning'}"
