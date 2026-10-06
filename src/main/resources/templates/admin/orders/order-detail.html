@@ -114,7 +114,7 @@
                         <!-- Price Breakdown -->
                         <div class="pt-3 text-end pe-2">
                             <p class="mb-1 text-muted">Subtotal: <span class="fw-bold text-dark" th:text="${#numbers.formatDecimal(order.subtotalAmount, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></span></p>
-                            <p class="mb-1 text-muted">Tax: <span class="fw-bold text-dark" th:text="${order.taxAmount} + ' %'"></span></p>
+                            <p class="mb-1 text-muted">Tax: <span class="fw-bold text-dark" th:text="${#numbers.formatDecimal(order.taxAmount, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></span></p>
                             <p class="mb-1 text-muted">Shipping Fee: <span class="fw-bold text-dark" th:text="${#numbers.formatDecimal(order.shippingFee, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></span></p>
                             <h5 class="fw-bold text-purple mt-2">Grand Total: <span th:text="${#numbers.formatDecimal(order.totalAmount, 1, 'COMMA', 0, 'POINT')} + ' MMK'"></span></h5>
                         </div>
@@ -136,13 +136,14 @@
                         </div>
 
                         <div class="mb-3 text-center">
-                            <div th:if="${order.paymentConfirmPhoto != null and !#strings.isEmpty(order.paymentConfirmPhoto)}">
-                                <img th:src="${order.paymentConfirmPhoto}" 
-                                     class="img-fluid rounded border shadow-sm w-100" 
-                                     style="max-height: 250px; object-fit: contain;" 
-                                     alt="Payment Slip">
-                            </div>
-                            <div th:if="${order.paymentConfirmPhoto == null or #strings.isEmpty(order.paymentConfirmPhoto)}" class="alert alert-secondary mb-0 p-2" role="alert">
+							<div th:if="${order.paymentConfirmPhoto != null and !#strings.isEmpty(order.paymentConfirmPhoto)}">
+								<img
+									th:src="@{${#strings.startsWith(order.paymentConfirmPhoto, '/') ? order.paymentConfirmPhoto : '/' + order.paymentConfirmPhoto}}"
+									class="img-fluid rounded border shadow-sm w-100"
+									style="max-height: 250px; object-fit: contain;"
+									alt="Payment Slip">
+							</div>
+							<div th:if="${order.paymentConfirmPhoto == null or #strings.isEmpty(order.paymentConfirmPhoto)}" class="alert alert-secondary mb-0 p-2" role="alert">
                                 <small class="text-muted">No Payment Slip Uploaded</small>
                             </div>
                         </div>
