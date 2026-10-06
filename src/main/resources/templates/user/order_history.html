@@ -122,7 +122,7 @@
         <thead class="table-dark text-uppercase fw-semibold">
          <tr>
           <th style="width: 13%;">Order No</th>
-          <th style="width: 14%;">Customer</th>
+          <!-- <th style="width: 14%;">Customer</th> -->
           <th style="width: 18%;">Product</th>
           <th style="width: 15%;">Total</th>
           <th style="width: 12%;" class="text-center">Order Status</th>
@@ -134,7 +134,7 @@
         <tbody>
          <tr th:each="order : ${orders}">
           <td class="fw-semibold" th:text="${order.orderNumber}" th:title="${order.orderNumber}"></td>
-          <td th:text="${order.customerName}" th:title="${order.customerName}"></td>
+          <!-- <td th:text="${order.customerName}" th:title="${order.customerName}"></td>  -->
           <td th:text="${order.productNames}" th:title="${order.productNames}"></td>
           <td class="fw-bold" th:text="${#numbers.formatDecimal(order.totalAmount, 1, 2)} + ' MMK'"></td>
           
