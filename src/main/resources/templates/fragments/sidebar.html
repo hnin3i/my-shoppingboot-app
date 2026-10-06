@@ -5,7 +5,8 @@
 
 	<!-- Logo -->
 	<div class="sidebar-logo">
-		<span>BLACKJACK</span>
+		<a th:href="@{/}"> <span>BLACKJACK</span>
+		</a>
 	</div>
 
 
@@ -15,38 +16,43 @@
 	<ul class="sidebar-menu">
 
 		<!-- Dashboard -->
-		<li><a th:href="@{/admin/dashboard}" class="sidebar-link" th:classappend="${activePage == 'dashboard'} ? ' active' : ''">
-
-				<i class="bi bi-grid-1x2-fill"></i> <span>Dashboard</span>
+		<li><a th:href="@{/admin/dashboard}" class="sidebar-link"
+			th:classappend="${activePage == 'dashboard'} ? ' active' : ''"> <i
+				class="bi bi-grid-1x2-fill"></i> <span>Dashboard</span>
 		</a></li>
 
 
 		<!-- Products -->
-		<li><a th:href="@{/admin/products}" class="sidebar-link" th:classappend="${activePage == 'products'} ? ' active' : ''"> <i
+		<li><a th:href="@{/admin/products}" class="sidebar-link"
+			th:classappend="${activePage == 'products'} ? ' active' : ''"> <i
 				class="bi bi-bag-fill"></i> <span>Products</span>
 		</a></li>
 
 
 		<!-- Categories -->
-		<li><a th:href="@{/admin/categories}" class="sidebar-link" th:classappend="${activePage == 'categories'} ? ' active' : ''"> <i
-				class="bi bi-tags-fill"></i> <span>Categories</span>
+		<li><a th:href="@{/admin/categories}" class="sidebar-link"
+			th:classappend="${activePage == 'categories'} ? ' active' : ''">
+				<i class="bi bi-tags-fill"></i> <span>Categories</span>
 		</a></li>
 
 
 		<!-- Stock -->
-		<li><a th:href="@{/admin/stock}" class="sidebar-link" th:classappend="${activePage == 'stock'} ? ' active' : ''"> <i
+		<li><a th:href="@{/admin/stock}" class="sidebar-link"
+			th:classappend="${activePage == 'stock'} ? ' active' : ''"> <i
 				class="bi bi-box-seam-fill"></i> <span>Stock</span>
 		</a></li>
 
 
 		<!-- Orders -->
-		<li><a th:href="@{/admin/orders}" class="sidebar-link" th:classappend="${activePage == 'orders'} ? ' active' : ''"> <i
+		<li><a th:href="@{/admin/orders}" class="sidebar-link"
+			th:classappend="${activePage == 'orders'} ? ' active' : ''"> <i
 				class="bi bi-cart-check-fill"></i> <span>Orders</span>
 		</a></li>
 
 
 		<!-- Users -->
-		<li><a th:href="@{/admin/users}" class="sidebar-link" th:classappend="${activePage == 'users'} ? ' active' : ''"> <i
+		<li><a th:href="@{/admin/users}" class="sidebar-link"
+			th:classappend="${activePage == 'users'} ? ' active' : ''"> <i
 				class="bi bi-people-fill"></i> <span>Users</span>
 		</a></li>
 
@@ -65,21 +71,24 @@
 
 </aside>
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+	document.addEventListener("DOMContentLoaded", function() {
 
-    const currentPath = window.location.pathname;
+		const currentPath = window.location.pathname;
 
-    document.querySelectorAll(".sidebar-menu .sidebar-link").forEach(function (link) {
+		document.querySelectorAll(".sidebar-menu .sidebar-link")
+				.forEach(
+						function(link) {
 
-        const linkPath = new URL(link.href, window.location.origin).pathname;
+							const linkPath = new URL(link.href,
+									window.location.origin).pathname;
 
-        if (currentPath === linkPath) {
-            link.classList.add("active");
-        }
+							if (currentPath === linkPath) {
+								link.classList.add("active");
+							}
 
-    });
+						});
 
-});
+	});
 </script>
 
 </html>

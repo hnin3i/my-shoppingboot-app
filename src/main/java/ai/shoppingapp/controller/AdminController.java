@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import ai.shoppingapp.model.AdminDashboardDto;
 import ai.shoppingapp.model.UserModel;
 import ai.shoppingapp.model.usermanagement.ChangeProfileModel;
+import ai.shoppingapp.service.AdminDashboardService;
 import ai.shoppingapp.service.UserService;
 import jakarta.servlet.http.HttpSession;
 
@@ -22,184 +24,164 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private final UserService userService;
+	private final UserService userService;
+	private final AdminDashboardService adminDashboardService;
 
-    public AdminController(UserService userService) {
-        this.userService = userService;
-    }
+	public AdminController(UserService userService, AdminDashboardService adminDashboardService) {
 
-    @GetMapping("/dashboard")
-    public String dashboard(HttpSession session) {
+		this.userService = userService;
+		this.adminDashboardService = adminDashboardService;
+	}
 
-        UserModel loggedInUser =
-                (UserModel) session.getAttribute("loggedInUser");
+	@GetMapping("/dashboard")
+	public String dashboard(HttpSession session, Model model) {
 
-        if (loggedInUser == null) {
-            return "redirect:/login";
-        }
+		UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
 
-        return "admin/dashboard/dashboard";
-    }
-    
+		if (loggedInUser == null) {
+			return "redirect:/login";
+		}
 
-    @GetMapping("/users")
-    public String users(Model model) {
-        model.addAttribute("users", userService.findAll());
-        model.addAttribute("activePage", "users");
-        return "admin/users/list";
-    }
-    
-    @GetMapping("/profile")
-    public String profile(HttpSession session, Model model) {
+		  AdminDashboardDto dashboard =
+		            adminDashboardService.getDashboardSummary();
 
-        UserModel loggedInUser =
-                (UserModel) session.getAttribute("loggedInUser");
+		model.addAttribute("dashboard", dashboard);
 
-        if (loggedInUser == null) {
-            return "redirect:/login";
-        }
+		return "admin/dashboard/dashboard";
+	}
 
-        UserModel currentUser =
-                userService.findById(loggedInUser.getId());
+	@GetMapping("/users")
+	public String users(Model model) {
+		model.addAttribute("users", userService.findAll());
+		model.addAttribute("activePage", "users");
+		return "admin/users/list";
+	}
 
-        if (currentUser == null) {
-            return "redirect:/login";
-        }
+	@GetMapping("/profile")
+	public String profile(HttpSession session, Model model) {
 
-        ChangeProfileModel profile = new ChangeProfileModel();
+		UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
 
-        profile.setId(currentUser.getId());
-        profile.setName(currentUser.getName());
-        profile.setEmail(currentUser.getEmail());
-        profile.setPhone(currentUser.getPhone());
-        profile.setAddress(currentUser.getAddress());
-        profile.setProfile(currentUser.getProfile());
+		if (loggedInUser == null) {
+			return "redirect:/login";
+		}
 
-        model.addAttribute("changeProfileModel", profile);
+		UserModel currentUser = userService.findById(loggedInUser.getId());
 
-        return "admin/profile/profile";
-    }
-    
-    @PostMapping("/profile/update")
-    public String updateProfile(
-            @ModelAttribute("changeProfileModel") ChangeProfileModel changeProfileModel,
-            @RequestParam(value = "profilePhoto", required = false) MultipartFile profilePhoto,
-            HttpSession session,
-            RedirectAttributes redirectAttributes) throws IOException {
+		if (currentUser == null) {
+			return "redirect:/login";
+		}
 
-        UserModel loggedInUser =
-                (UserModel) session.getAttribute("loggedInUser");
+		ChangeProfileModel profile = new ChangeProfileModel();
 
-        if (loggedInUser == null) {
-            return "redirect:/login";
-        }
+		profile.setId(currentUser.getId());
+		profile.setName(currentUser.getName());
+		profile.setEmail(currentUser.getEmail());
+		profile.setPhone(currentUser.getPhone());
+		profile.setAddress(currentUser.getAddress());
+		profile.setProfile(currentUser.getProfile());
 
-        // Get current user before updating
-        UserModel currentUser =
-                userService.findById(loggedInUser.getId());
+		model.addAttribute("changeProfileModel", profile);
 
-        if (currentUser == null) {
-            return "redirect:/login";
-        }
+		return "admin/profile/profile";
+	}
 
-        changeProfileModel.setId(loggedInUser.getId());
+	@PostMapping("/profile/update")
+	public String updateProfile(@ModelAttribute("changeProfileModel") ChangeProfileModel changeProfileModel,
+			@RequestParam(value = "profilePhoto", required = false) MultipartFile profilePhoto, HttpSession session,
+			RedirectAttributes redirectAttributes) throws IOException {
 
-        // Keep old profile path
-        String oldProfile = currentUser.getProfile();
+		UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
 
-        // =========================
-        // PROFILE PHOTO UPLOAD
-        // =========================
+		if (loggedInUser == null) {
+			return "redirect:/login";
+		}
 
-        if (profilePhoto != null && !profilePhoto.isEmpty()) {
+		// Get current user before updating
+		UserModel currentUser = userService.findById(loggedInUser.getId());
 
-            String originalFileName = profilePhoto.getOriginalFilename();
+		if (currentUser == null) {
+			return "redirect:/login";
+		}
 
-            // Create unique file name
-            String fileName =
-                    System.currentTimeMillis() + "_" + originalFileName;
+		changeProfileModel.setId(loggedInUser.getId());
 
-            String uploadPath =
-                    "E:\\BlackJack_shop\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
+		// Keep old profile path
+		String oldProfile = currentUser.getProfile();
 
-            File uploadDir = new File(uploadPath);
+		// =========================
+		// PROFILE PHOTO UPLOAD
+		// =========================
 
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
+		if (profilePhoto != null && !profilePhoto.isEmpty()) {
 
-            // Save new photo
-            File file = new File(uploadPath + fileName);
+			String originalFileName = profilePhoto.getOriginalFilename();
 
-            profilePhoto.transferTo(file);
+			// Create unique file name
+			String fileName = System.currentTimeMillis() + "_" + originalFileName;
 
-            // Save new image path in database
-            changeProfileModel.setProfile(
-                    "/images/profile/" + fileName
-            );
+			String uploadPath = "E:\\BlackJack_shop\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
 
-        } else {
+			File uploadDir = new File(uploadPath);
 
-            // No new photo → keep old photo
-            changeProfileModel.setProfile(oldProfile);
-        }
+			if (!uploadDir.exists()) {
+				uploadDir.mkdirs();
+			}
 
-        // =========================
-        // UPDATE DATABASE
-        // =========================
+			// Save new photo
+			File file = new File(uploadPath + fileName);
 
-        int result =
-                userService.editProfile(changeProfileModel);
+			profilePhoto.transferTo(file);
 
-        if (result > 0) {
+			// Save new image path in database
+			changeProfileModel.setProfile("/images/profile/" + fileName);
 
-            // =========================
-            // DELETE OLD PHOTO
-            // =========================
+		} else {
 
-            if (profilePhoto != null && !profilePhoto.isEmpty()) {
+			// No new photo → keep old photo
+			changeProfileModel.setProfile(oldProfile);
+		}
 
-                if (oldProfile != null
-                        && !oldProfile.isEmpty()
-                        && oldProfile.startsWith("/images/profile/")) {
+		// =========================
+		// UPDATE DATABASE
+		// =========================
 
-                    String oldFileName =
-                            oldProfile.substring("/images/profile/".length());
+		int result = userService.editProfile(changeProfileModel);
 
-                    String uploadPath =
-                            "E:\\BlackJack_shop\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
+		if (result > 0) {
 
-                    File oldFile =
-                            new File(uploadPath + oldFileName);
+			// =========================
+			// DELETE OLD PHOTO
+			// =========================
 
-                    if (oldFile.exists()) {
-                        oldFile.delete();
-                    }
-                }
-            }
+			if (profilePhoto != null && !profilePhoto.isEmpty()) {
 
-            // Refresh logged-in user
-            UserModel updatedUser =
-                    userService.findById(loggedInUser.getId());
+				if (oldProfile != null && !oldProfile.isEmpty() && oldProfile.startsWith("/images/profile/")) {
 
-            session.setAttribute(
-                    "loggedInUser",
-                    updatedUser
-            );
+					String oldFileName = oldProfile.substring("/images/profile/".length());
 
-            redirectAttributes.addFlashAttribute(
-                    "successMessage",
-                    "Profile updated successfully!"
-            );
+					String uploadPath = "E:\\BlackJack_shop\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
 
-        } else {
+					File oldFile = new File(uploadPath + oldFileName);
 
-            redirectAttributes.addFlashAttribute(
-                    "errorMessage",
-                    "Failed to update profile."
-            );
-        }
+					if (oldFile.exists()) {
+						oldFile.delete();
+					}
+				}
+			}
 
-        return "admin/dashboard/dashboard";
-    }
+			// Refresh logged-in user
+			UserModel updatedUser = userService.findById(loggedInUser.getId());
+
+			session.setAttribute("loggedInUser", updatedUser);
+
+			redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully!");
+
+		} else {
+
+			redirectAttributes.addFlashAttribute("errorMessage", "Failed to update profile.");
+		}
+
+		return "redirect:/admin/dashboard";
+	}
 }

@@ -1,5 +1,7 @@
 package ai.shoppingapp.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,8 +10,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import ai.shoppingapp.model.OrderHistoryDto;
 import ai.shoppingapp.model.UserModel;
 import ai.shoppingapp.model.usermanagement.ChangeProfileModel;
+import ai.shoppingapp.service.OrderHistoryService;
 import ai.shoppingapp.service.UserService;
 import jakarta.servlet.http.HttpSession;
 
@@ -17,74 +21,95 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
+	private final UserService userService;
+	private final OrderHistoryService orderHistoryService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+	public UserController(UserService userService, OrderHistoryService orderHistoryService) {
 
-    // Handles the GET request when loading the page
-    @GetMapping("/edit")
-    public String showEditProfilePage(HttpSession session, Model model) {
-        UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return "redirect:/";
-        }
+		this.userService = userService;
+		this.orderHistoryService = orderHistoryService;
+	}
 
-        UserModel currentUser = userService.findById(loggedInUser.getId());
-        if (currentUser == null) {
-            return "redirect:/";
-        }
+	// Handles the GET request when loading the page
+	@GetMapping("/edit")
+	public String showEditProfilePage(HttpSession session, Model model) {
+		UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/";
+		}
 
-        ChangeProfileModel changeProfileModel = new ChangeProfileModel();
-        changeProfileModel.setId(currentUser.getId());
-        changeProfileModel.setName(currentUser.getName());
-        changeProfileModel.setEmail(currentUser.getEmail());
-        changeProfileModel.setPhone(currentUser.getPhone());
-        changeProfileModel.setAddress(currentUser.getAddress());
-        changeProfileModel.setProfile(currentUser.getProfile());
+		UserModel currentUser = userService.findById(loggedInUser.getId());
+		if (currentUser == null) {
+			return "redirect:/";
+		}
 
-        model.addAttribute("changeProfileModel", changeProfileModel);
-        return "user/edit";
-    }
+		ChangeProfileModel changeProfileModel = new ChangeProfileModel();
+		changeProfileModel.setId(currentUser.getId());
+		changeProfileModel.setName(currentUser.getName());
+		changeProfileModel.setEmail(currentUser.getEmail());
+		changeProfileModel.setPhone(currentUser.getPhone());
+		changeProfileModel.setAddress(currentUser.getAddress());
+		changeProfileModel.setProfile(currentUser.getProfile());
 
-    // Handles the form submission (POST)
-    @PostMapping("/edit")
-    public String processEditProfile(@ModelAttribute("changeProfileModel") ChangeProfileModel changeProfileModel,
-                                     HttpSession session,
-                                     RedirectAttributes redirectAttributes) {
+		model.addAttribute("changeProfileModel", changeProfileModel);
+		return "user/edit";
+	}
 
-        UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return "redirect:/";
-        }
+	// Handles the form submission (POST)
+	@PostMapping("/edit")
+	public String processEditProfile(@ModelAttribute("changeProfileModel") ChangeProfileModel changeProfileModel,
+			HttpSession session, RedirectAttributes redirectAttributes) {
 
-        changeProfileModel.setId(loggedInUser.getId());
-        int result = userService.editProfile(changeProfileModel);
+		UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
+		if (loggedInUser == null) {
+			return "redirect:/";
+		}
 
-        if (result > 0) {
-            UserModel updatedUser = userService.findById(loggedInUser.getId());
-            session.setAttribute("loggedInUser", updatedUser);
-            redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully!");
-        } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to update profile. Please try again.");
-        }
+		changeProfileModel.setId(loggedInUser.getId());
+		int result = userService.editProfile(changeProfileModel);
 
-        return "redirect:/user/edit";
-    
-    }
-    @GetMapping("/profile")
+		if (result > 0) {
+			UserModel updatedUser = userService.findById(loggedInUser.getId());
+			session.setAttribute("loggedInUser", updatedUser);
+			redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully!");
+		} else {
+			redirectAttributes.addFlashAttribute("errorMessage", "Failed to update profile. Please try again.");
+		}
+
+		return "redirect:/user/edit";
+
+	}
+
+	@GetMapping("/profile")
 	public String profile() {
 		return "user/profile";
 	}
-    @GetMapping("/dashboard")
-   	public String dashboard() {
-   		return "user/dashboard";
-   	}
+
+	@GetMapping("/dashboard")
+	public String dashboard(
+	        HttpSession session,
+	        Model model) {
+
+	    UserModel loggedInUser =
+	            (UserModel) session.getAttribute("loggedInUser");
+
+	    if (loggedInUser == null) {
+	        return "redirect:/login";
+	    }
+
+	    String userId = loggedInUser.getId();
+
+	    List<OrderHistoryDto> latestOrders =
+	            orderHistoryService.getLatestOrders(userId);
+
+	    model.addAttribute("latestOrders", latestOrders);
+
+	    return "user/dashboard";
+	}
 
 //	@GetMapping("/orders")
 //	public String orders() {
 //		return "user/orders";
 //	}
-	
+
 }
