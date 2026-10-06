@@ -127,6 +127,12 @@ function goToCheckout(){
 	window.location.href="/cart/checkout";
 }
 
+function handleClearCart() {
+    clearCart(); // Uses clearCart() from storage.js
+    updateBadge(); // Updates top navigation badge count
+    renderCart(); // Re-renders empty cart state
+}
+
 function renderCart() {
     const container = document.getElementById("cart-container");
 
@@ -136,10 +142,10 @@ function renderCart() {
 
     if (cart.length === 0) {
         container.innerHTML = `
-            <div class="text-center py-5 text-muted">
-                <div class="display-4">🛒</div>
-                <p>Your cart is empty.</p>
-                <a href="./index.html" class="btn btn-outline-primary">
+            <div class="text-center py-5">
+                <div class="display-5 mb-3">🛒</div>
+                <h4 class="fw-normal">Your bag is empty</h4>
+                <a href="/" class="btn btn-outline-dark rounded-pill mt-3 px-4">
                     Browse Products
                 </a>
             </div>
@@ -148,90 +154,164 @@ function renderCart() {
     }
 
     container.innerHTML = `
-        <div class="card">
-            <div class="table-responsive">
-                <table class="table table-borderless align-middle mb-0">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Product</th>
-                            <th>Variant</th>
-                            <th>Price</th>
-                            <th>Qty</th>
-                            <th>Subtotal</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${cart.map(item => `
-                            <tr>
-                                <td>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <img
-                                            src="${item.image}"
-                                            width="48"
-                                            height="48"
-                                            style="object-fit:cover;border-radius:6px;"
-                                            alt="${item.productName}"
-                                        >
-                                        <span class="fw-semibold">
-                                            ${item.productName}
-                                        </span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="badge bg-secondary">
-                                        ${item.colour} / ${item.size}
-                                    </span>
-                                </td>
-                                <td>
-                                    ${Number(item.price).toLocaleString()} MMK
-                                </td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-1">
-                                        <button
-                                            class="btn btn-sm btn-outline-secondary"
-                                            data-cart-action="decrease"
-                                            data-stock-id="${item.stockId}"
-                                            data-quantity="${item.quantity - 1}"
-                                        >−</button>
-                                        <span class="px-2">${item.quantity}</span>
-                                        <button
-                                            class="btn btn-sm btn-outline-secondary"
-                                            data-cart-action="increase"
-                                            data-stock-id="${item.stockId}"
-                                            data-quantity="${item.quantity + 1}"
-                                        >+</button>
-                                    </div>
-                                </td>
-                                <td class="fw-bold">
-                                   ${Number(item.subtotal).toLocaleString()} MMK
-                                </td>
-                                <td>
-                                    <button
-                                        class="btn btn-sm btn-outline-danger"
-                                        data-cart-action="remove"
-                                        data-stock-id="${item.stockId}"
-                                    >🗑</button>
-                                </td>
-                            </tr>
-                        `).join("")}
-                    </tbody>
-                    <tfoot class="table-light">
-                        <tr>
-                            <td colspan="4" class="text-end fw-bold fs-5">
-                                Grand Total:
-                            </td>
-                            <td colspan="2" class="fw-bold fs-5 text-primary">
-                                ${getCartTotal().toLocaleString()} MMK
-                            </td>
-                        </tr>
-                    </tfoot>
-                </table>
+        <!-- Responsive Grid Header (Hidden on Mobile < md breakpoint) -->
+        <div class="row cart-grid-header d-none d-md-flex align-items-center">
+            <div class="col-md-5 col-lg-6">PRODUCT</div>
+            <div class="col-md-2">PRICE</div>
+            <div class="col-md-2 text-center">QUANTITY</div>
+            <div class="col-md-2 text-end">SUBTOTAL</div>
+            <div class="col-md-1 text-end"></div>
+        </div>
+
+        <!-- Cart Items List (Grid Rows) -->
+        <div class="cart-items-list mb-4">
+            ${cart.map(item => `
+                <div class="row cart-item-row align-items-center g-3">
+                    <!-- Product Info (Image + Title + Variant) -->
+                    <div class="col-12 col-md-5 col-lg-6">
+                        <div class="d-flex align-items-center gap-3">
+                            <img
+                                src="${item.image}"
+                                class="product-img"
+                                alt="${item.productName}"
+                            >
+                            <div>
+                                <div class="product-title">${item.productName}</div>
+                                <div class="product-variant">${item.colour} /${item.size}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price -->
+                    <div class="col-4 col-md-2">
+                        <span class="d-md-none text-muted small d-block">Price:</span>
+                        <span class="fw-normal">${Number(item.price).toLocaleString()} MMK</span>
+                    </div>
+
+                    <!-- Quantity Control -->
+                    <div class="col-8 col-md-2 text-md-center text-end">
+                        <div class="qty-pill-input">
+                            <button
+                                class="qty-pill-btn"
+                                data-cart-action="decrease"
+                                data-stock-id="${item.stockId}"
+                                data-quantity="${item.quantity - 1}"
+                            >−</button>
+                            <span class="px-2 px-md-3 fw-normal">${item.quantity}</span>
+                            <button
+                                class="qty-pill-btn"
+                                data-cart-action="increase"
+                                data-stock-id="${item.stockId}"
+                                data-quantity="${item.quantity + 1}"
+                            >+</button>
+                        </div>
+                    </div>
+
+                    <!-- Subtotal -->
+                    <div class="col-10 col-md-2 text-end">
+                        <span class="d-md-none text-muted small d-block">Subtotal:</span>
+                        <span class="fw-semibold fs-6">${Number(item.subtotal).toLocaleString()} MMK</span>
+                    </div>
+
+                    <!-- Remove Icon -->
+                    <div class="col-2 col-md-1 text-end">
+                        <button
+                            class="btn-remove-icon"
+                            data-cart-action="remove"
+                            data-stock-id="${item.stockId}"
+                            title="Remove item"
+                        >
+                            <i class="bi bi-trash3"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join("")}
+        </div>
+
+        <!-- Footer Actions Grid Row -->
+        <div class="row align-items-end pt-3">
+            <div class="col-12 col-md-4 mb-4 mb-md-0">
+                <span class="clear-cart-link" data-cart-action="clear-all">Clear Cart</span>
+            </div>
+            <div class="col-12 col-md-8 text-start text-md-end">
+                <div class="d-inline-block text-start text-md-end">
+                    <div class="d-flex justify-content-start justify-content-md-end align-items-center gap-4 mb-1">
+                        <span class="text-uppercase fw-semibold tracking-wider text-muted small">SUBTOTAL</span>
+                        <span class="fs-4 fw-bold">${getCartTotal().toLocaleString()} MMK</span>
+                    </div>
+                    <p class="text-muted small fst-italic mb-3">Taxes and shipping calculated at checkout</p>
+                    <button 
+                        class="btn btn-checkout-black w-100 w-md-auto" 
+                        type="button" 
+                        data-cart-action="checkout"
+                    >
+                        Proceed to Checkout →
+                    </button>
+                </div>
             </div>
         </div>
     `;
 }
 
+function handleCartAction(event) {
+    const button = event.target.closest("[data-cart-action]");
+
+    if (!button) return;
+
+    const action = button.dataset.cartAction;
+
+    if (action === "checkout") {
+        goToCheckout();
+        return;
+    }
+
+    if (action === "clear-all") {
+        handleClearCart();
+        return;
+    }
+
+    const stockId = button.dataset.stockId;
+    const quantity = Number(button.dataset.quantity);
+
+    if (action === "decrease" || action === "increase") {
+        updateQty(stockId, quantity);
+        return;
+    }
+
+    if (action === "remove") {
+        removeFromCart(stockId);
+    }
+}
+
+function handleCartAction(event) {
+    const button = event.target.closest("[data-cart-action]");
+
+    if (!button) return;
+
+    const action = button.dataset.cartAction;
+
+    if (action === "checkout") {
+        goToCheckout();
+        return;
+    }
+
+    if (action === "clear-all") {
+        handleClearCart();
+        return;
+    }
+
+    const stockId = button.dataset.stockId;
+    const quantity = Number(button.dataset.quantity);
+
+    if (action === "decrease" || action === "increase") {
+        updateQty(stockId, quantity);
+        return;
+    }
+
+    if (action === "remove") {
+        removeFromCart(stockId);
+    }
+}
 function handleCartAction(event) {
     const button = event.target.closest("[data-cart-action]");
 
