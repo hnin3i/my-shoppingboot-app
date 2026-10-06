@@ -46,6 +46,7 @@ public class AdminController {
 		            adminDashboardService.getDashboardSummary();
 
 		model.addAttribute("dashboard", dashboard);
+		 model.addAttribute("activePage", "dashboard");
 
 		return "admin/dashboard/dashboard";
 	}
