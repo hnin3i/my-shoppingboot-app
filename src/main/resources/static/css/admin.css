@@ -97,6 +97,10 @@ body {
 	color: #e00020;
 	background: #050505;
 }
+.sidebar-logo a {
+    text-decoration: none;
+    color: inherit;
+}
 
 .sidebar-section-title {
 	font-size: 11px;

@@ -23,6 +23,16 @@ public class OrderHistoryService {
        return entities.stream().map(this::toOrderDto).toList();
         		
     }
+	public List<OrderHistoryDto> getLatestOrders(String userId) {
+
+	    List<OrderHistoryEntity> entities =
+	    		 repo.findLatestOrdersByUserId(userId);
+
+	    return entities.stream()
+	            .map(this::toOrderDto)
+	            .toList();
+	}
+   
 	public List<OrderDetailsDto> getOrderDetails(String userId,String orderId) {
 		List<OrderDetailsEntity> entities = repo.findOrderItemsByOrderId(userId,orderId);
 	    return entities.stream().map(this::toItemDto).toList();
