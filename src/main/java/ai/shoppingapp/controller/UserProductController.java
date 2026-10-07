@@ -44,6 +44,9 @@ public class UserProductController {
 		List<StockModel> stocks = stockService.findByProductId(id);
 		model.addAttribute("stocks", stocks);
 
+		List<CategoryModel> categories = categoryService.getAllActiveCategories();
+	      model.addAttribute("categories", categories);
+
 		return "products/detail";
 	}
 

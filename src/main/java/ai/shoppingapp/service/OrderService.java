@@ -75,6 +75,8 @@ public class OrderService {
                if (product == null) {
                    throw new RuntimeException("Product not found.");
                }
+               
+               
 
                BigDecimal price = product.getPrice();
                BigDecimal quantity = BigDecimal.valueOf(itemDto.getQuantity());
