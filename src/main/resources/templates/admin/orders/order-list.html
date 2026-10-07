@@ -209,11 +209,12 @@
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body text-center p-3 bg-light">
-                                                    <img th:src="${order.paymentConfirmPhoto}"
-                                                         class="img-fluid rounded shadow-sm"
-                                                         style="max-height: 450px; object-fit: contain;"
-                                                         alt="Payment Slip">
-                                                </div>
+													<img
+														th:src="@{${#strings.startsWith(order.paymentConfirmPhoto, '/') ? order.paymentConfirmPhoto : '/' + order.paymentConfirmPhoto}}"
+														class="img-fluid rounded shadow-sm"
+														style="max-height: 450px; object-fit: contain;"
+														alt="Payment Slip">
+												</div>
                                                 <div class="modal-footer py-2">
                                                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                                                 </div>

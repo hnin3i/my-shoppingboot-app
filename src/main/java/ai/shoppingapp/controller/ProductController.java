@@ -74,6 +74,7 @@ public class ProductController {
 			String fileName = imageFile.getOriginalFilename();
 
 			String uploadPath = "file:\\C:\\Users\\DELL\\git\\my-shoppingboot-app-finalfinal\\src\\main\\resources\\static\\images\\product";
+
 			
 
 			File uploadDir = new File(uploadPath);
@@ -131,6 +132,7 @@ public class ProductController {
 		if (imageFile != null && !imageFile.isEmpty()) {
 
 			String fileName = imageFile.getOriginalFilename();
+
 
 			String uploadPath = "file:\\C:\\Users\\DELL\\git\\my-shoppingboot-app-finalfinal\\src\\main\\resources\\static\\images\\product";
 

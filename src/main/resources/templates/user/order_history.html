@@ -41,6 +41,30 @@
     font-size: 10px;
     padding: 4px 6px;
 }
+/* Admin Status Badge Styles */
+.status {
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 4px;
+    display: inline-block;
+    text-align: center;
+}
+
+.status-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
 </style>
 </head>
 
@@ -98,10 +122,13 @@
         <thead class="table-dark text-uppercase fw-semibold">
          <tr>
           <th style="width: 13%;">Order No</th>
-          <th style="width: 14%;">Customer</th>
-          <th style="width: 14%;">Product</th>
-          <th style="width: 12%;">Total</th>
-          <th style="width: 18%;" class="text-center">Order Status</th>
+
+          <!-- <th style="width: 14%;">Customer</th> -->
+          <th style="width: 18%;">Product</th>
+          <th style="width: 15%;">Total</th>
+          <th style="width: 12%;" class="text-center">Order Status</th>
+
+          
           <th style="width: 12%;" class="text-center">Payment</th>
           <th style="width: 16%;">Date</th>
           <th style="width: 10%;" class="text-center">Action</th>
@@ -110,15 +137,25 @@
         <tbody>
          <tr th:each="order : ${orders}">
           <td class="fw-semibold" th:text="${order.orderNumber}" th:title="${order.orderNumber}"></td>
-          <td th:text="${order.customerName}" th:title="${order.customerName}"></td>
+          <!-- <td th:text="${order.customerName}" th:title="${order.customerName}"></td>  -->
           <td th:text="${order.productNames}" th:title="${order.productNames}"></td>
           <td class="fw-bold" th:text="${#numbers.formatDecimal(order.totalAmount, 1, 2)} + ' MMK'"></td>
-          <td class="text-center">
-           <span class="badge bg-success" th:text="${order.orderStatus}">CONFIRMED</span>
-           </td>
-          <td class="text-center">
-           <span class="badge bg-info text-dark" th:text="${order.paymentStatus}">PAID</span>
-          </td>
+          
+          <!-- Order Status -->
+		<td class="text-center">
+    		<span th:if="${#strings.toString(order.orderStatus) == 'PENDING'}" class="status status-warning">PENDING</span>
+    		<span th:if="${#strings.toString(order.orderStatus) == 'CONFIRMED'}" class="status status-success">CONFIRMED</span>
+    		<span th:if="${#strings.toString(order.orderStatus) == 'DELIVERED'}" class="status status-success">DELIVERED</span>
+    		<span th:if="${#strings.toString(order.orderStatus) == 'CANCELLED'}" class="status status-danger">CANCELLED</span>
+		</td>
+
+		<!-- Payment Status -->
+		<td class="text-center">
+    		<span th:if="${#strings.toString(order.paymentStatus) == 'PAID'}" class="status status-success">PAID</span>
+    		<span th:if="${#strings.toString(order.paymentStatus) == 'UNPAID'}" class="status status-warning">UNPAID</span>
+    		<span th:if="${#strings.toString(order.paymentStatus) == 'REFUNDED'}" class="status status-danger">REFUNDED</span>
+		</td>
+          
           <td th:text="${order.createdAt}"></td>
           <td class="text-center">
            <form th:action="@{/user/details}" method="post">
