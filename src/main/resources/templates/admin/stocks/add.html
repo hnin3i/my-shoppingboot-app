@@ -58,12 +58,20 @@
 						</div>
 					</div>
 
-					<!-- Size -->
+					<!-- Size (Select Box) -->
 					<div class="mb-3 row">
-						<label for="InputSize" class="col-sm-2 col-form-label">Size :</label>
+						<label for="selectSize" class="col-sm-2 col-form-label">Size
+							:</label>
 						<div class="col-sm-5">
-							<input type="text" class="form-control" id="InputSize"
-								th:field="*{size}" placeholder="e.g. M">
+							<select class="form-select" id="selectSize" th:field="*{size}">
+								<option value="">-- Select a size --</option>
+								<option value="XS">XS</option>
+								<option value="S">S</option>
+								<option value="M">M</option>
+								<option value="L">L</option>
+								<option value="XL">XL</option>
+								<option value="XXL">XXL</option>
+							</select>
 						</div>
 					</div>
 
