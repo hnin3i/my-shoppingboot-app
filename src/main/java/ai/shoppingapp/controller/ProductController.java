@@ -73,7 +73,8 @@ public class ProductController {
 
 			String fileName = imageFile.getOriginalFilename();
 
-			String uploadPath = "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\product\\";
+			String uploadPath = "file:\\C:\\Users\\DELL\\git\\my-shoppingboot-app-finalfinal\\src\\main\\resources\\static\\images\\product";
+
 			
 
 			File uploadDir = new File(uploadPath);
@@ -132,7 +133,8 @@ public class ProductController {
 
 			String fileName = imageFile.getOriginalFilename();
 
-			String uploadPath = "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\product\\";
+
+			String uploadPath = "file:\\C:\\Users\\DELL\\git\\my-shoppingboot-app-finalfinal\\src\\main\\resources\\static\\images\\product";
 
 			File uploadDir = new File(uploadPath);
 
