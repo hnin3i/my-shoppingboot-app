@@ -25,6 +25,8 @@ public class Product {
     private boolean is_discount;
     private int discount_product;
     private LocalDate discount_duration;
+    private BigDecimal discount_price;
+    private BigDecimal final_price;
 
     public Product() {
     }
@@ -34,7 +36,8 @@ public class Product {
                     boolean is_active, LocalDateTime created_at,
                     LocalDateTime updated_at, String created_user_id,
                     String updated_user_id, boolean is_discount,
-                    int discount_product, LocalDate  discount_duration) {
+                    int discount_product, LocalDate  discount_duration,
+                    BigDecimal discount_price,BigDecimal final_price) {
 
         this.id = id;
         this.category_id = category_id;
@@ -50,6 +53,8 @@ public class Product {
         this.is_discount = is_discount;
         this.discount_product = discount_product;
         this.discount_duration = discount_duration;
+        this.discount_price=discount_price;
+        this.final_price=final_price;
     }
 
 	public String getId() {
@@ -163,5 +168,22 @@ public class Product {
 	public void setDiscount_duration(LocalDate discount_duration) {
 		this.discount_duration = discount_duration;
 	}
+
+	public BigDecimal getDiscount_price() {
+		return discount_price;
+	}
+
+	public void setDiscount_price(BigDecimal discount_price) {
+		this.discount_price = discount_price;
+	}
+
+	public BigDecimal getFinal_price() {
+		return final_price;
+	}
+
+	public void setFinal_price(BigDecimal final_price) {
+		this.final_price = final_price;
+	}
     
+	
 }
