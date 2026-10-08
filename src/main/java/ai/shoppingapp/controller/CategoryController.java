@@ -7,8 +7,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import ai.shoppingapp.exception.ResourceNotFoundException;
 import ai.shoppingapp.model.CategoryModel;
+import ai.shoppingapp.model.Role;
+import ai.shoppingapp.model.UserModel;
 import ai.shoppingapp.service.CategoryService;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class CategoryController {
@@ -45,8 +49,13 @@ public class CategoryController {
 
 	// CREATE
 	@PostMapping("/admin/categories/add")
-	public String addCategory(@ModelAttribute("category") CategoryModel category, Model model) {
+	public String addCategory(@ModelAttribute("category") CategoryModel category,HttpSession session, Model model) {
 
+		UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
+		if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
+			throw new ResourceNotFoundException("Page not found");
+		}
+		
 		boolean exists = categoryService.existsByName(category.getName());
 
 		if (exists) {
@@ -56,8 +65,9 @@ public class CategoryController {
 			return "admin/categories/add";
 		}
 
-		category.setCreatedUserId("1");
-		category.setUpdatedUserId("1");
+		String currentUserId = String.valueOf(currentUser.getId());
+		category.setCreatedUserId(currentUserId);
+		category.setUpdatedUserId(currentUserId);
 
 		categoryService.add(category);
 
@@ -90,8 +100,12 @@ public class CategoryController {
 
 	// UPDATE
 	@PostMapping("/admin/categories/edit")
-	public String editCategory(@ModelAttribute("category") CategoryModel category, Model model) {
+	public String editCategory(@ModelAttribute("category") CategoryModel category,HttpSession session, Model model) {
 
+		UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
+		if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
+			throw new ResourceNotFoundException("Page not found");
+		}
 		boolean exists = categoryService.existsByName(category.getName(), category.getId());
 
 		if (exists) {
@@ -101,7 +115,8 @@ public class CategoryController {
 			return "admin/categories/edit";
 		}
 
-		category.setUpdatedUserId("1");
+		String currentUserId = String.valueOf(currentUser.getId());
+		category.setUpdatedUserId(currentUserId);
 
 		categoryService.edit(category.getId(), category);
 

@@ -128,7 +128,7 @@ public class UserController {
 	                    System.currentTimeMillis() + "_" + originalFileName;
 
 	            String uploadPath =
-	                    "E:\\BlackJack_shop\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
+	                    "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
 
 	            File uploadDir = new File(uploadPath);
 
@@ -175,7 +175,7 @@ public class UserController {
 	                        );
 
 	                String uploadPath =
-	                        "E:\\BlackJack_shop\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
+	                        "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
 
 	                File oldFile =
 	                        new File(uploadPath + oldFileName);

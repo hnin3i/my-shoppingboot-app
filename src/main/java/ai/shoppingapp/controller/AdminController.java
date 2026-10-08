@@ -121,7 +121,7 @@ public class AdminController {
 			// Create unique file name
 			String fileName = System.currentTimeMillis() + "_" + originalFileName;
 
-			String uploadPath = "E:\\BlackJack_shop\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
+			String uploadPath = "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
 
 			File uploadDir = new File(uploadPath);
 
@@ -161,7 +161,7 @@ public class AdminController {
 
 					String oldFileName = oldProfile.substring("/images/profile/".length());
 
-					String uploadPath = "E:\\BlackJack_shop\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
+					String uploadPath = "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
 
 					File oldFile = new File(uploadPath + oldFileName);
 
