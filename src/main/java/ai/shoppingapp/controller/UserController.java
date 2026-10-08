@@ -128,7 +128,8 @@ public class UserController {
 	                    System.currentTimeMillis() + "_" + originalFileName;
 
 	            String uploadPath =
-	                    "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
+	                    "C:\\Users\\DELL\\git\\my-shoppingboot-app-finalfinal\\src\\main\\resources\\static\\images\\profile\\";
+
 
 	            File uploadDir = new File(uploadPath);
 
@@ -171,11 +172,13 @@ public class UserController {
 
 	                String oldFileName =
 	                        oldProfile.substring(
-	                                "/images/profile/".length()
+	                                "//images//profile/".length()
 	                        );
 
 	                String uploadPath =
-	                        "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
+
+	                        "C:\\Users\\DELL\\git\\my-shopingboot-app-finalfinal\\src\\main\\resources\\static\\images\\profile\\";
+
 
 	                File oldFile =
 	                        new File(uploadPath + oldFileName);

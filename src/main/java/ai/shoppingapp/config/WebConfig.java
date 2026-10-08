@@ -86,7 +86,8 @@ public class WebConfig implements WebMvcConfigurer {
 				"file:///C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\product\\");
 
 		registry.addResourceHandler("/images/profile/**")
-				.addResourceLocations("file:///C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\");
+				.addResourceLocations("file:///C:/Users/DELL/git/my-shopingboot-app-finalfinal/src/main/resources/static/images/");
+
 
 
 

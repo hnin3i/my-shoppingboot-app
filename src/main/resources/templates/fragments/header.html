@@ -444,6 +444,58 @@
 			}
 		</script>
 		
+		<script>
+		function changeSort(value) {
+
+			const productGrid = document.getElementById("productGrid");
+
+			if (!productGrid) {
+				return;
+			}
+
+			const productCards = Array.from(productGrid
+					.querySelectorAll(".product-card"));
+
+			if (value === "price-low") {
+
+				productCards.sort(function(a, b) {
+
+					const priceA = Number(a.getAttribute("data-price")) || 0;
+
+					const priceB = Number(b.getAttribute("data-price")) || 0;
+
+					return priceA - priceB;
+				});
+
+			} else if (value === "price-high") {
+
+				productCards.sort(function(a, b) {
+
+					const priceA = Number(a.getAttribute("data-price")) || 0;
+
+					const priceB = Number(b.getAttribute("data-price")) || 0;
+
+					return priceB - priceA;
+				});
+
+			} else if (value === "newest") {
+
+				productCards.sort(function(a, b) {
+
+					const dateA = new Date(a.getAttribute("data-created"));
+
+					const dateB = new Date(b.getAttribute("data-created"));
+
+					return dateB - dateA;
+				});
+			}
+
+			productCards.forEach(function(card) {
+				productGrid.appendChild(card);
+			});
+		}
+	</script>
+		
 		<script src="/js/storage.js"></script>
 <script src="/js/cart.js"></script>
 <script src="/js/product.js"></script>
