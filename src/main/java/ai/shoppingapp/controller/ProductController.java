@@ -74,9 +74,11 @@ public class ProductController {
 			String fileName = imageFile.getOriginalFilename();
 
 
+
 			String uploadPath = "file:\\C:\\\\JWD-69\\\\FinalProject\\\\shopping_app\\\\my-shoppingboot-app\\\\src\\\\main\\\\resources\\\\static\\\\images\\\\product";
 
 			
+
 
 			
 
@@ -136,7 +138,9 @@ public class ProductController {
 
 			String fileName = imageFile.getOriginalFilename();
 
+
 			String uploadPath = "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\product\\";
+
 
 
 			File uploadDir = new File(uploadPath);
