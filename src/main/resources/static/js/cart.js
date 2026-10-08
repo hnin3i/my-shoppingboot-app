@@ -154,21 +154,21 @@ function renderCart() {
     }
 
     container.innerHTML = `
-        <!-- Responsive Grid Header (Hidden on Mobile < md breakpoint) -->
+        <!-- Responsive Grid Header -->
         <div class="row cart-grid-header d-none d-md-flex align-items-center">
-            <div class="col-md-5 col-lg-6">PRODUCT</div>
-            <div class="col-md-2">PRICE</div>
+            <div class="col-md-5 col-lg-5">PRODUCT</div>
+            <div class="col-md-2 text-center">PRICE</div>
             <div class="col-md-2 text-center">QUANTITY</div>
             <div class="col-md-2 text-end">SUBTOTAL</div>
             <div class="col-md-1 text-end"></div>
         </div>
 
-        <!-- Cart Items List (Grid Rows) -->
+        <!-- Cart Items List -->
         <div class="cart-items-list mb-4">
             ${cart.map(item => `
-                <div class="row cart-item-row align-items-center g-3">
-                    <!-- Product Info (Image + Title + Variant) -->
-                    <div class="col-12 col-md-5 col-lg-6">
+                <div class="row cart-item-row align-items-center g-2 g-md-3">
+                    <!-- Product Info -->
+                    <div class="col-12 col-md-5 col-lg-5">
                         <div class="d-flex align-items-center gap-3">
                             <img
                                 src="${item.image}"
@@ -183,13 +183,13 @@ function renderCart() {
                     </div>
 
                     <!-- Price -->
-                    <div class="col-4 col-md-2">
+                    <div class="col-4 col-md-2 text-start text-md-center">
                         <span class="d-md-none text-muted small d-block">Price:</span>
                         <span class="fw-normal">${Number(item.price).toLocaleString()} MMK</span>
                     </div>
 
                     <!-- Quantity Control -->
-                    <div class="col-8 col-md-2 text-md-center text-end">
+                    <div class="col-8 col-md-2 text-end text-md-center">
                         <div class="qty-pill-input">
                             <button
                                 class="qty-pill-btn"
@@ -208,13 +208,13 @@ function renderCart() {
                     </div>
 
                     <!-- Subtotal -->
-                    <div class="col-10 col-md-2 text-end">
+                    <div class="col-9 col-md-2 text-start text-md-end">
                         <span class="d-md-none text-muted small d-block">Subtotal:</span>
                         <span class="fw-semibold fs-6">${Number(item.subtotal).toLocaleString()} MMK</span>
                     </div>
 
-                    <!-- Remove Icon -->
-                    <div class="col-2 col-md-1 text-end">
+                    <!-- Remove Icon (Pinned to Right) -->
+                    <div class="col-3 col-md-1 text-end">
                         <button
                             class="btn-remove-icon"
                             data-cart-action="remove"
@@ -228,7 +228,7 @@ function renderCart() {
             `).join("")}
         </div>
 
-        <!-- Footer Actions Grid Row -->
+        <!-- Footer Actions -->
         <div class="row align-items-end pt-3">
             <div class="col-12 col-md-4 mb-4 mb-md-0">
                 <span class="clear-cart-link" data-cart-action="clear-all">Clear Cart</span>

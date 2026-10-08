@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/public_layout}">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +9,7 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="/css/styles.css" />
+<link rel="stylesheet" th:href="@{/css/app.css}">
 <style>
 :root {
 	--border-color: #e2e8f0;
@@ -63,9 +66,16 @@ body {
 	border-color: #0f172a;
 }
 
-/* Order Summary */
+/* Sticky Order Summary Sidebar on Desktop */
+@media (min-width: 992px) {
+	.sticky-summary {
+		position: sticky;
+		top: 2rem;
+		z-index: 10;
+	}
+}
+
 .order-summary-card {
-	position: static;
 	border: 1px solid var(--border-color);
 	border-radius: var(--card-radius);
 	background: #ffffff;
@@ -73,57 +83,108 @@ body {
 }
 
 .place-order-btn {
-	background-color: #0f172a;
-	border-color: #0f172a;
+	background-color: #000000 !important;
+	border-color: #000000 !important;
+	color: #ffffff !important;
 	padding: 14px;
 	font-weight: 600;
 	font-size: 1rem;
 	border-radius: var(--input-radius);
 	width: 100%;
-	transition: background-color 0.2s ease;
+	transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.place-order-btn:hover {
-	background-color: #1e293b;
-	border-color: #1e293b;
+.place-order-btn:hover,
+.place-order-btn:focus,
+.place-order-btn:active {
+	background-color: #1e293b !important;
+	border-color: #1e293b !important;
+	color: #ffffff !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+.border-dashed {
+    border-style: dashed !important;
+}
+.hover-bg-white:hover {
+    background-color: #ffffff !important;
+    border-color: #000000 !important;
+}
+
+.payment-preview-card {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease-in-out;
+}
+
+.preview-thumbnail {
+    object-fit: cover;
+    border: 1px solid #e2e8f0;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.border-dashed {
+    border-style: dashed !important;
+}
+
+/* Compact Scrollable Container */
+#order-summary-items {
+    max-height: 195px; /* Shows ~2 items at a time cleanly without being too tall */
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+/* Custom Minimalist Scrollbar */
+#order-summary-items::-webkit-scrollbar {
+    width: 4px;
+}
+
+#order-summary-items::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+#order-summary-items::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+#order-summary-items::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
 }
 </style>
 </head>
 <body>
+<div layout:fragment="content">
 
-	<nav class="navbar navbar-dark bg-dark px-4 mb-4">
-		<a class="navbar-brand fw-bold" href="./index.html">🛍️ ShopDemo</a> <a
-			class="btn btn-outline-warning btn-sm position-relative" href="/cart">
-			🛒 Cart <span id="cart-badge"
-			class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
-		</a>
-	</nav>
-
-	<main class="container pb-5">
+<main class="container-xl pb-5 pt-3">
 		<h1 class="h3 fw-bold mb-4">Checkout</h1>
 
+		<!-- Main Responsive Grid Row -->
 		<div class="row g-4">
-			<!-- Left Side: Forms -->
-			<div class="col-lg-7">
+			<!-- Left Side: Checkout Forms (8 cols on lg, 7 cols on xl) -->
+			<div class="col-12 col-lg-8 col-xl-7">
 
 				<!-- Contact Section -->
 				<section class="checkout-card">
 					<div class="d-flex justify-content-between align-items-center mb-3">
 						<h2 class="section-title mb-0">Contact</h2>
-						<a href="/logout"
-							class="text-decoration-underline text-secondary small">Log
-							out</a>
 					</div>
 
 					<div
 						class="p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between mb-3">
-						<div>
+						<div class="text-truncate me-2">
 							<small class="text-muted d-block" style="font-size: 11px;">Account</small>
 							<strong id="user-contact-display" th:text="${user.email}"
-								class="text-dark small"> Loading... </strong>
+								class="text-dark small text-truncate d-block"> Loading... </strong>
 						</div>
 						<span
-							class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1"
+							class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1 flex-shrink-0"
 							style="font-size: 11px;">✔</span>
 					</div>
 
@@ -148,14 +209,14 @@ body {
 							</div>
 						</div>
 
-						<div class="col-md-6">
+						<div class="col-12 col-sm-6">
 							<div class="form-floating">
 								<input type="text" class="form-control" id="first-name"
 									placeholder="First name (optional)"> <label
 									for="first-name">First name (optional)</label>
 							</div>
 						</div>
-						<div class="col-md-6">
+						<div class="col-12 col-sm-6">
 							<div class="form-floating">
 								<input type="text" class="form-control" id="last-name"
 									placeholder="Last name"> <label for="last-name">Last
@@ -181,14 +242,14 @@ body {
 							</div>
 						</div>
 
-						<div class="col-md-6">
+						<div class="col-12 col-sm-6">
 							<div class="form-floating">
 								<input type="text" class="form-control" id="address-city"
 									placeholder="City"> <label for="address-city">City</label>
 								<div id="address-city-error" class="field-error" hidden></div>
 							</div>
 						</div>
-						<div class="col-md-6">
+						<div class="col-12 col-sm-6">
 							<div class="form-floating">
 								<input type="text" class="form-control" id="address-postal"
 									placeholder="Postal code (optional)"> <label
@@ -233,7 +294,7 @@ body {
 						</div>
 					</div>
 
-					<div class="payment-group-title">PAY NOW (TRANSFER / SCAN)</div>
+					<div class="payment-group-title mt-3">PAY NOW (TRANSFER / SCAN)</div>
 
 					<div class="payment-option" data-payment="KBZ_BANK">
 						<div class="payment-option-header">
@@ -275,7 +336,7 @@ body {
 						<div class="payment-option-header">
 							<input class="payment-radio" type="radio" name="payment-method"
 								value="MOBILE_PAY"> <img class="payment-icon"
-								src="/images/bank/kpay.png" alt="cb bank logo">
+								src="/images/bank/kpay.png" alt="kpay logo">
 							<div class="payment-info">
 								<strong>K Pay / AYA Pay / CB Pay / Wave Pay</strong> <span>Mobile
 									payment</span>
@@ -287,58 +348,63 @@ body {
 					<div id="payment-method-error" class="field-error" hidden></div>
 				</section>
 
-				<!-- Additional Notes -->
+				<!-- Additional Notes Section -->
 				<section class="checkout-card">
 					<h2 class="section-title">Additional Notes</h2>
 					<div class="form-floating">
 						<textarea id="order-notes" class="form-control"
 							style="height: 100px;" placeholder="Instructions"></textarea>
-						<label for="order-notes">Special instructions for your
-							order...</label>
+						<label for="order-notes">Special instructions for your order...</label>
 					</div>
 				</section>
 
-				<button id="place-order-btn" class="btn btn-primary place-order-btn"
+				<button id="place-order-btn" class="btn place-order-btn d-none d-lg-block mb-4"
 					data-action="place-order">Place Order</button>
 			</div>
 
-			<!-- Right Side: Order Summary -->
-			<div class="col-lg-5">
-				<div class="card p-4 order-summary-card">
-					<h2 class="section-title">Order Summary</h2>
+			<!-- Right Side: Order Summary (4 cols on lg, 5 cols on xl) -->
+			<div class="col-12 col-lg-4 col-xl-5">
+				<div class="sticky-summary">
+					<div class="card p-4 order-summary-card">
+						<h2 class="section-title">Order Summary</h2>
 
-					<div id="order-summary-items" class="order-summary-items mb-3"></div>
+						<div id="order-summary-items" class="order-summary-items mb-3"></div>
 
-					<hr class="my-3 text-secondary">
+						<hr class="my-3 text-secondary">
 
-					<div class="d-flex justify-content-between mb-2 small">
-						<span class="text-secondary">Subtotal · <span
-							id="order-item-count">0</span> items
-						</span> <span id="order-subtotal" class="fw-semibold">0 MMK</span>
-					</div>
+						<div class="d-flex justify-content-between mb-2 small">
+							<span class="text-secondary">Subtotal · <span
+								id="order-item-count">0</span> items
+							</span> <span id="order-subtotal" class="fw-semibold">0 MMK</span>
+						</div>
 
-					<div class="d-flex justify-content-between mb-2 small">
-						<span class="text-secondary">Shipping</span> <span
-							id="order-shipping" class="fw-semibold">0 MMK</span>
-					</div>
+						<div class="d-flex justify-content-between mb-2 small">
+							<span class="text-secondary">Shipping</span> <span
+								id="order-shipping" class="fw-semibold">0 MMK</span>
+						</div>
 
-					<div class="d-flex justify-content-between mb-3 small">
-						<span class="text-secondary">Estimated taxes(5.00%)</span> <span
-							id="order-tax" class="fw-semibold">0 MMK</span>
-					</div>
+						<div class="d-flex justify-content-between mb-3 small">
+							<span class="text-secondary">Estimated taxes (5.00%)</span> <span
+								id="order-tax" class="fw-semibold">0 MMK</span>
+						</div>
 
-					<hr class="my-3 text-secondary">
+						<hr class="my-3 text-secondary">
 
-					<div class="d-flex justify-content-between align-items-center">
-						<strong class="h5 mb-0">Total</strong> <strong
-							id="order-grand-total" class="h5 mb-0 text-dark">0 MMK</strong>
+						<div class="d-flex justify-content-between align-items-center mb-4">
+							<strong class="h5 mb-0">Total</strong> <strong
+								id="order-grand-total" class="h5 mb-0 text-dark">0 MMK</strong>
+						</div>
+
+						<!-- Place order button for mobile view positioned inside summary -->
+						<button id="place-order-btn-mobile" class="btn place-order-btn d-lg-none"
+							data-action="place-order">Place Order</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</main>
 
-	<div id="toast-msg" class="toast align-items-center border-0"
+	<div id="toast-msg" class="toast align-items-center border-0 position-fixed bottom-0 end-0 m-3"
 		role="alert">
 		<div class="d-flex">
 			<div class="toast-body" id="toast-body"></div>
@@ -354,5 +420,6 @@ body {
 	<script src="/js/checkout.js"></script>
 	<script src="/js/error-handler.js"></script>
 	<script src="/js/cart-app.js"></script>
+</div>
 </body>
 </html>
