@@ -22,32 +22,33 @@ public class ProductRepository {
 
         String sql = """
                 SELECT
-                    p.id,
-                    p.category_id,
-                    c.name AS category_name,
-                    p.name,
-                    p.description,
-                    p.price,
-                    p.image,
-                    p.is_active,
-                    p.created_at,
-                    p.updated_at,
-                    p.created_user_id,
-                    p.updated_user_id,
-
-                    p.is_discount,
-                    p.discount_product,
-                    p.discount_duration,
-                    p.discount_price,
-                    p.final_price
-
-                FROM products p
-
-                LEFT JOIN categories c
-                    ON p.category_id = c.id
-
-                ORDER BY p.created_at DESC
+				    p.id,
+				    p.category_id,
+				    c.name AS category_name,
+				    p.name,
+				    p.description,
+				    p.price,
+				    p.image,
+				    p.is_active,
+				    p.created_at,
+				    p.updated_at,
+				    p.created_user_id,
+				    p.updated_user_id,
+				
+				    p.is_discount,
+				    p.discount_product,
+				    p.discount_duration,
+				    p.discount_price,
+				    p.final_price
+				
+				FROM products p
+				
+				LEFT JOIN categories c
+				    ON p.category_id = c.id
+				
+				ORDER BY p.created_at DESC
                 """;
+      
 
         return jdbcTemplate.query(
                 sql,
@@ -142,6 +143,7 @@ public class ProductRepository {
     }
     public List<ProductModel> findByCategoryId(String categoryId) {
         String sql = "SELECT * FROM products WHERE category_id = ? AND is_active = 1";
+    	
         return jdbcTemplate.query(sql, new ProductMapper(), categoryId);
     }
 
