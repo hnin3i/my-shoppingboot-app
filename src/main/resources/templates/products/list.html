@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-layout:decorate="~{layouts/public_layout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/public_layout}">
 
 <head>
 
@@ -18,9 +18,9 @@ layout:decorate="~{layouts/public_layout}">
 
 <body>
 
-<div layout:fragment="content">
+	<div layout:fragment="content">
 
-		
+
 
 
 		<!-- PRODUCTS PAGE -->
@@ -33,7 +33,7 @@ layout:decorate="~{layouts/public_layout}">
 
 				<h1 th:text="${pageTitle != null ? pageTitle : 'ALL PRODUCTS'}">
 					ALL PRODUCTS</h1>
-				
+
 				<p class="eyebrow"
 					th:text="${pageSubtitle != null ? pageSubtitle : 'SHOP'}">SHOP
 				</p>
@@ -79,8 +79,10 @@ layout:decorate="~{layouts/public_layout}">
 					th:attr="
                         data-price=${product.isDiscount == 1 ? product.finalPrice : product.price},
                         data-created=${product.createdAt}">
-
-
+                        
+					<span class="sale-badge" th:if="${product.isDiscount == 1}">
+						SALE </span>
+						
 					<!-- PRODUCT IMAGE -->
 					<a class="product-image"
 						th:href="@{/products/detail/{id}(id=${product.id})}"> <img
@@ -114,7 +116,7 @@ layout:decorate="~{layouts/public_layout}">
 
 								45,000 MMK </span>
 
-</div>
+						</div>
 
 
 						<!-- DISCOUNT PRICE -->
@@ -187,63 +189,57 @@ layout:decorate="~{layouts/public_layout}">
 
 	</div>
 
-<script>
-			function changeSort(value) {
+	<script>
+		function changeSort(value) {
 
-				const productGrid = document.getElementById("productGrid");
+			const productGrid = document.getElementById("productGrid");
 
-				if (!productGrid) {
-					return;
-				}
+			if (!productGrid) {
+				return;
+			}
 
-				const productCards = Array.from(productGrid
-						.querySelectorAll(".product-card"));
+			const productCards = Array.from(productGrid
+					.querySelectorAll(".product-card"));
 
-				if (value === "price-low") {
+			if (value === "price-low") {
 
-					productCards
-							.sort(function(a, b) {
+				productCards.sort(function(a, b) {
 
-								const priceA = Number(a
-										.getAttribute("data-price")) || 0;
+					const priceA = Number(a.getAttribute("data-price")) || 0;
 
-								const priceB = Number(b
-										.getAttribute("data-price")) || 0;
+					const priceB = Number(b.getAttribute("data-price")) || 0;
 
-								return priceA - priceB;
-							});
+					return priceA - priceB;
+				});
 
-				} else if (value === "price-high") {
+			} else if (value === "price-high") {
 
-					productCards
-							.sort(function(a, b) {
+				productCards.sort(function(a, b) {
 
-								const priceA = Number(a
-										.getAttribute("data-price")) || 0;
+					const priceA = Number(a.getAttribute("data-price")) || 0;
 
-								const priceB = Number(b
-										.getAttribute("data-price")) || 0;
+					const priceB = Number(b.getAttribute("data-price")) || 0;
 
-								return priceB - priceA;
-							});
+					return priceB - priceA;
+				});
 
-				} else if (value === "newest") {
+			} else if (value === "newest") {
 
-					productCards.sort(function(a, b) {
+				productCards.sort(function(a, b) {
 
-						const dateA = new Date(a.getAttribute("data-created"));
+					const dateA = new Date(a.getAttribute("data-created"));
 
-						const dateB = new Date(b.getAttribute("data-created"));
+					const dateB = new Date(b.getAttribute("data-created"));
 
-						return dateB - dateA;
-					});
-				}
-
-				productCards.forEach(function(card) {
-					productGrid.appendChild(card);
+					return dateB - dateA;
 				});
 			}
-		</script>
+
+			productCards.forEach(function(card) {
+				productGrid.appendChild(card);
+			});
+		}
+	</script>
 </body>
 
 </html>
