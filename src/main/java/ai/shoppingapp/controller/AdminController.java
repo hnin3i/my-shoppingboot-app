@@ -123,6 +123,7 @@ public class AdminController {
 
 			String uploadPath = "C:\\Users\\DELL\\git\\my-shopingboot-app-finalfinal\\src\\main\\resources\\static\\images\\profile\\";
 
+
 			File uploadDir = new File(uploadPath);
 
 			if (!uploadDir.exists()) {
@@ -162,6 +163,7 @@ public class AdminController {
 					String oldFileName = oldProfile.substring("/images/profile/".length());
 
 					String uploadPath = "C:\\Users\\DELL\\git\\my-shopingboot-app-finalfinal\\src\\main\\resources\\static\\images\\profile\\";
+
 
 					File oldFile = new File(uploadPath + oldFileName);
 
