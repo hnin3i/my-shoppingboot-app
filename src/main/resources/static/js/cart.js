@@ -245,7 +245,7 @@ function renderCart() {
                         type="button" 
                         data-cart-action="checkout"
                     >
-                        Proceed to Checkout →
+                        Proceed to Checkout
                     </button>
                 </div>
             </div>
@@ -283,60 +283,6 @@ function handleCartAction(event) {
     }
 }
 
-function handleCartAction(event) {
-    const button = event.target.closest("[data-cart-action]");
-
-    if (!button) return;
-
-    const action = button.dataset.cartAction;
-
-    if (action === "checkout") {
-        goToCheckout();
-        return;
-    }
-
-    if (action === "clear-all") {
-        handleClearCart();
-        return;
-    }
-
-    const stockId = button.dataset.stockId;
-    const quantity = Number(button.dataset.quantity);
-
-    if (action === "decrease" || action === "increase") {
-        updateQty(stockId, quantity);
-        return;
-    }
-
-    if (action === "remove") {
-        removeFromCart(stockId);
-    }
-}
-function handleCartAction(event) {
-    const button = event.target.closest("[data-cart-action]");
-
-    if (!button) return;
-
-    const action = button.dataset.cartAction;
-	
-	if(action==="checkout"){
-				goToCheckout();
-				return;
-			}
-    const stockId = button.dataset.stockId;
-    const quantity = Number(button.dataset.quantity);
-
-    if (action === "decrease" || action === "increase") {
-        updateQty(stockId, quantity);
-        return;
-    }
-
-    if (action === "remove") {
-        removeFromCart(stockId);
-    }
-	
-	
-}
 function handleGlobalClick(event) {
     const addButton = event.target.closest(
         "[data-action='add-to-cart']"
