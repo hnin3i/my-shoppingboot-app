@@ -296,22 +296,23 @@ public class ProductRepository {
     }
     public List<ProductModel> findByCategoryId1(String categoryId) {
 
-        String sql = """
-            SELECT p.*,
-                   c.name AS category_name
-            FROM products p
-            JOIN categories c
-              ON p.category_id = c.id
-            WHERE p.category_id = ?
-              AND p.is_active = 1
-            ORDER BY p.created_at DESC
-            """;
+    	 String sql = """
+    		        SELECT
+    		            p.*,
+    		            c.name AS category_name
+    		        FROM products p
+    		        LEFT JOIN categories c
+    		            ON p.category_id = c.id
+    		        WHERE p.category_id = ?
+    		          AND p.is_active = 1
+    		        ORDER BY p.created_at DESC
+    		        """;
 
-        return jdbcTemplate.query(
-                sql,
-                new ProductMapper(),
-                categoryId
-        );
+    		    return jdbcTemplate.query(
+    		            sql,
+    		            new ProductMapper(),
+    		            categoryId
+    		    );
     }
     public List<ProductModel> searchproduct(String keyword) {
 
@@ -342,38 +343,59 @@ public class ProductRepository {
     }
     public List<ProductModel> findNewProducts() {
 
-        String sql = """
-          SELECT *
-FROM products
-WHERE is_active = 1
-AND created_at >= DATE_SUB(NOW(), INTERVAL 5 DAY)
-ORDER BY created_at DESC
-            """;
+    	 String sql = """
+    		        SELECT
+    		            p.*,
+    		            c.name AS category_name
+    		        FROM products p
+    		        LEFT JOIN categories c
+    		            ON p.category_id = c.id
+    		        WHERE p.is_active = 1
+    		          AND p.created_at >= DATE_SUB(NOW(), INTERVAL 5 DAY)
+    		        ORDER BY p.created_at DESC
+    		        """;
 
-        return jdbcTemplate.query(sql, new ProductMapper());
+    		    return jdbcTemplate.query(
+    		            sql,
+    		            new ProductMapper()
+    		    );
     }
     public List<ProductModel> findDiscountProducts() {
 
-        String sql = """
-            SELECT *
-            FROM products
-            WHERE is_active = 1
-            AND is_discount = 1
-            ORDER BY created_at DESC
-            """;
+    	 String sql = """
+    		        SELECT
+    		            p.*,
+    		            c.name AS category_name
+    		        FROM products p
+    		        LEFT JOIN categories c
+    		            ON p.category_id = c.id
+    		        WHERE p.is_active = 1
+    		          AND p.is_discount = 1
+    		        ORDER BY p.created_at DESC
+    		        """;
 
-        return jdbcTemplate.query(sql, new ProductMapper());
+    		    return jdbcTemplate.query(
+    		            sql,
+    		            new ProductMapper()
+    		    );
     }
     public List<ProductModel> findSaleProducts() {
 
-        String sql = """
-                SELECT *
-                FROM products
-                WHERE is_active = 1
-                  AND is_discount = 1
-                ORDER BY created_at DESC
-                """;
+    	String sql = """
+    	        SELECT
+    	            p.*,
+    	            c.name AS category_name
+    	        FROM products p
+    	        LEFT JOIN categories c
+    	            ON p.category_id = c.id
+    	        WHERE p.is_active = 1
+    	          AND p.is_discount = 1
+    	        ORDER BY p.created_at DESC
+    	        """;
 
-        return jdbcTemplate.query(sql, new ProductMapper());
+    	    return jdbcTemplate.query(
+    	            sql,
+    	            new ProductMapper()
+    	    );
     }
 }
