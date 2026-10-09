@@ -47,6 +47,15 @@ public class AdminController {
 
 		model.addAttribute("dashboard", dashboard);
 		 model.addAttribute("activePage", "dashboard");
+		 Boolean clearCart =
+			        (Boolean) session.getAttribute("clearCartOnLogin");
+
+			model.addAttribute(
+			        "clearCartOnLogin",
+			        Boolean.TRUE.equals(clearCart)
+			);
+
+			session.removeAttribute("clearCartOnLogin");
 
 		return "admin/dashboard/dashboard";
 	}

@@ -13,37 +13,93 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class CartController {
-	private final CategoryService categoryService;
-	
-	public CartController(CategoryService categoryService) {
-		this.categoryService=categoryService;
-	}
-	
 
-	@GetMapping("/cart")
-    public String viewCart(Model model) {
-		
-		List<CategoryModel> categories = categoryService.getAllActiveCategories();
-	      model.addAttribute("categories", categories);
-		
-        return "cart/cart"; 
+    private final CategoryService categoryService;
+
+    public CartController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
-	
-	@GetMapping("/cart/checkout")
-    public String viewCheckout(HttpSession session,
-    		Model model) {
-		UserModel loggedInUser=(UserModel) session.getAttribute("loggedInUser");
-		if(loggedInUser==null) {
-			return "redirect:/login";
-		}
-		List<CategoryModel> categories = categoryService.getAllActiveCategories();
-	      model.addAttribute("categories", categories);
-		model.addAttribute("user", loggedInUser);
-        return "cart/checkout"; 
+
+    // ==========================================
+    // VIEW CART
+    // ==========================================
+
+    @GetMapping("/cart")
+    public String viewCart(HttpSession session, Model model) {
+
+        UserModel loggedInUser =
+                (UserModel) session.getAttribute("loggedInUser");
+
+        if (loggedInUser != null &&
+                "ADMIN".equalsIgnoreCase(
+                        String.valueOf(loggedInUser.getRole()))) {
+            return "redirect:/";
+        }
+
+        List<CategoryModel> categories =
+                categoryService.getAllActiveCategories();
+
+        model.addAttribute("categories", categories);
+
+        return "cart/cart";
     }
-	
-	@GetMapping("/cart/order-success")
-    public String viewOrderSuccess() {
-        return "cart/order-success"; 
+
+    // ==========================================
+    // CHECKOUT
+    // ==========================================
+
+    @GetMapping("/cart/checkout")
+    public String viewCheckout(
+            HttpSession session,
+            Model model) {
+
+        UserModel loggedInUser =
+                (UserModel) session.getAttribute("loggedInUser");
+
+        // Not logged in
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+
+        // Admin cannot checkout
+        if ("ADMIN".equalsIgnoreCase(
+                String.valueOf(loggedInUser.getRole()))) {
+
+            return "redirect:/";
+        }
+
+        List<CategoryModel> categories =
+                categoryService.getAllActiveCategories();
+
+        model.addAttribute("categories", categories);
+        model.addAttribute("user", loggedInUser);
+
+        return "cart/checkout";
+    }
+
+    // ==========================================
+    // ORDER SUCCESS
+    // ==========================================
+
+    @GetMapping("/cart/order-success")
+    public String viewOrderSuccess(
+            HttpSession session) {
+
+        UserModel loggedInUser =
+                (UserModel) session.getAttribute("loggedInUser");
+
+        // Not logged in
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+
+        // Admin cannot access order success page
+        if ("ADMIN".equalsIgnoreCase(
+                String.valueOf(loggedInUser.getRole()))) {
+
+            return "redirect:/";
+        }
+
+        return "cart/order-success";
     }
 }

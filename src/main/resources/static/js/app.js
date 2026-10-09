@@ -19,3 +19,18 @@ seeMore.parentElement.style.display = "none";
 
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+
+    const currentPath = window.location.pathname;
+
+    document.querySelectorAll(".account-menu-link").forEach(function (link) {
+
+        if (link.getAttribute("href") === currentPath) {
+            link.classList.add("active");
+        }
+
+    });
+
+});
+
+

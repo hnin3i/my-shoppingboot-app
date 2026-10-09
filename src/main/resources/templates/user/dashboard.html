@@ -42,29 +42,9 @@
 
 					<div class="col-lg-3">
 
-						<div class="account-menu">
+    <div th:replace="~{fragments/usersidebar :: usersidebar}"></div>
 
-							<p class="menu-title">ACCOUNT</p>
-
-							<a th:href="@{/user/dashboard}" class="account-menu-link active">
-
-								<span> OVERVIEW </span> <i class="bi bi-arrow-right"></i>
-
-							</a> <a th:href="@{/user/profile}" class="account-menu-link"> <span>
-									MY PROFILE </span> <i class="bi bi-arrow-right"></i>
-
-							</a> <a th:href="@{/user/orders}" class="account-menu-link"> <span>
-									MY ORDERS </span> <i class="bi bi-arrow-right"></i>
-
-
-							</a> <a th:href="@{/logout}" class="account-menu-link logout-link">
-								<span> LOG OUT </span> <i class="bi bi-box-arrow-right"></i>
-
-							</a>
-
-						</div>
-
-					</div>
+</div>
 
 
 					<!-- ================= RIGHT CONTENT ================= -->
@@ -77,7 +57,9 @@
 
 							<p class="eyebrow">WELCOME BACK</p>
 
-							<h2>Hello, <span th:text="${loggedInUser.name}">Vivi</span></h2>
+							<h2>
+								Hello, <span th:text="${loggedInUser.name}">Vivi</span>
+							</h2>
 
 							<p>Manage your profile, orders and saved items from your
 								BLACKJACK account.</p>

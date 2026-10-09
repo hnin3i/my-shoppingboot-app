@@ -231,6 +231,40 @@
 	background: #f5f5f5;
 }
 
+.admin-shopping-notice {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    padding: 18px 20px;
+    margin-top: 20px;
+    background: #f7f7f7;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    color: #222;
+}
+
+.admin-shopping-notice > i {
+    font-size: 26px;
+    color: #777;
+    flex-shrink: 0;
+}
+
+.admin-shopping-notice strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.admin-shopping-notice p {
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+    line-height: 1.5;
+}
+
+
 /* ================= ACCORDION ================= */
 .details-accordion {
 	margin-top: 35px;
