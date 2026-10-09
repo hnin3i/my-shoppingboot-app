@@ -38,7 +38,9 @@ public class OrderProductRowMapper implements RowMapper<Product>{
 				rs.getString("updated_user_id"),
 				rs.getBoolean("is_discount"),
 				rs.getInt("discount_product"),
-				rs.getObject("discount_duration", LocalDate.class)
+				rs.getObject("discount_duration", LocalDate.class),
+				rs.getBigDecimal("discount_price"),
+				rs.getBigDecimal("final_price")
 				);
 	}
 
