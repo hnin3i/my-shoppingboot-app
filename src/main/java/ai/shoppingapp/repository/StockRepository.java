@@ -27,7 +27,7 @@ SELECT s.*, p.name AS product_name
 FROM stocks s
 JOIN products p ON s.product_id = p.id
 WHERE s.is_active = 1
-ORDER BY p.name ASC
+ORDER BY s.created_at DESC
 """;
 
 return this.jdbcTemplate.query(sql, new StockMapper());
@@ -110,7 +110,7 @@ public List<Product> findAllProductsForDropdown() {
 String sql = """
 SELECT id, name
 FROM products
-ORDER BY name ASC
+ORDER BY created_at DESC
 """;
 
 return this.jdbcTemplate.query(sql, (rs, rowNum) -> {
@@ -185,4 +185,5 @@ Integer count = this.jdbcTemplate.queryForObject(sql, Integer.class, threshold);
        return this.jdbcTemplate.query( sql, new StockMapper(), productId );
        
 	}
+	
 }
