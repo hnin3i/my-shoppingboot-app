@@ -47,6 +47,7 @@ public class ProductController {
 		model.addAttribute("categories", categoryService.findAll());
 
 		model.addAttribute("keyword", keyword);
+		 model.addAttribute("activePage", "products");
 
 		return "admin/products/list";
 	}
@@ -63,22 +64,20 @@ public class ProductController {
 		model.addAttribute("product", newProduct);
 
 		model.addAttribute("categories", categoryService.findAll());
+		model.addAttribute("activePage", "products");
 
 		return "admin/products/add";
 	}
 
 @PostMapping("/admin/products/add")
 	public String addProduct(@ModelAttribute("product") ProductModel product,
-			@RequestParam(value = "imageFile", required = false) MultipartFile imageFile, HttpSession session) throws IOException {
+			@RequestParam(value = "imageFile", required = false) MultipartFile imageFile,HttpSession session) throws IOException {
 	UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
-    if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
-        throw new ResourceNotFoundException("Page not found");
-    }
 	if (imageFile != null && !imageFile.isEmpty()) {
 
 			String fileName = imageFile.getOriginalFilename();
 
-			String uploadPath = "E:\\BlackJack_shop\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\product";
+			String uploadPath = "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\product\\";
 
 			File uploadDir = new File(uploadPath);
 
@@ -92,9 +91,10 @@ public class ProductController {
 
 			product.setImage(fileName);
 		}
-		String currentUserId = String.valueOf(currentUser.getId());
-		product.setCreatedUserId(currentUserId);
-		product.setUpdatedUserId(currentUserId);
+
+	String currentUserId = String.valueOf(currentUser.getId());
+	product.setCreatedUserId(currentUserId);
+	product.setUpdatedUserId(currentUserId);
 
 		productService.save(product);
 
@@ -107,7 +107,8 @@ public class ProductController {
 		ProductModel product = productService.findById(id);
 
 		model.addAttribute("product", product);
-
+		model.addAttribute("activePage", "products");
+		
 		return "admin/products/detail";
 	}
 
@@ -121,22 +122,28 @@ public class ProductController {
 		model.addAttribute("product", product);
 
 		model.addAttribute("categories", categoryService.findAll());
+		
+		model.addAttribute("activePage", "products");
 
 		return "admin/products/edit";
 	}
 
 @PostMapping("/admin/products/edit")
 	public String editProduct(@ModelAttribute("product") ProductModel product,
-			@RequestParam(value = "imageFile", required = false) MultipartFile imageFile, HttpSession session) throws IOException {
-		UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
-	    if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
-	        throw new ResourceNotFoundException("Page not found");
-	    }
+			@RequestParam(value = "imageFile", required = false) MultipartFile imageFile,HttpSession session) throws IOException {
+
+	UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
+    if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
+        throw new ResourceNotFoundException("Page not found");
+    }
 		if (imageFile != null && !imageFile.isEmpty()) {
 
 			String fileName = imageFile.getOriginalFilename();
 
-			String uploadPath = "D:/shopping/my-shoppingboot-app/src/main/resources/static/images/product/";
+
+			String uploadPath = "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\product\\";
+
+
 
 			File uploadDir = new File(uploadPath);
 
@@ -150,6 +157,7 @@ public class ProductController {
 
 			product.setImage(fileName);
 		}
+
 		String currentUserId = String.valueOf(currentUser.getId());
 		product.setUpdatedUserId(currentUserId);
 
@@ -165,15 +173,17 @@ public class ProductController {
 		ProductModel product = productService.findById(id);
 
 		model.addAttribute("product", product);
+		model.addAttribute("activePage", "products");
 
 		return "admin/products/delete";
 	}
 
 @GetMapping("/admin/products/delete-confirm/{id}")
-	public String deleteConfirm(@PathVariable String id) {
+	public String deleteConfirm(@PathVariable String id, Model model) {
 
 		productService.delete(id);
-
+		model.addAttribute("activePage", "products");
+		
 		return "redirect:/admin/products";
 	}
 }

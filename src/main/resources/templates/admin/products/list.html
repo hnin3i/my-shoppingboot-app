@@ -320,20 +320,11 @@
 						placeholder="Search products..." autocomplete="off">
 
 				</div>
+				
 
 			</form>
+			<div th:replace="~{fragments/adminheader :: adminheader}"></div>
 
-			<div class="admin-profile">
-
-				<div class="admin-avatar">A</div>
-
-				<div>
-
-					<div style="font-weight: 600;">Admin</div>
-
-				</div>
-
-			</div>
 
 		</div>
 
@@ -359,25 +350,42 @@
 
 			<div class="admin-card">
 
-				<div class="product-card-header mb-3">
+			
+<div class="product-card-header mb-3">
 
+    <div class="admin-card-title mb-0">
+        Product List
+    </div>
 
-					<div class="admin-card-title mb-0">Product List</div>
+    <div class="d-flex gap-2">
 
-					<select id="categoryFilter"
-						class="form-select form-select-sm product-filter">
+        <!-- CATEGORY FILTER -->
+        <select id="categoryFilter"
+                class="form-select form-select-sm product-filter">
 
-						<option value="">All Categories</option>
+            <option value="">All Categories</option>
 
-						<option th:each="category : ${categories}"
-							th:value="${category.id}" th:text="${category.name}">
+            <option th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:text="${category.name}">
+                Category
+            </option>
 
-							Category</option>
+        </select>
 
-					</select>
+        <!-- STATUS FILTER -->
+        <select id="statusFilter"
+                class="form-select form-select-sm product-filter">
 
-				</div>
+            <option value="">All Status</option>
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
 
+        </select>
+
+    </div>
+
+</div>
 
 				<div class="product-table-wrapper">
 
@@ -403,7 +411,7 @@
 
 								<th>SALE PRICE</th>
 
-								<th>STATUS</th>
+								<th>PRODUCT STATUS</th>
 
 								<th class="text-center">ACTION</th>
 
@@ -413,8 +421,11 @@
 
 						<tbody id="productTableBody">
 
-							<tr th:each="product, stat : ${products}"
-								th:attr="data-category-id=${product.categoryId}">
+<tr th:each="product, stat : ${products}"
+    th:attr="
+        data-category-id=${product.categoryId},
+        data-status=${product.isActive}">
+
 
 								<td><span class="product-id-number" th:text="${stat.count}">
 
@@ -466,7 +477,7 @@
 
 								<td><span th:if="${product.isDiscount == 1}"
 									class="status status-warning"> <span
-										 th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
+										 th:text="${#numbers.formatDecimal(product.discountPrice, 0, 'COMMA', 0, 'POINT') + ' MMK'}">
 
 											10000 </span> &nbsp;OFF
 
@@ -614,29 +625,33 @@
 
 </script>
 
-	<script>
+<script>
 
     const categoryFilter =
         document.getElementById("categoryFilter");
 
+    const statusFilter =
+        document.getElementById("statusFilter");
 
     const productRows =
         document.querySelectorAll(
             "#productTableBody tr[data-category-id]"
         );
 
-
     const productCount =
         document.getElementById("productCount");
-
 
     const noProductsFromFilter =
         document.getElementById("noProductsFromFilter");
 
 
-    categoryFilter.addEventListener("change", function () {
+    function filterProducts() {
 
-        const selectedCategoryId = this.value;
+        const selectedCategoryId =
+            categoryFilter.value;
+
+        const selectedStatus =
+            statusFilter.value;
 
         let visibleCount = 0;
 
@@ -646,26 +661,29 @@
             const productCategoryId =
                 row.getAttribute("data-category-id");
 
+            const productStatus =
+                row.getAttribute("data-status");
 
-            if (selectedCategoryId === "") {
+
+            // CATEGORY MATCH
+            const categoryMatch =
+                selectedCategoryId === "" ||
+                productCategoryId === selectedCategoryId;
+
+
+            // STATUS MATCH
+            const statusMatch =
+                selectedStatus === "" ||
+                productStatus === selectedStatus;
+
+
+            // BOTH MUST MATCH
+            if (categoryMatch && statusMatch) {
 
                 row.style.display = "";
-
                 visibleCount++;
 
-            }
-
-            else if (
-                productCategoryId === selectedCategoryId
-            ) {
-
-                row.style.display = "";
-
-                visibleCount++;
-
-            }
-
-            else {
+            } else {
 
                 row.style.display = "none";
 
@@ -673,24 +691,40 @@
 
         });
 
-        productCount.textContent = visibleCount;
 
+        // UPDATE PRODUCT COUNT
+        productCount.textContent =
+            visibleCount;
+
+
+        // SHOW / HIDE EMPTY MESSAGE
         if (visibleCount === 0) {
 
             noProductsFromFilter.style.display = "";
 
-        }
-
-        else {
+        } else {
 
             noProductsFromFilter.style.display = "none";
 
         }
 
-    });
+    }
+
+
+    // CATEGORY CHANGE
+    categoryFilter.addEventListener(
+        "change",
+        filterProducts
+    );
+
+
+    // STATUS CHANGE
+    statusFilter.addEventListener(
+        "change",
+        filterProducts
+    );
 
 </script>
-
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">

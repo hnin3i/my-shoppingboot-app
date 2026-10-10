@@ -3,11 +3,11 @@ package ai.shoppingapp.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import ai.shoppingapp.exception.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import ai.shoppingapp.exception.ResourceNotFoundException;
 import ai.shoppingapp.model.CategoryModel;
 import ai.shoppingapp.model.Role;
 import ai.shoppingapp.model.UserModel;
@@ -28,6 +28,8 @@ public class CategoryController {
 	public String categoryList(Model model) {
 
 		model.addAttribute("categories", categoryService.findAll());
+		 model.addAttribute("activePage", "categories");
+
 		return "admin/categories/list";
 	}
 
@@ -40,18 +42,20 @@ public class CategoryController {
 		newCategory.setIsActive(1);
 
 		model.addAttribute("category", newCategory);
+		 model.addAttribute("activePage", "categories");
 
 		return "admin/categories/add";
 	}
 
 	// CREATE
 	@PostMapping("/admin/categories/add")
-	public String addCategory(@ModelAttribute("category") CategoryModel category, HttpSession session, Model model) {
-		
+	public String addCategory(@ModelAttribute("category") CategoryModel category,HttpSession session, Model model) {
+
 		UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
 		if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
 			throw new ResourceNotFoundException("Page not found");
 		}
+		
 		boolean exists = categoryService.existsByName(category.getName());
 
 		if (exists) {
@@ -60,6 +64,7 @@ public class CategoryController {
 
 			return "admin/categories/add";
 		}
+
 		String currentUserId = String.valueOf(currentUser.getId());
 		category.setCreatedUserId(currentUserId);
 		category.setUpdatedUserId(currentUserId);
@@ -76,6 +81,7 @@ public class CategoryController {
 		CategoryModel category = categoryService.findById(id);
 
 		model.addAttribute("category", category);
+		 model.addAttribute("activePage", "categories");
 
 		return "admin/categories/detail";
 	}
@@ -87,13 +93,15 @@ public class CategoryController {
 		CategoryModel category = categoryService.findById(id);
 
 		model.addAttribute("category", category);
+		 model.addAttribute("activePage", "categories");
 
 		return "admin/categories/edit";
 	}
 
 	// UPDATE
 	@PostMapping("/admin/categories/edit")
-	public String editCategory(@ModelAttribute("category") CategoryModel category, HttpSession session, Model model) {
+	public String editCategory(@ModelAttribute("category") CategoryModel category,HttpSession session, Model model) {
+
 		UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
 		if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
 			throw new ResourceNotFoundException("Page not found");
@@ -106,6 +114,7 @@ public class CategoryController {
 
 			return "admin/categories/edit";
 		}
+
 		String currentUserId = String.valueOf(currentUser.getId());
 		category.setUpdatedUserId(currentUserId);
 
@@ -121,6 +130,7 @@ public class CategoryController {
 		CategoryModel category = categoryService.findById(id);
 
 		model.addAttribute("category", category);
+		 model.addAttribute("activePage", "categories");
 
 		return "admin/categories/delete";
 	}

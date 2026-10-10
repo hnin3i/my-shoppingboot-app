@@ -1,19 +1,21 @@
+
 document.addEventListener("DOMContentLoaded", function () {
 
-    const seeMore = document.getElementById("seeMoreCategories");
-    const moreCategories = document.getElementById("moreCategories");
+const seeMore = document.getElementById("seeMoreCategories");
+const moreCategories = document.getElementById("moreCategories");
 
-    if (seeMore && moreCategories) {
+if (seeMore && moreCategories) {
 
-        seeMore.addEventListener("click", function (e) {
+seeMore.addEventListener("click", function (e) {
 
-            e.preventDefault();
+e.preventDefault();
 
-            moreCategories.style.display = "block";
+moreCategories.style.display = "block";
 
-            seeMore.parentElement.style.display = "none";
-        });
+seeMore.parentElement.style.display = "none";
+});
 
-    }
+}
 
 });
+

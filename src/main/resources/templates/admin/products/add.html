@@ -27,19 +27,7 @@
 
 	<main class="admin-main">
 
-		<div class="admin-topbar">
-
-			<div class="admin-profile" style="margin-left: auto;">
-
-				<div class="admin-avatar">A</div>
-
-				<div>
-					<strong>Admin</strong>
-				</div>
-
-			</div>
-
-		</div>
+		<div th:replace="~{fragments/adminheader :: adminheader}"></div>
 
 		<div class="admin-content">
 
@@ -152,7 +140,7 @@
 
 						<div class="col-md-6">
 
-							<label class="form-label"> Status </label> <select
+							<label class="form-label">Product Status </label> <select
 								th:field="*{isActive}" class="form-select">
 
 								<option value="1">Active</option>

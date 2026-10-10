@@ -1,15 +1,24 @@
 package ai.shoppingapp.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import ai.shoppingapp.model.OrderHistoryDto;
 import ai.shoppingapp.model.UserModel;
 import ai.shoppingapp.model.usermanagement.ChangeProfileModel;
+import ai.shoppingapp.service.OrderHistoryService;
 import ai.shoppingapp.service.UserService;
 import jakarta.servlet.http.HttpSession;
 
@@ -17,70 +26,245 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
+	private final UserService userService;
+	private final OrderHistoryService orderHistoryService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+	public UserController(UserService userService, OrderHistoryService orderHistoryService) {
 
-    // Handles the GET request when loading the page
-    @GetMapping("/edit")
-    public String showEditProfilePage(HttpSession session, Model model) {
-        UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return "redirect:/";
-        }
+		this.userService = userService;
+		this.orderHistoryService = orderHistoryService;
+	}
 
-        UserModel currentUser = userService.findById(loggedInUser.getId());
-        if (currentUser == null) {
-            return "redirect:/";
-        }
+	// =========================================================
+	// USER PROFILE CHANGES PAGE
+	// URL: GET /user/profilechanges
+	// =========================================================
 
-        ChangeProfileModel changeProfileModel = new ChangeProfileModel();
-        changeProfileModel.setId(currentUser.getId());
-        changeProfileModel.setName(currentUser.getName());
-        changeProfileModel.setEmail(currentUser.getEmail());
-        changeProfileModel.setPhone(currentUser.getPhone());
-        changeProfileModel.setAddress(currentUser.getAddress());
-        changeProfileModel.setProfile(currentUser.getProfile());
+	@GetMapping("/profilechanges")
+	public String showEditProfilePage(HttpSession session, Model model) {
 
-        model.addAttribute("changeProfileModel", changeProfileModel);
-        return "user/edit";
-    }
+		UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
 
-    // Handles the form submission (POST)
-    @PostMapping("/edit")
-    public String processEditProfile(@ModelAttribute("changeProfileModel") ChangeProfileModel changeProfileModel,
-                                     HttpSession session,
-                                     RedirectAttributes redirectAttributes) {
+		if (loggedInUser == null) {
+			return "redirect:/login";
+		}
 
-        UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return "redirect:/";
-        }
+		UserModel currentUser = userService.findById(loggedInUser.getId());
 
-        changeProfileModel.setId(loggedInUser.getId());
-        int result = userService.editProfile(changeProfileModel);
+		if (currentUser == null) {
+			return "redirect:/login";
+		}
 
-        if (result > 0) {
-            UserModel updatedUser = userService.findById(loggedInUser.getId());
-            session.setAttribute("loggedInUser", updatedUser);
-            redirectAttributes.addFlashAttribute("successMessage", "Profile updated successfully!");
-        } else {
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to update profile. Please try again.");
-        }
+		ChangeProfileModel changeProfileModel = new ChangeProfileModel();
 
-        return "redirect:/user/edit";
-    
-    }
-    @GetMapping("/profile")
-	public String profile() {
+		changeProfileModel.setId(currentUser.getId());
+		changeProfileModel.setName(currentUser.getName());
+		changeProfileModel.setEmail(currentUser.getEmail());
+		changeProfileModel.setPhone(currentUser.getPhone());
+		changeProfileModel.setAddress(currentUser.getAddress());
+		changeProfileModel.setProfile(currentUser.getProfile());
+
+		model.addAttribute("changeProfileModel", changeProfileModel);
+
+		return "user/profilechanges";
+	}
+
+	// =========================================================
+	// SAVE PROFILE CHANGES
+	// URL: POST /user/profilechanges
+	// =========================================================
+
+	@PostMapping("/profilechanges")
+	public String processEditProfile(
+	        @ModelAttribute("changeProfileModel") ChangeProfileModel changeProfileModel,
+	        BindingResult result,
+	        @RequestParam(value = "profilePhoto", required = false) MultipartFile profilePhoto,
+	        HttpSession session,
+	        Model model,
+	        RedirectAttributes redirectAttributes) throws IOException {
+
+	    UserModel loggedInUser =
+	            (UserModel) session.getAttribute("loggedInUser");
+
+	    if (loggedInUser == null) {
+	        return "redirect:/login";
+	    }
+
+	    UserModel currentUser =
+	            userService.findById(loggedInUser.getId());
+
+	    if (currentUser == null) {
+	        return "redirect:/login";
+	    }
+
+	    changeProfileModel.setId(loggedInUser.getId());
+
+
+	    // CHECK DUPLICATE EMAIL
+	    if (userService.isEmailAlreadyUsed(
+	            changeProfileModel.getEmail(),
+	            changeProfileModel.getId())) {
+
+	        model.addAttribute("duplicateEmail", true);
+
+	        return "user/profilechanges";
+	    }
+
+
+	    // KEEP OLD PROFILE IMAGE
+	    String oldProfile = currentUser.getProfile();
+
+
+	    // PROFILE PHOTO UPLOAD
+	    if (profilePhoto != null && !profilePhoto.isEmpty()) {
+
+	        String originalFileName =
+	                profilePhoto.getOriginalFilename();
+
+	        if (originalFileName != null &&
+	                !originalFileName.isBlank()) {
+
+	            String fileName =
+	                    System.currentTimeMillis() + "_" + originalFileName;
+
+	            String uploadPath =
+	                    "C:\\Users\\DELL\\git\\my-shoppingboot-app-finalfinal\\src\\main\\resources\\static\\images\\profile\\";
+
+
+	            File uploadDir = new File(uploadPath);
+
+	            if (!uploadDir.exists()) {
+	                uploadDir.mkdirs();
+	            }
+
+	            File newFile =
+	                    new File(uploadPath + fileName);
+
+	            profilePhoto.transferTo(newFile);
+
+	            changeProfileModel.setProfile(
+	                    "/images/profile/" + fileName
+	            );
+
+	        } else {
+	            changeProfileModel.setProfile(oldProfile);
+	        }
+
+	    } else {
+	        changeProfileModel.setProfile(oldProfile);
+	    }
+
+
+	    // UPDATE DATABASE
+	    int updateResult =
+	            userService.editProfile(changeProfileModel);
+
+
+	    if (updateResult > 0) {
+
+	        // DELETE OLD PHOTO
+	        if (profilePhoto != null &&
+	                !profilePhoto.isEmpty()) {
+
+	            if (oldProfile != null &&
+	                    !oldProfile.isEmpty() &&
+	                    oldProfile.startsWith("/images/profile/")) {
+
+	                String oldFileName =
+	                        oldProfile.substring(
+	                                "//images//profile/".length()
+	                        );
+
+	                String uploadPath =
+
+	                        "C:\\Users\\DELL\\git\\my-shopingboot-app-finalfinal\\src\\main\\resources\\static\\images\\profile\\";
+
+
+	                File oldFile =
+	                        new File(uploadPath + oldFileName);
+
+	                if (oldFile.exists()) {
+	                    oldFile.delete();
+	                }
+	            }
+	        }
+
+
+	        // REFRESH SESSION
+	        UserModel updatedUser =
+	                userService.findById(loggedInUser.getId());
+
+	        session.setAttribute(
+	                "loggedInUser",
+	                updatedUser
+	        );
+
+	        redirectAttributes.addFlashAttribute(
+	                "successMessage",
+	                "Profile updated successfully!"
+	        );
+
+	    } else {
+
+	        redirectAttributes.addFlashAttribute(
+	                "errorMessage",
+	                "Failed to update profile. Please try again."
+	        );
+	    }
+
+	    return "redirect:/user/profile";
+	}
+
+	// =========================================================
+	// USER PROFILE VIEW
+	// URL: GET /user/profile
+	// =========================================================
+
+	@GetMapping("/profile")
+	public String profile(HttpSession session, Model model) {
+
+		UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
+
+		if (loggedInUser == null) {
+			return "redirect:/login";
+		}
+
+		String userId = loggedInUser.getId();
+
+		UserModel user = userService.findById(userId);
+
+		if (user == null) {
+			return "redirect:/login";
+		}
+
+		model.addAttribute("user", user);
+
 		return "user/profile";
 	}
 
-//	@GetMapping("/orders")
-//	public String orders() {
-//		return "user/orders";
-//	}
-	
+	// =========================================================
+	// USER DASHBOARD
+	// URL: GET /user/dashboard
+	// =========================================================
+
+	@GetMapping("/dashboard")
+	public String dashboard(HttpSession session, Model model) {
+
+		UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
+
+		if (loggedInUser == null) {
+			return "redirect:/login";
+		}
+
+		model.addAttribute("loggedInUser", loggedInUser);
+
+		String userId = loggedInUser.getId();
+
+		List<OrderHistoryDto> latestOrders = orderHistoryService.getLatestOrders(userId);
+
+		model.addAttribute("latestOrders", latestOrders);
+
+		return "user/dashboard";
+	}
+
 }

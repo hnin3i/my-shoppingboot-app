@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
+
 
 import ai.shoppingapp.model.ProductModel;
 
@@ -14,13 +14,22 @@ public class ProductMapper implements RowMapper<ProductModel> {
     public ProductModel mapRow(ResultSet rs, int rowNum) throws SQLException {
 
         ProductModel product = new ProductModel();
-
+//        product.setCategoryName(rs.getString("category_name"));
+        
+//        product.setCategoryName(
+//                rs.getString("category_name") != null
+//                        ? rs.getString("category_name")
+//                        : null
+//        );
+        
+        
+        
         product.setId(rs.getString("id"));
 
         product.setCategoryId(rs.getString("category_id"));
-
+        
         product.setCategoryName(rs.getString("category_name"));
-
+        
         product.setName(rs.getString("name"));
 
         product.setDescription(rs.getString("description"));
