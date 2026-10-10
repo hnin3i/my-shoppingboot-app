@@ -396,57 +396,74 @@ document.addEventListener("DOMContentLoaded", () => {
     renderOrderSummary();
 });
 
+
+
+let isPlacingOrder = false; // Flag to prevent multi-triggering
+
 async function placeOrder() {
-    const cart = getCart();
+    
+    if (isPlacingOrder) return;
+
+    const cart = getCart(); 
 
     if (cart.length === 0) {
-        throw new Error("Your cart is empty. Please add items before checkout.");
+        throw new Error("Your cart is empty. Please add items before checkout."); 
     }
 
-    const paymentMethod = getSelectedPaymentMethod();
+    const paymentMethod = getSelectedPaymentMethod(); 
 
-    if (!validateCheckoutForm()) {
+    if (!validateCheckoutForm()) { 
         return;
     }
 
-    const paymentProof = document.getElementById("payment-proof")?.files[0] || null;
+    const paymentProof = document.getElementById("payment-proof")?.files[0] || null; 
 
-    if (paymentMethod !== "COD") {
-        const paymentProofError = validatePaymentProof(paymentProof);
+    if (paymentMethod !== "COD") { 
+        const paymentProofError = validatePaymentProof(paymentProof); 
 
-        if (paymentProofError) {
-            showFieldError("payment-proof", paymentProofError);
+        if (paymentProofError) { 
+            showFieldError("payment-proof", paymentProofError); 
             return;
         }
     }
 
-    setButtonLoading(true);
+    try {
+        isPlacingOrder = true;
+        setButtonLoading(true); 
 
-    const firstName = document.getElementById("first-name")?.value.trim() || "";
-    const lastName = document.getElementById("last-name")?.value.trim() || "";
-    const fullName = `${firstName} ${lastName}`.trim();
+        const firstName = document.getElementById("first-name")?.value.trim() || ""; //[cite: 5]
+        const lastName = document.getElementById("last-name")?.value.trim() || ""; //[cite: 5]
+        const fullName = `${firstName} ${lastName}`.trim(); //[cite: 5]
 
-    const street = document.getElementById("address-street")?.value.trim() || "";
-    const apartment = document.getElementById("address-apartment")?.value.trim() || "";
-    const city = document.getElementById("address-city")?.value.trim() || "";
-    const postal = document.getElementById("address-postal")?.value.trim() || "";
+        const street = document.getElementById("address-street")?.value.trim() || ""; //[cite: 5]
+        const apartment = document.getElementById("address-apartment")?.value.trim() || ""; //[cite: 5]
+        const city = document.getElementById("address-city")?.value.trim() || ""; //[cite: 5]
+        const postal = document.getElementById("address-postal")?.value.trim() || ""; //[cite: 5]
 
-    const shippingAddress = `${street}${apartment ? ", " + apartment : ""}, ${city}${postal ? " " + postal : ""}, Myanmar`.trim();
+        const shippingAddress = `${street}${apartment ? ", " + apartment : ""}, ${city}${postal ? " " + postal : ""}, Myanmar`.trim(); //[cite: 5]
 
-    const phoneNo = document.getElementById("phone-no")?.value.trim() || "";
-    const orderNotes = document.getElementById("order-notes")?.value.trim() || "";
+        const phoneNo = document.getElementById("phone-no")?.value.trim() || ""; //[cite: 5]
+        const orderNotes = document.getElementById("order-notes")?.value.trim() || ""; //[cite: 5]
 
-    const payload = buildCheckoutPayload(
-        fullName,
-        shippingAddress,
-        phoneNo,
-        paymentMethod,
-        orderNotes
-    );
+        const payload = buildCheckoutPayload( //[cite: 5]
+            fullName,
+            shippingAddress,
+            phoneNo,
+            paymentMethod,
+            orderNotes
+        );
 
-    const result = await createOrder(payload, paymentProof);
+        const result = await createOrder(payload, paymentProof); //[cite: 5]
 
-    window.location.href = `/user/orders`;
+        // Clear cart after placing order
+        clearCart();
+
+        window.location.href = `/user/orders`; //[cite: 5]
+    } catch (error) {
+        isPlacingOrder = false;
+        setButtonLoading(false); //[cite: 5]
+        throw error;
+    }
 }
 
 function renderOrderSummary() {
