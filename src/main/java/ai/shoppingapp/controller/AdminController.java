@@ -47,6 +47,15 @@ public class AdminController {
 
 		model.addAttribute("dashboard", dashboard);
 		 model.addAttribute("activePage", "dashboard");
+		 Boolean clearCart =
+			        (Boolean) session.getAttribute("clearCartOnLogin");
+
+			model.addAttribute(
+			        "clearCartOnLogin",
+			        Boolean.TRUE.equals(clearCart)
+			);
+
+			session.removeAttribute("clearCartOnLogin");
 
 		return "admin/dashboard/dashboard";
 	}
@@ -121,7 +130,7 @@ public class AdminController {
 			// Create unique file name
 			String fileName = System.currentTimeMillis() + "_" + originalFileName;
 
-			String uploadPath = "C:\\Users\\DELL\\git\\my-shopingboot-app-finalfinal\\src\\main\\resources\\static\\images\\profile\\";
+			String uploadPath = "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
 
 
 			File uploadDir = new File(uploadPath);

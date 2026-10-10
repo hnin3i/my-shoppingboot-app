@@ -1,374 +1,347 @@
 
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/public_layout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/public_layout}">
 
 <head>
 
-    <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title th:text="${product != null
+<title
+	th:text="${product != null
         ? product.name + ' - BLACKJACK'
         : 'Product Detail - BLACKJACK'}">
-        Product Detail - BLACKJACK
-    </title>
+	Product Detail - BLACKJACK</title>
 
-    <!-- Bootstrap -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+<!-- Bootstrap -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-        rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+	rel="stylesheet">
 
-    <!-- Product Detail CSS -->
-    <link rel="stylesheet"
-          th:href="@{/css/product-detail.css}">
+<!-- Product Detail CSS -->
+<link rel="stylesheet" th:href="@{/css/product-detail.css}">
 
-    <link rel="stylesheet"
-          th:href="@{/css/app.css}">
-          
-          
+<link rel="stylesheet" th:href="@{/css/app.css}">
+
+
 
 </head>
 
 <style>
 
-
-
-
 /* ================= PRICE ================= */
 .old-price {
-    text-decoration: line-through !important;
-    color: #888;
-    margin-right: 10px;
+	text-decoration: line-through !important;
+	color: #888;
+	margin-right: 10px;
 }
 
 .sale-price {
-    color: #d63384;
-    font-weight: 600;
+	color: #d63384;
+	font-weight: 600;
 }
 
-    /* ================= PRICE ================= */
-
-    .old-price {
-        text-decoration: line-through !important;
-        color: #888;
-        margin-right: 10px;
-    }
-
-    .sale-price {
-        color: #d63384;
-        font-weight: 600;
-    }
-    
-    .quantity-btn i {
-    pointer-events: none; /* Icon ကို နှိပ်ရင် ဘုတ်သီး (Button) ကိုပဲ တိုက်ရိုက် ရွေးချယ်စေသည် */
+/* ================= PRICE ================= */
+.old-price {
+	text-decoration: line-through !important;
+	color: #888;
+	margin-right: 10px;
 }
 
+.sale-price {
+	color: #d63384;
+	font-weight: 600;
+}
+
+.quantity-btn i {
+	pointer-events: none;
+	/* Icon ကို နှိပ်ရင် ဘုတ်သီး (Button) ကိုပဲ တိုက်ရိုက် ရွေးချယ်စေသည် */
+}
 </style>
 
 
 <body>
 
-<div layout:fragment="content">
+	<div layout:fragment="content">
 
-<style type="text/css">
-
-
-
+		<style type="text/css">
 
 /* ================= DESCRIPTION ACCORDION ================= */
 .accordion-trigger {
-    cursor: pointer;
-    outline: none;
-    color: #111;
-    background: transparent;
+	cursor: pointer;
+	outline: none;
+	color: #111;
+	background: transparent;
 }
 
 /* Force standard font display for icon */
 .accordion-icon {
-    font-family: Arial, sans-serif !important;
-    font-size: 1.25rem !important;
-    font-weight: bold !important;
-    line-height: 1 !important;
-    display: inline-block !important;
+	font-family: Arial, sans-serif !important;
+	font-size: 1.25rem !important;
+	font-weight: bold !important;
+	line-height: 1 !important;
+	display: inline-block !important;
 }
 
 /* Default state: (+) */
 .accordion-icon::before {
-    content: "+" !important;
+	content: "+" !important;
 }
 
 /* Expanded state: (-) */
 .accordion-trigger[aria-expanded="true"] .accordion-icon::before,
-.accordion-trigger.is-open .accordion-icon::before {
-    content: "−" !important; /* Proper minus character */
+	.accordion-trigger.is-open .accordion-icon::before {
+	content: "−" !important; /* Proper minus character */
 }
 
 /* Content Visibility Control */
 #descriptionCollapse {
-    display: none;
+	display: none;
 }
 
 #descriptionCollapse.is-open {
-    display: block !important;
+	display: block !important;
 }
 
 .size-message {
-    margin-top: 10px;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    min-height: 20px; /* စာသားမရှိချိန်တွင် Design မရွေ့အောင် height ထိန်းထားခြင်း */
+	margin-top: 10px;
+	font-size: 13px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	min-height: 20px;
+	/* စာသားမရှိချိန်တွင် Design မရွေ့အောင် height ထိန်းထားခြင်း */
 }
 
 /* Red Message (Please select a size / Out of stock) */
 .size-message.text-danger {
-    color: #dc3545 !important;
+	color: #dc3545 !important;
 }
 
 /* Black Message (Size selected) */
 .size-message.text-dark {
-    color: #111111 !important;
+	color: #111111 !important;
 }
 
 /* ================= DISABLED SIZE BUTTON CLICK FIX ================= */
-
 .size-btn.out-of-stock {
-    background: #ffffff !important;
-    color: #111 !important;
-    cursor: not-allowed !important;
-    opacity: 0.8 !important;
+	background: #ffffff !important;
+	color: #111 !important;
+	cursor: not-allowed !important;
+	opacity: 0.8 !important;
 }
 
-
 .size-options {
-    display: grid !important;
-    grid-template-columns: repeat(5, 1fr) !important;
-    border-top: 1px solid #222 !important;
-    border-left: 1px solid #222 !important;
+	display: grid !important;
+	grid-template-columns: repeat(5, 1fr) !important;
+	border-top: 1px solid #222 !important;
+	border-left: 1px solid #222 !important;
 }
 
 .size-btn {
-    position: relative !important;
-    height: 55px !important;
-    border: none !important;
-    border-right: 1px solid #222 !important;
-    border-bottom: 1px solid #222 !important;
-    background: #fff !important;
-    color: #111 !important;
-    font-size: 14px !important;
-    font-weight: 500 !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+	position: relative !important;
+	height: 55px !important;
+	border: none !important;
+	border-right: 1px solid #222 !important;
+	border-bottom: 1px solid #222 !important;
+	background: #fff !important;
+	color: #111 !important;
+	font-size: 14px !important;
+	font-weight: 500 !important;
+	cursor: pointer !important;
+	transition: all 0.2s ease !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
 }
 /* Active & Hover States */
-.size-btn:hover:not(.out-of-stock),
-.size-btn.active {
-    background: #111 !important;
-    color: #fff !important;
+.size-btn:hover:not(.out-of-stock), .size-btn.active {
+	background: #111 !important;
+	color: #fff !important;
 }
 
 /* Disabled / Out of Stock Buttons (Screenshot Exact Match) */
 
-
 /* Strikethrough Line Across Out-of-Stock Button */
 .size-btn.out-of-stock::after {
-    content: "" !important;
-    position: absolute !important;
-    top: 50% !important;
-    left: 10% !important;
-    right: 10% !important;
-    height: 2px !important;
-    background-color: #111111 !important;
-    transform: translateY(-50%) !important;
-    z-index: 5 !important;
-    pointer-events: none !important;
+	content: "" !important;
+	position: absolute !important;
+	top: 50% !important;
+	left: 10% !important;
+	right: 10% !important;
+	height: 2px !important;
+	background-color: #111111 !important;
+	transform: translateY(-50%) !important;
+	z-index: 5 !important;
+	pointer-events: none !important;
 }
 
+/* Quantity Box Container Override */
+main.product-detail-page .product-option.quantity-section .quantity-control
+	{
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	width: 140px !important;
+	height: 46px !important;
+	border: 1px solid #dcdcdc !important;
+	border-radius: 12px !important;
+	background: #ffffff !important;
+	padding: 0 4px !important;
+	box-sizing: border-box !important;
+}
 
-        /* Quantity Box Container Override */
-        main.product-detail-page .product-option.quantity-section .quantity-control {
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: space-between !important;
-            width: 140px !important;
-            height: 46px !important;
-            border: 1px solid #dcdcdc !important;
-            border-radius: 12px !important;
-            background: #ffffff !important;
-            padding: 0 4px !important;
-            box-sizing: border-box !important;
-        }
+/* Quantity Buttons Override */
+main.product-detail-page .quantity-control .quantity-btn {
+	width: 38px !important;
+	height: 38px !important;
+	border: none !important;
+	background: transparent !important;
+	font-size: 18px !important;
+	color: #333 !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	cursor: pointer !important;
+	border-radius: 8px !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
 
-        /* Quantity Buttons Override */
-        main.product-detail-page .quantity-control .quantity-btn {
-            width: 38px !important;
-            height: 38px !important;
-            border: none !important;
-            background: transparent !important;
-            font-size: 18px !important;
-            color: #333 !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            cursor: pointer !important;
-            border-radius: 8px !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            box-shadow: none !important;
-            outline: none !important;
-        }
+main.product-detail-page .quantity-control .quantity-btn:hover {
+	background-color: #f2f2f2 !important;
+}
 
-        main.product-detail-page .quantity-control .quantity-btn:hover {
-            background-color: #f2f2f2 !important;
-        }
+main.product-detail-page .quantity-control .quantity-btn i {
+	pointer-events: auto !important;
+	font-size: 16px !important;
+}
 
-        main.product-detail-page .quantity-control .quantity-btn i {
-            pointer-events: auto !important;
-            font-size: 16px !important;
-        }
+/* Quantity Input Field Override */
+main.product-detail-page .quantity-control #quantity {
+	flex: 1 !important;
+	width: 35px !important;
+	height: 100% !important;
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+	text-align: center !important;
+	font-size: 16px !important;
+	font-weight: 600 !important;
+	color: #111 !important;
+	background: transparent !important;
+	padding: 0 !important;
+	margin: 0 !important;
+}
 
-        /* Quantity Input Field Override */
-        main.product-detail-page .quantity-control #quantity {
-            flex: 1 !important;
-            width: 35px !important;
-            height: 100% !important;
-            border: none !important;
-            outline: none !important;
-            box-shadow: none !important;
-            text-align: center !important;
-            font-size: 16px !important;
-            font-weight: 600 !important;
-            color: #111 !important;
-            background: transparent !important;
-            padding: 0 !important;
-            margin: 0 !important;
-        }
+/* Input Spinners (Up/Down Arrows) ဖျောက်ရန် */
+main.product-detail-page #quantity::-webkit-inner-spin-button, main.product-detail-page #quantity::-webkit-outer-spin-button
+	{
+	-webkit-appearance: none !important;
+	margin: 0 !important;
+}
 
-        /* Input Spinners (Up/Down Arrows) ဖျောက်ရန် */
-        main.product-detail-page #quantity::-webkit-inner-spin-button,
-        main.product-detail-page #quantity::-webkit-outer-spin-button {
-            -webkit-appearance: none !important;
-            margin: 0 !important;
-        }
-        main.product-detail-page #quantity[type="number"] {
-            -moz-appearance: textfield !important;
-        }
-    </style>
+main.product-detail-page #quantity[type="number"] {
+	-moz-appearance: textfield !important;
+}
+</style>
 
-    <main class="product-detail-page">
+		<main class="product-detail-page">
 
-        <div class="container-fluid px-3 px-lg-5">
+			<div class="container-fluid px-3 px-lg-5">
 
-            <div class="row product-detail-wrapper">
+				<div class="row product-detail-wrapper">
 
 
-                <!-- ================================================= -->
-                <!-- LEFT : PRODUCT IMAGE -->
-                <!-- ================================================= -->
+					<!-- ================================================= -->
+					<!-- LEFT : PRODUCT IMAGE -->
+					<!-- ================================================= -->
 
-                <div class="col-lg-7 product-gallery">
+					<div class="col-lg-7 product-gallery">
 
-                    <div class="main-product-image">
+						<div class="main-product-image">
 
-                        <img id="productImage"
-                             th:src="@{'/images/product/' + ${product.image}}"
-                             th:alt="${product != null
+							<img id="productImage"
+								th:src="@{'/images/product/' + ${product.image}}"
+								th:alt="${product != null
                                 ? product.name
                                 : 'BLACKJACK Product'}"
-                             class="img-fluid rounded"
-                             style="width: 100%;
-                                    height: 100%;
-                                    object-fit: contain;">
+								class="img-fluid rounded"
+								style="width: 100%; height: 100%; object-fit: contain;">
 
-                    </div>
+						</div>
 
 
-                   
-
-                </div>
+					</div>
 
 
-                <!-- ================================================= -->
-                <!-- RIGHT : PRODUCT INFORMATION -->
-                <!-- ================================================= -->
+					<!-- ================================================= -->
+					<!-- RIGHT : PRODUCT INFORMATION -->
+					<!-- ================================================= -->
 
-                <div class="col-lg-5 product-information">
+					<div class="col-lg-5 product-information">
 
-                    <div class="product-info-inner">
+						<div class="product-info-inner">
 
 
-                        <!-- ================= PRODUCT NAME ================= -->
+							<!-- ================= PRODUCT NAME ================= -->
 
-                        <div class="product-title-row">
+							<div class="product-title-row">
 
-                            <div>
+								<div>
 
-                                <h1 th:text="${product != null
+									<h1
+										th:text="${product != null
                                     ? product.name
                                     : 'Product'}">
-                                    Product
-                                </h1>
+										Product</h1>
 
-                                <div class="product-code">
-                                    Product No.
-                                </div>
+									<div class="product-code">Product No.</div>
 
-                            </div>
+								</div>
 
-                        </div>
+							</div>
 
 
-                        <!-- ================= PRICE ================= -->
+							<!-- ================= PRICE ================= -->
 
-                        <!-- NORMAL PRICE -->
+							<!-- NORMAL PRICE -->
 
-                        <div class="product-price"
-                             th:if="${product != null
+							<div class="product-price"
+								th:if="${product != null
                                 and product.isDiscount != 1}">
 
-                            <span
-                                th:text="${#numbers.formatDecimal( product.price, 0,'COMMA', 0, 'POINT' ) + ' MMK'}">
+								<span
+									th:text="${#numbers.formatDecimal( product.price, 0,'COMMA', 0, 'POINT' ) + ' MMK'}">
 
-                                0 MMK
+									0 MMK </span>
 
-                            </span>
-
-                        </div>
+							</div>
 
 
-                        <!-- DISCOUNT PRICE -->
+							<!-- DISCOUNT PRICE -->
 
-                        <div class="product-price discount-price"
-                             th:if="${product != null
+							<div class="product-price discount-price"
+								th:if="${product != null
                                 and product.isDiscount == 1}">
 
-                            <span class="old-price">
+								<span class="old-price"> <del
+										th:text="${#numbers.formatDecimal(product.price, 0,'COMMA', 0, 'POINT' ) + ' MMK'}">
 
-                                <del th:text="${#numbers.formatDecimal(product.price, 0,'COMMA', 0, 'POINT' ) + ' MMK'}">
+										0 MMK </del>
 
-                                    0 MMK
-
-                                </del>
-
-                            </span>
-
-
-                            <span class="sale-price"
-                                  th:text="${#numbers.formatDecimal(
+								</span> <span class="sale-price"
+									th:text="${#numbers.formatDecimal(
                                       product.finalPrice,
                                       0,
                                       'COMMA',
@@ -376,213 +349,185 @@
                                       'POINT'
                                   ) + ' MMK'}">
 
-                                0 MMK
+									0 MMK </span>
 
-                            </span>
-
-                        </div>
+							</div>
 
 
-                      
-                        
 
 
-                        <!-- ================================================= -->
-                        <!-- COLOR -->
-                        <!-- ================================================= -->
-
-                        <div class="product-option">
-
-                            <div class="option-title">
-
-                                COLOR:
-
-                                <span id="selectedColor">
-                                    Please select
-                                </span>
-
-                            </div>
 
 
-                            <!--
+							<!-- ================================================= -->
+							<!-- COLOR -->
+							<!-- ================================================= -->
+
+							<div class="product-option">
+
+								<div class="option-title">
+
+									COLOR: <span id="selectedColor"> Please select </span>
+
+								</div>
+
+
+								<!--
                                 product.js will create color buttons
                                 from DETAIL_PRODUCT.stocks
                             -->
 
-                            <div class="color-options"
-                                 id="colorOptions">
+								<div class="color-options" id="colorOptions"></div>
 
-                            </div>
-
-                        </div>
+							</div>
 
 
-                        <!-- ================================================= -->
-                        <!-- SIZE -->
-                        <!-- ================================================= -->
+							<!-- ================================================= -->
+							<!-- SIZE -->
+							<!-- ================================================= -->
 
-                        <section class="product-option size-section">
+							<section class="product-option size-section">
 
-                            <div class="option-heading">
-                                <span>SIZE</span>
-                            </div>
+								<div class="option-heading">
+									<span>SIZE</span>
+								</div>
 
 
-                            <!--
+								<!--
                                 product.js will create size buttons
                                 from DETAIL_PRODUCT.stocks
                             -->
 
-                            <div class="size-options"
-                                 id="sizeOptions">
-
-                            </div>
+								<div class="size-options" id="sizeOptions"></div>
 
 
-                            <div class="size-message"
-                                 id="sizeMessage">
+								<div class="size-message" id="sizeMessage">
 
-                                <i class="bi bi-info-circle"></i>
+									<i class="bi bi-info-circle"></i> Please select a size
 
-                                Please select a size
+								</div>
 
-                            </div>
-
-                        </section>
+							</section>
 
 
-                        <!-- ================================================= -->
-                        <!-- QUANTITY -->
-                        <!-- ================================================= -->
+							<!-- ================================================= -->
+							<!-- QUANTITY -->
+							<!-- ================================================= -->
 
-                        <div class="product-option quantity-section">
-    <div class="option-heading">
-        <span>Quantity</span>
-    </div>
+							<div class="product-option quantity-section">
+								<div class="option-heading">
+									<span>Quantity</span>
+								</div>
 
-    <div class="quantity-control">
-        <button type="button"
-                class="quantity-btn"
-                id="decreaseQuantity"
-                aria-label="Decrease quantity">
-            <i class="bi bi-dash"></i>
-        </button>
+								<div class="quantity-control">
+									<button type="button" class="quantity-btn"
+										id="decreaseQuantity" aria-label="Decrease quantity">
+										<i class="bi bi-dash"></i>
+									</button>
 
-        <input type="number"
-               id="quantity"
-               name="quantity"
-               value="1"
-               min="1"
-               max="20"
-               step="1"
-               inputmode="numeric">
+									<input type="number" id="quantity" name="quantity" value="1"
+										min="1" max="20" step="1" inputmode="numeric">
 
-        <button type="button"
-                class="quantity-btn"
-                id="increaseQuantity"
-                aria-label="Increase quantity">
-            <i class="bi bi-plus"></i>
-        </button>
-    </div>
-</div>
+									<button type="button" class="quantity-btn"
+										id="increaseQuantity" aria-label="Increase quantity">
+										<i class="bi bi-plus"></i>
+									</button>
+								</div>
+							</div>
 
-                        <!-- ================================================= -->
-                        <!-- ADD TO CART -->
-                        <!-- ================================================= -->
+							<!-- SHOPPING ACTIONS -->
 
-                        <div class="product-actions">
+							<!-- Guest and Customer -->
+							<div class="product-actions"
+								th:if="${session.loggedInUser == null
+             or #strings.toUpperCase(session.loggedInUser.role) != 'ADMIN'}">
 
+								<button class="add-to-cart-btn" id="addToCartBtn" type="button">
+									<i class="bi bi-bag"></i> <span>ADD TO CART</span>
+								</button>
 
-                            <button class="add-to-cart-btn"
-                                    id="addToCartBtn"
-                                    type="button">
+								<!-- Future feature: BUY NOW -->
+								<button class="buy-now-btn" type="button" >BUY
+									NOW</button>
 
-                                <i class="bi bi-bag"></i>
+							</div>
 
-                                <span>
-                                    ADD TO CART
-                                </span>
+							<!-- Admin Only -->
+							<div class="admin-shopping-notice"
+								th:if="${session.loggedInUser != null
+             and #strings.toUpperCase(session.loggedInUser.role) == 'ADMIN'}">
 
-                            </button>
+								<i class="bi bi-shield-lock"></i>
 
+								<div>
+									<strong>Shopping Unavailable</strong>
+									<p>Admin accounts cannot place orders.</p>
+								</div>
 
-                            <button class="buy-now-btn"
-                                    type="button">
+							</div>
 
-                                BUY NOW
+							<!-- ================= DESCRIPTION ================= -->
 
-                            </button>
+							<!-- ================= DESCRIPTION ACCORDION ================= -->
+							<!-- ================= DESCRIPTION ACCORDION ================= -->
+							<div class="product-description-accordion mt-4">
+								<div class="accordion-item border-top border-bottom py-2">
+									<button
+										class="accordion-trigger d-flex justify-content-between align-items-center w-100 bg-transparent border-0 px-0 py-2 text-start fw-semibold fs-6"
+										type="button" data-bs-toggle="collapse"
+										data-bs-target="#descriptionCollapse" aria-expanded="false"
+										aria-controls="descriptionCollapse">
+										<span>PRODUCT DESCRIPTION</span> <span class="accordion-icon"></span>
+									</button>
 
-                        </div>
-                        
-                          <!-- ================= DESCRIPTION ================= -->
-                        
-                      <!-- ================= DESCRIPTION ACCORDION ================= -->
-<!-- ================= DESCRIPTION ACCORDION ================= -->
-<div class="product-description-accordion mt-4">
-    <div class="accordion-item border-top border-bottom py-2">
-        <button class="accordion-trigger d-flex justify-content-between align-items-center w-100 bg-transparent border-0 px-0 py-2 text-start fw-semibold fs-6" 
-                type="button" 
-                data-bs-toggle="collapse" 
-                data-bs-target="#descriptionCollapse" 
-                aria-expanded="false" 
-                aria-controls="descriptionCollapse">
-            <span>PRODUCT DESCRIPTION</span>
-            <span class="accordion-icon"></span>
-        </button>
+									<div id="descriptionCollapse" class="collapse mt-2">
+										<p class="description-text mb-2 text-muted"
+											th:if="${product != null and product.description != null}"
+											th:text="${product.description}">Product
+											description[cite: 2]</p>
+									</div>
+								</div>
+							</div>
 
-        <div id="descriptionCollapse" class="collapse mt-2">
-            <p class="description-text mb-2 text-muted"
-               th:if="${product != null and product.description != null}"
-               th:text="${product.description}">
-                Product description[cite: 2]
-            </p>
-        </div>
-    </div>
-</div>
+						</div>
 
-                    </div>
+					</div>
 
-                </div>
+				</div>
 
-            </div>
+			</div>
 
-        </div>
-
-    </main>
+		</main>
 
 
-    <!-- ================================================= -->
-    <!-- PRODUCT DATA FROM SPRING BOOT -->
-    <!-- ================================================= -->
+		<!-- ================================================= -->
+		<!-- PRODUCT DATA FROM SPRING BOOT -->
+		<!-- ================================================= -->
 
-    <script th:inline="javascript">
-
-        const DETAIL_PRODUCT = {
-            productId: /*[[${product != null ? product.id : null}]]*/ null,
-            productName: /*[[${product != null ? product.name : ''}]]*/ "",
-            image: /*[[${product != null ? '/images/product/' + product.image : ''}]]*/ "",
-            price: /*[[${product != null
-                ? (product.isDiscount == 1 ? product.finalPrice : product.price)
-                : 0}]]*/ 0,
-            stocks: /*[[${stocks != null ? stocks : {}}]]*/ []
-        };
-
-    </script>
+		<script th:inline="javascript">
+			const DETAIL_PRODUCT = {
+				productId : /*[[${product != null ? product.id : null}]]*/null,
+				productName : /*[[${product != null ? product.name : ''}]]*/"",
+				image : /*[[${product != null ? '/images/product/' + product.image : ''}]]*/"",
+				price : /*[[${product != null
+													               ? (product.isDiscount == 1 ? product.finalPrice : product.price)
+													               : 0}]]*/0,
+				stocks : /*[[${stocks != null ? stocks : {}}]]*/[]
+			};
+		</script>
 
 
-    <!-- ================================================= -->
-    <!-- JAVASCRIPT FILES -->
-    <!-- ================================================= -->
-    
-    <script th:src="@{/js/storage.js}"></script>
+		<!-- ================================================= -->
+		<!-- JAVASCRIPT FILES -->
+		<!-- ================================================= -->
 
-    <script th:src="@{/js/cart.js}"></script>
+		<script th:src="@{/js/storage.js}"></script>
 
-    <script th:src="@{/js/product.js}"></script>
+		<script th:src="@{/js/cart.js}"></script>
 
-    
-</div>
+		<script th:src="@{/js/product.js}"></script>
+
+
+	</div>
 
 
 

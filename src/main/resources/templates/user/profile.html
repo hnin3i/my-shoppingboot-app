@@ -39,41 +39,7 @@
 
 				<div class="col-lg-3">
 
-					<div class="account-menu">
-
-						<p class="menu-title">ACCOUNT</p>
-
-
-						<!-- Overview -->
-						<a th:href="@{/user/dashboard}" class="account-menu-link"> <span>
-								OVERVIEW </span> <i class="bi bi-arrow-right"></i>
-
-						</a>
-
-
-						<!-- My Profile -->
-						<a th:href="@{/user/profile}" class="account-menu-link active">
-
-							<span> MY PROFILE </span> <i class="bi bi-arrow-right"></i>
-
-						</a>
-
-
-						<!-- My Orders -->
-						<a th:href="@{/user/orders}" class="account-menu-link"> <span>
-								MY ORDERS </span> <i class="bi bi-arrow-right"></i>
-
-						</a>
-
-
-						<!-- Logout -->
-						<a th:href="@{/logout}" class="account-menu-link logout-link">
-
-							<span> LOG OUT </span> <i class="bi bi-box-arrow-right"></i>
-
-						</a>
-
-					</div>
+					<div th:replace="~{fragments/usersidebar :: usersidebar}"></div>
 
 				</div>
 
@@ -233,7 +199,8 @@
 
 
 							<!-- Edit -->
-							<a th:href="@{/user/profilechanges}" class="profile-text-link"> EDIT </a>
+							<a th:href="@{/user/profilechanges}" class="profile-text-link">
+								EDIT </a>
 
 						</div>
 
