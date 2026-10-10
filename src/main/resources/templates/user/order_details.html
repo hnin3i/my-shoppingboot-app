@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
- xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
- layout:decorate="~{layouts/public_layout}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/public_layout}">
 
 <head>
 <meta charset="UTF-8">
@@ -9,9 +9,9 @@
 
 <title>Order Details - BLACKJACK</title>
 <link rel="stylesheet"
- href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 <link rel="stylesheet"
- href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <link rel="stylesheet" th:href="@{/css/app.css}">
 <link rel="stylesheet" th:href="@{/css/profile.css}">
@@ -19,143 +19,133 @@
 
 <style>
 .fit-table {
-    width: 100%;
+	width: 100%;
 }
-.fit-table th, 
-.fit-table td {
-    font-size: 12px;
-    padding: 8px 5px !important;
-    white-space: nowrap;
+
+.fit-table th, .fit-table td {
+	font-size: 12px;
+	padding: 8px 5px !important;
+	white-space: nowrap;
 }
+
 .fit-table th {
-    letter-spacing: 0.5px;
+	letter-spacing: 0.5px;
 }
 </style>
 </head>
 
 <body>
 
- <section layout:fragment="content" class="profile-page">
+	<section layout:fragment="content" class="profile-page">
 
-  <div class="container">
+		<div class="container">
 
-   <div class="row g-4">
-    
-    <!-- ================= LEFT ACCOUNT MENU ================= -->
-    <div class="col-lg-3">
+			<div class="row g-4">
 
-     <div class="account-menu">
+				<!-- ================= LEFT ACCOUNT MENU ================= -->
+				<div class="col-lg-3">
 
-      <p class="menu-title">ACCOUNT</p>
+					<div th:replace="~{fragments/usersidebar :: usersidebar}"></div>
 
-      <a th:href="@{/user/dashboard}" class="account-menu-link"> 
-       <span> OVERVIEW </span> <i class="bi bi-arrow-right"></i>
-      </a> 
-      
-      <a th:href="@{/user/profile}" class="account-menu-link">
-       <span> MY PROFILE </span> <i class="bi bi-arrow-right"></i>
-      </a> 
-      
-      <a th:href="@{/user/orders}" class="account-menu-link active"> 
-       <span> MY ORDERS </span> <i class="bi bi-arrow-right"></i>
-      </a> 
-      
-      <a th:href="@{/logout}" class="account-menu-link logout-link"> 
-       <span> LOG OUT </span> <i class="bi bi-box-arrow-right"></i>
-      </a>
+				</div>
 
-     </div>
+				<!-- ================= RIGHT ORDER DETAILS CONTENT ================= -->
+				<div class="col-lg-9">
 
-    </div>
+					<div
+						class="profile-page-header mb-3 d-flex justify-content-between align-items-center">
+						<div>
+							<p class="profile-eyebrow">ACCOUNT / ORDERS / DETAILS</p>
+							<h1 class="mb-1">ORDER DETAILS</h1>
+							<p class="profile-intro mb-0">View detailed information for
+								your order.</p>
+						</div>
+					</div>
 
-    <!-- ================= RIGHT ORDER DETAILS CONTENT ================= -->
-    <div class="col-lg-9">
+					<!-- Order Details Body -->
+					<div class="row g-4 align-items-start mt-0">
 
-     <div class="profile-page-header mb-3 d-flex justify-content-between align-items-center">
-      <div>
-       <p class="profile-eyebrow">ACCOUNT / ORDERS / DETAILS</p>
-       <h1 class="mb-1">ORDER DETAILS</h1>
-       <p class="profile-intro mb-0">View detailed information for your order.</p>
-      </div>
-     </div>
+						<div class="col-lg-8 pt-0 mt-0">
+							<div class="table-responsive">
+								<table class="table table-bordered align-middle fit-table mb-0">
+									<thead class="table-dark text-uppercase fw-semibold">
+										<tr>
+											<th>No.</th>
+											<th>Image</th>
+											<th>Product Name</th>
+											<th>Spec</th>
+											<th>Unit Price</th>
+											<th class="text-center">Qty</th>
+											<th class="text-end">Subtotal</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="item, stat : ${items}">
+											<td th:text="${stat.count}"></td>
+											<td><img
+												th:src="@{'/images/product/' + ${item.image ?: '/images/default.jpg'}}"
+												class="rounded" width="40" height="40"
+												style="object-fit: cover;" alt="Product Image" /></td>
+											<td class="fw-semibold" th:text="${item.productName}"></td>
+											<td class="text-muted"><span th:text="${item.color}"></span>
+												/ <span th:text="${item.size}"></span></td>
+											<td
+												th:text="${#numbers.formatDecimal(item.price, 1, 2)} + ' MMK'"></td>
+											<td class="text-center" th:text="${item.quantity}"></td>
+											<td class="text-end fw-bold"
+												th:text="${#numbers.formatDecimal(item.subtotal, 1, 2)} + ' MMK'"></td>
+										</tr>
+										<tr th:if="${#lists.isEmpty(items)}">
+											<td colspan="7" class="text-center text-muted py-3">No
+												order items found.</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
 
-     <!-- Order Details Body -->
-     <div class="row g-4 align-items-start mt-0">
-      
-      <div class="col-lg-8 pt-0 mt-0">
-       <div class="table-responsive">
-        <table class="table table-bordered align-middle fit-table mb-0">
-         <thead class="table-dark text-uppercase fw-semibold">
-          <tr>
-           <th>No.</th>
-           <th>Image</th>
-           <th>Product Name</th>
-           <th>Spec</th>
-           <th>Unit Price</th>
-           <th class="text-center">Qty</th>
-           <th class="text-end">Subtotal</th>
-          </tr>
-         </thead>
-         <tbody>
-          <tr th:each="item, stat : ${items}">
-           <td th:text="${stat.count}"></td>
-           <td>
-            <img th:src="@{'/images/product/' + ${item.image ?: '/images/default.jpg'}}" class="rounded" width="40" height="40" style="object-fit: cover;" alt="Product Image" />
-           </td>
-           <td class="fw-semibold" th:text="${item.productName}"></td>
-           <td class="text-muted">
-            <span th:text="${item.color}"></span> / <span th:text="${item.size}"></span>
-           </td>
-           <td th:text="${#numbers.formatDecimal(item.price, 1, 2)} + ' MMK'"></td>
-           <td class="text-center" th:text="${item.quantity}"></td>
-           <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(item.subtotal, 1, 2)} + ' MMK'"></td>
-          </tr>
-          <tr th:if="${#lists.isEmpty(items)}">
-           <td colspan="7" class="text-center text-muted py-3">No order items found.</td>
-          </tr>
-         </tbody>
-        </table>
-       </div>
-      </div>
+						<!-- Order Summary Card (4 Columns) -->
+						<div class="col-lg-4 pt-0 mt-0">
+							<div class="card border shadow-sm p-3 bg-white rounded-0"
+								th:if="${summary != null}">
+								<h5 class="fw-bold mb-3 border-bottom pb-2">Order Summary</h5>
 
-      <!-- Order Summary Card (4 Columns) -->
-      <div class="col-lg-4 pt-0 mt-0">
-       <div class="card border shadow-sm p-3 bg-white rounded-0" th:if="${summary != null}">
-        <h5 class="fw-bold mb-3 border-bottom pb-2">Order Summary</h5>
-        
-        <div class="d-flex justify-content-between mb-2 small">
-         <span class="text-muted">Subtotal</span>
-         <span class="fw-semibold" th:text="${#numbers.formatDecimal(summary.subtotal, 1, 2)} + ' MMK'"></span>
-        </div>
-        
-        <div class="d-flex justify-content-between mb-2 small">
-         <span class="text-muted">Shipping Fee</span>
-         <span class="fw-semibold" th:text="${#numbers.formatDecimal(summary.shippingFee, 1, 2)} + ' MMK'"></span>
-        </div>
-        
-        <div class="d-flex justify-content-between mb-2 small">
-         <span class="text-muted">Tax</span>
-         <span class="fw-semibold" th:text="${summary.tax} + ' MMK'"></span>
-        </div>
-        
-        <hr class="my-2">
-        
-        <div class="d-flex justify-content-between text-dark fw-bold fs-6">
-         <span>Grand Total</span>
-         <span th:text="${#numbers.formatDecimal(summary.grandTotal, 1, 2)} + ' MMK'"></span>
-        </div>
-       </div>
-      </div>
+								<div class="d-flex justify-content-between mb-2 small">
+									<span class="text-muted">Subtotal</span> <span
+										class="fw-semibold"
+										th:text="${#numbers.formatDecimal(summary.subtotal, 1, 2)} + ' MMK'"></span>
+								</div>
 
-     </div>
+								<div class="d-flex justify-content-between mb-2 small">
+									<span class="text-muted">Shipping Fee</span> <span
+										class="fw-semibold"
+										th:text="${#numbers.formatDecimal(summary.shippingFee, 1, 2)} + ' MMK'"></span>
+								</div>
 
-    </div>
+								<div class="d-flex justify-content-between mb-2 small">
+									<span class="text-muted">Tax</span> <span class="fw-semibold"
+										th:text="${summary.tax} + ' MMK'"></span>
+								</div>
 
-   </div>
+								<hr class="my-2">
 
-  </div>
+								<div
+									class="d-flex justify-content-between text-dark fw-bold fs-6">
+									<span>Grand Total</span> <span
+										th:text="${#numbers.formatDecimal(summary.grandTotal, 1, 2)} + ' MMK'"></span>
+								</div>
+							</div>
+						</div>
 
- </section>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</section>
 
 </body>
 </html>
