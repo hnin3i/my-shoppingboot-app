@@ -170,18 +170,29 @@
 									class="btn btn-sm btn-outline-info me-1" title="Detail"> <i
 										class="bi bi-eye"></i>
 
-								</a> <!-- Edit --> <a
-									th:href="@{/admin/categories/edit/{id}(id=${category.id})}"
-									class="btn btn-sm btn-outline-secondary me-1" title="Edit">
-
-										<i class="bi bi-pencil"></i>
-
-								</a> <!-- Delete --> <a
-									th:href="@{/admin/categories/delete/{id}(id=${category.id})}"
-									class="btn btn-sm btn-outline-danger" title="Delete"> <i
-										class="bi bi-trash"></i>
-
-								</a>
+								</a> <!-- Edit --> 
+								<th:block
+										th:with="canEdit=${session.loggedInUser != null and (session.loggedInUser.role.name() == 'SUPER_ADMIN' or session.loggedInUser.id == category.createdUserId)}">
+										<a
+											th:href="${canEdit} ? @{/admin/categories/edit/{id}(id=${category.id})} : 'javascript:void(0)'"
+											class="btn btn-sm btn-outline-secondary me-1"
+											th:classappend="${!canEdit} ? 'opacity-25 pe-none cursor-not-allowed' : ''"
+											th:title="${canEdit} ? 'Edit' : 'You do not have permission to edit this category'">
+											<i class="bi bi-pencil"></i>
+										</a>
+								</th:block>  
+								
+								<!-- Delete --> 
+								<th:block
+										th:with="canDelete=${session.loggedInUser != null and session.loggedInUser.role.name() == 'SUPER_ADMIN'}">
+										<a
+											th:href="${canDelete} ? @{/admin/categories/delete/{id}(id=${category.id})} : 'javascript:void(0)'"
+											class="btn btn-sm btn-outline-danger"
+											th:classappend="${!canDelete} ? 'opacity-25 pe-none cursor-not-allowed' : ''"
+											th:title="${canDelete} ? 'Delete' : 'Only Super Admin can delete categories'">
+											<i class="bi bi-trash"></i>
+										</a>
+								</th:block>
 
 								</td>
 

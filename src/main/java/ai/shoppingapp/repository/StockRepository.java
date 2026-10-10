@@ -185,5 +185,10 @@ Integer count = this.jdbcTemplate.queryForObject(sql, Integer.class, threshold);
        return this.jdbcTemplate.query( sql, new StockMapper(), productId );
        
 	}
+	public boolean existsByProductId(String productId) {
+	    String sql = "SELECT COUNT(*) FROM stocks WHERE product_id = ? AND is_active = 1";
+	    Integer count = jdbcTemplate.queryForObject(sql, Integer.class, productId);
+	    return count != null && count > 0;
+	}
 	
 }

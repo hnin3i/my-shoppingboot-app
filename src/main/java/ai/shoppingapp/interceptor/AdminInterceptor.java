@@ -26,7 +26,10 @@ public class AdminInterceptor implements HandlerInterceptor{
 		}
 		
 		UserModel user = (UserModel) session.getAttribute("loggedInUser");
-		if (!(user.getRole().equals(Role.ADMIN))) {
+		
+		Role role = user.getRole();
+		
+		if (role != Role.ADMIN && role != Role.SUPER_ADMIN) {
 			response.sendRedirect("/error/error");
 		}
 		

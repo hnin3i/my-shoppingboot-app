@@ -2,6 +2,6 @@ package ai.shoppingapp.model;
 
 public enum Role {
 	ADMIN,
-	CUSTOMER
-
+	CUSTOMER,
+	SUPER_ADMIN
 }

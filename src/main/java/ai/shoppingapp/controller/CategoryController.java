@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ai.shoppingapp.exception.ResourceNotFoundException;
 import ai.shoppingapp.model.CategoryModel;
@@ -88,9 +89,24 @@ public class CategoryController {
 
 	// EDIT FORM
 	@GetMapping("/admin/categories/edit/{id}")
-	public String editCategory(@PathVariable String id, Model model) {
+	public String editCategory(@PathVariable String id,HttpSession session, Model model) {
 
+		UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
+	    if (currentUser == null) {
+	        return "redirect:/login";
+	    }
+		
 		CategoryModel category = categoryService.findById(id);
+		
+		String loggedInUserId = String.valueOf(currentUser.getId());
+	    String createdUserId = category.getCreatedUserId() != null ? String.valueOf(category.getCreatedUserId()) : "";
+
+		boolean isSuperAdmin = Role.SUPER_ADMIN.equals(currentUser.getRole());
+		boolean isOwner = loggedInUserId.equals(createdUserId);
+
+	    if (!isSuperAdmin && !isOwner) {
+	        throw new ResourceNotFoundException("Page not found / Access Denied");
+	    }
 
 		model.addAttribute("category", category);
 		 model.addAttribute("activePage", "categories");
@@ -103,9 +119,25 @@ public class CategoryController {
 	public String editCategory(@ModelAttribute("category") CategoryModel category,HttpSession session, Model model) {
 
 		UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
-		if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
-			throw new ResourceNotFoundException("Page not found");
-		}
+		if (currentUser == null) {
+	        return "redirect:/login";
+	    }
+		
+		CategoryModel existingCategory = categoryService.findById(category.getId());
+	    if (existingCategory == null) {
+	        throw new ResourceNotFoundException("Category not found");
+	    }
+
+	    String loggedInUserId = String.valueOf(currentUser.getId());
+	    String createdUserId = existingCategory.getCreatedUserId() != null ? String.valueOf(existingCategory.getCreatedUserId()) : "";
+	    
+	    boolean isSuperAdmin = Role.SUPER_ADMIN.equals(currentUser.getRole());
+	    boolean isOwner = loggedInUserId.equals(createdUserId);
+
+	    if (!isSuperAdmin && !isOwner) {
+	        throw new ResourceNotFoundException("Page not found / Access Denied");
+	    }
+		
 		boolean exists = categoryService.existsByName(category.getName(), category.getId());
 
 		if (exists) {
@@ -136,11 +168,23 @@ public class CategoryController {
 	}
 
 	// DELETE CONFIRM - HARD DELETE
-	@PostMapping("/admin/categories/delete")
-	public String deleteConfirm(@ModelAttribute("category") CategoryModel category) {
+	@PostMapping("/admin/categories/delete/{id}")
+	public String deleteConfirm(@ModelAttribute("category") CategoryModel category,HttpSession session,RedirectAttributes redirectAttributes) {
 
-		categoryService.delete(category.getId());
-
+		UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
+	    if (currentUser == null || !Role.SUPER_ADMIN.equals(currentUser.getRole())) {
+	        throw new ResourceNotFoundException("Page not found");
+	    }
+		try {
+			categoryService.delete(category.getId());
+		}catch(RuntimeException e) {
+			// Product ရှိနေ၍ ဖျက်မရပါက Error message ကို FlashAttribute ဖြင့် ပို့မည်
+			redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+			return "redirect:/admin/categories/delete/" + category.getId();
+		}
+		
+		
 		return "redirect:/admin/categories";
+		
 	}
 }

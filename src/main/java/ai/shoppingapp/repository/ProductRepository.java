@@ -400,4 +400,10 @@ public class ProductRepository {
     	            new ProductMapper()
     	    );
     }
+    
+    public boolean existsByCategoryId(String categoryId) {
+        String sql = "SELECT COUNT(*) FROM products WHERE category_id = ? AND is_active = 1";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, categoryId);
+        return count != null && count > 0;
+    }
 }

@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ai.shoppingapp.exception.ResourceNotFoundException;
 import ai.shoppingapp.model.ProductModel;
 import ai.shoppingapp.model.Role;
 import ai.shoppingapp.model.UserModel;
+import ai.shoppingapp.repository.StockRepository;
 import ai.shoppingapp.service.CategoryService;
 import ai.shoppingapp.service.ProductService;
 import jakarta.servlet.http.HttpSession;
@@ -25,11 +27,13 @@ public class ProductController {
 
 	private final ProductService productService;
 	private final CategoryService categoryService;
+	private final StockRepository stockRepository;
 
-	public ProductController(ProductService productService, CategoryService categoryService) {
+	public ProductController(ProductService productService, CategoryService categoryService,StockRepository stockRepository) {
 
 		this.productService = productService;
 		this.categoryService = categoryService;
+		this.stockRepository = stockRepository;
 	}
 
 	@GetMapping("/admin/products")
@@ -113,9 +117,24 @@ public class ProductController {
 	}
 
 @GetMapping("/admin/products/edit/{id}")
-	public String editProduct(@PathVariable String id, Model model) {
+	public String editProduct(@PathVariable String id, Model model,HttpSession session) {
 
+	UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
+	if (currentUser == null) {
+        return "redirect:/login";
+    }
+	
 		ProductModel product = productService.findById(id);
+		
+		String loggedInUserId = String.valueOf(currentUser.getId());
+	    String createdUserId = product.getCreatedUserId() != null ? String.valueOf(product.getCreatedUserId()) : "";
+
+	    boolean isSuperAdmin = Role.SUPER_ADMIN.equals(currentUser.getRole());
+	    boolean isOwner = loggedInUserId.equals(createdUserId);
+
+	    if (!isSuperAdmin && !isOwner) {
+	        throw new ResourceNotFoundException("Page not found / Access Denied");
+	    }
 		
 		System.out.println(" duration in edit get .... " + product.getDiscountDuration());
 
@@ -133,9 +152,25 @@ public class ProductController {
 			@RequestParam(value = "imageFile", required = false) MultipartFile imageFile,HttpSession session) throws IOException {
 
 	UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
-    if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
-        throw new ResourceNotFoundException("Page not found");
+	if (currentUser == null) {
+        return "redirect:/login";
     }
+	
+	ProductModel existingProduct = productService.findById(product.getId());
+    if (existingProduct == null) {
+        throw new ResourceNotFoundException("Product not found");
+    }
+
+    String loggedInUserId = String.valueOf(currentUser.getId());
+    String createdUserId = existingProduct.getCreatedUserId() != null ? String.valueOf(existingProduct.getCreatedUserId()) : "";
+
+    boolean isSuperAdmin = Role.SUPER_ADMIN.equals(currentUser.getRole());
+    boolean isOwner = loggedInUserId.equals(createdUserId);
+
+    if (!isSuperAdmin && !isOwner) {
+        throw new ResourceNotFoundException("Page not found / Access Denied");
+    }
+	
 		if (imageFile != null && !imageFile.isEmpty()) {
 
 			String fileName = imageFile.getOriginalFilename();
@@ -158,8 +193,10 @@ public class ProductController {
 			product.setImage(fileName);
 		}
 
-		String currentUserId = String.valueOf(currentUser.getId());
-		product.setUpdatedUserId(currentUserId);
+		//String currentUserId = String.valueOf(currentUser.getId());
+		//product.setUpdatedUserId(currentUserId);
+		
+		product.setUpdatedUserId(loggedInUserId);
 
 		System.out.println(" duration .. " + product.getDiscountDuration());
 		productService.update(product);
@@ -168,8 +205,13 @@ public class ProductController {
 	}
 
 @GetMapping("/admin/products/delete/{id}")
-	public String deleteProduct(@PathVariable String id, Model model) {
+	public String deleteProduct(@PathVariable String id,HttpSession session, Model model) {
 
+	UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
+    if (currentUser == null || !Role.SUPER_ADMIN.equals(currentUser.getRole())) {
+        throw new ResourceNotFoundException("Page not found");
+    }
+	
 		ProductModel product = productService.findById(id);
 
 		model.addAttribute("product", product);
@@ -179,8 +221,20 @@ public class ProductController {
 	}
 
 @GetMapping("/admin/products/delete-confirm/{id}")
-	public String deleteConfirm(@PathVariable String id, Model model) {
+	public String deleteConfirm(@PathVariable String id,HttpSession session, Model model,RedirectAttributes redirectAttributes) {
 
+	UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
+    if (currentUser == null || !Role.SUPER_ADMIN.equals(currentUser.getRole())) {
+        throw new ResourceNotFoundException("Page not found");
+    }
+    
+ // Stock ရှိမရှိ စစ်ဆေး
+    boolean hasStock = stockRepository.existsByProductId(id);
+    if (hasStock) {
+        redirectAttributes.addFlashAttribute("errorMessage", "You can't delete this product because you have stock!");
+        return "redirect:/admin/products/delete/" + id;
+    }
+	
 		productService.delete(id);
 		model.addAttribute("activePage", "products");
 		

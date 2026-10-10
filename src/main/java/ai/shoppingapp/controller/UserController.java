@@ -47,8 +47,8 @@ public class UserController {
 		if (loggedInUser == null) {
 			return "redirect:/login";
 		}
-
-		if ("ADMIN".equalsIgnoreCase(String.valueOf(loggedInUser.getRole()))) {
+		
+		if ("ADMIN".equalsIgnoreCase(String.valueOf(loggedInUser.getRole())) || "SUPER_ADMIN".equalsIgnoreCase(String.valueOf(loggedInUser.getRole()))) {
 
 			return "redirect:/admin/dashboard";
 		}

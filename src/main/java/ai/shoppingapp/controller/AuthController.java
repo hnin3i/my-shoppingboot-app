@@ -86,7 +86,7 @@ public class AuthController {
 
         // Redirect according to user role
         if ("ADMIN".equalsIgnoreCase(
-                String.valueOf(loginUser.getRole()))) {
+                String.valueOf(loginUser.getRole())) || "SUPER_ADMIN".equalsIgnoreCase(String.valueOf(loginUser.getRole()))) {
 
             // Clear browser cart once after admin login
             newSession.setAttribute("clearCartOnLogin", true);
