@@ -8,14 +8,17 @@ import org.springframework.stereotype.Service;
 
 import ai.shoppingapp.model.ProductModel;
 import ai.shoppingapp.repository.ProductRepository;
+import ai.shoppingapp.repository.StockRepository;
 
 @Service
 public class ProductService {
 
 	private final ProductRepository productRepository;
+	private final StockRepository stockRepository;
 
-	public ProductService(ProductRepository productRepository) {
+	public ProductService(ProductRepository productRepository,StockRepository stockRepository) {
 		this.productRepository = productRepository;
+		this.stockRepository=stockRepository;
 	}
 
 	public List<ProductModel> findAll() {
@@ -59,6 +62,12 @@ public class ProductService {
 
 	public void delete(String id) {
 
+		
+	    boolean hasStock = stockRepository.existsByProductId(id);
+	    if (hasStock) {
+	        throw new RuntimeException("You can’t delete this product because you have stock.");
+	    }
+	 
 		productRepository.delete(id);
 	}
 
