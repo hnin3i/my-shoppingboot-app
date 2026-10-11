@@ -222,6 +222,157 @@ function renderColors() {
            sizeMessage.innerHTML = '<i class="bi bi-check-circle"></i> Size selected';
        }
    }
+   
+   /* =========================================================
+      ADD TO CART
+      ========================================================= */
+
+      function handleDetailAddToCart() {
+
+          if (typeof DETAIL_PRODUCT === "undefined") {
+              throw new Error("Product information not found.");
+          }
+
+          // 1. Color မရွေးရသေးပါက
+          if (!selectedColor) {
+              if (typeof showToast === "function") {
+                  showToast("Please select a color.", "warning");
+              }
+              return;
+          }
+
+          // 2. Size မရွေးရသေးပါက sizeMessage ကို အနီရောင်ဖြင့် "Please select a size" ပြမည်
+          if (!selectedSize) {
+              const sizeMessage = document.getElementById("sizeMessage");
+              if (sizeMessage) {
+                  sizeMessage.className = "size-message text-danger";
+                  sizeMessage.innerHTML = '<i class="bi bi-info-circle"></i> Please select a size';
+                  sizeMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+
+              if (typeof showToast === "function") {
+                  showToast("Please select a size.", "warning");
+              }
+              return;
+          }
+
+          // 3. ရွေးချယ်ထားသော Color နဲ့ Size အတွက် Stock ရှာမည်
+          const stock = findSelectedStock();
+
+          if (!stock) {
+              if (typeof showToast === "function") {
+                  showToast("This color and size are not available.", "danger");
+              }
+              return;
+          }
+
+          const maxQty = Number(stock.stockQty);
+
+          if (maxQty <= 0) {
+              const sizeMessage = document.getElementById("sizeMessage");
+              if (sizeMessage) {
+                  sizeMessage.className = "size-message text-danger";
+                  sizeMessage.innerHTML = '<i class="bi bi-exclamation-circle"></i> This item is out of stock.';
+              }
+              return;
+          }
+
+          const quantity = getQuantity();
+
+          if (quantity > maxQty) {
+              if (typeof showToast === "function") {
+                  showToast("Requested quantity is greater than available stock.", "warning");
+              }
+              return;
+          }
+
+          // 4. Cart ထဲသို့ ထည့်သွင်းမည်
+          const stockInfo = {
+              stockId: stock.id,
+              productId: DETAIL_PRODUCT.productId,
+              productName: DETAIL_PRODUCT.productName,
+              image: DETAIL_PRODUCT.image,
+              colour: stock.colour,
+              size: stock.size,
+              maxQty: maxQty,
+              price: Number(DETAIL_PRODUCT.price)
+          };
+
+          const result = addToCart(stockInfo, quantity);
+
+          if (result.success) {
+              // Show Pop-up Modal with item details
+              showAddToCartModal(stockInfo, quantity);
+              
+              if (typeof showToast === "function") {
+                  showToast(result.message, "success");
+              }
+          } else {
+              if (typeof showToast === "function") {
+                  showToast(result.message, "danger");
+              }
+          }
+      }
+	  
+	  /* =========================================================
+	     ADD TO CART MODAL CONTROLLERS
+	     ========================================================= */
+
+		 function showAddToCartModal(stockInfo, quantity) {
+		     const modal = document.getElementById("addToCartModal");
+
+		     if (!modal) {
+		         console.error("Modal not found: #addToCartModal");
+		         return;
+		     }
+
+		     const img = document.getElementById("modalProductImg");
+		     const name = document.getElementById("modalProductName");
+		     const color = document.getElementById("modalProductColor");
+		     const size = document.getElementById("modalProductSize");
+		     const qty = document.getElementById("modalProductQty");
+		     const price = document.getElementById("modalProductPrice");
+
+		     if (!img || !name || !color || !size || !qty || !price) {
+		         console.error("One or more modal elements are missing.", {
+		             img, name, color, size, qty, price
+		         });
+		         return;
+		     }
+
+		     img.src = stockInfo.image;
+		     name.textContent = stockInfo.productName;
+		     color.textContent = stockInfo.colour;
+		     size.textContent = stockInfo.size;
+		     qty.textContent = quantity;
+		     price.textContent =
+		         (Number(stockInfo.price) * quantity).toLocaleString() + " MMK";
+
+		     modal.style.display = "flex";
+		 }
+
+	  function hideAddToCartModal() {
+	      const modal = document.getElementById("addToCartModal");
+	      if (modal) {
+	          modal.style.display = "none";
+	      }
+	  }
+
+	  // Close Modal Event Listeners Setup (Add this inside your DOMContentLoaded listener or event delegation)
+	  document.addEventListener("click", function(event) {
+	      const closeBtn = event.target.closest("#closeCartModal");
+	      const continueBtn = event.target.closest("#continueShoppingBtn");
+	      const modalOverlay = event.target.closest("#addToCartModal");
+
+	      if (closeBtn || continueBtn) {
+	          hideAddToCartModal();
+	      }
+	      
+	      // Close if clicking outside the modal box container
+	      if (modalOverlay && event.target === modalOverlay) {
+	          hideAddToCartModal();
+	      }
+	  });
 
 /* =========================================================
    GET QUANTITY
@@ -424,91 +575,6 @@ function handleQuantityBlur(event) {
     event.target.value =
         quantity;
 }
-
-
-/* =========================================================
-   ADD TO CART
-   ========================================================= */
-
-   function handleDetailAddToCart() {
-
-       if (typeof DETAIL_PRODUCT === "undefined") {
-           throw new Error("Product information not found.");
-       }
-
-       // 1. Color မရွေးရသေးပါက
-       if (!selectedColor) {
-           if (typeof showToast === "function") {
-               showToast("Please select a color.", "warning");
-           }
-           return;
-       }
-
-       // 2. Size မရွေးရသေးပါက sizeMessage ကို အနီရောင်ဖြင့် "Please select a size" ပြမည်
-       if (!selectedSize) {
-           const sizeMessage = document.getElementById("sizeMessage");
-           if (sizeMessage) {
-               sizeMessage.className = "size-message text-danger";
-               sizeMessage.innerHTML = '<i class="bi bi-info-circle"></i> Please select a size';
-               
-               // Size Section ထံ သို့ စက်ဝိုင်းသဖွယ် Smooth Scroll သွားရန် (Optional)
-               sizeMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-           }
-
-           if (typeof showToast === "function") {
-               showToast("Please select a size.", "warning");
-           }
-           return;
-       }
-
-       // 3. ရွေးချယ်ထားသော Color နဲ့ Size အတွက် Stock ရှာမည်
-       const stock = findSelectedStock();
-
-       if (!stock) {
-           if (typeof showToast === "function") {
-               showToast("This color and size are not available.", "danger");
-           }
-           return;
-       }
-
-       const maxQty = Number(stock.stockQty);
-
-       if (maxQty <= 0) {
-           const sizeMessage = document.getElementById("sizeMessage");
-           if (sizeMessage) {
-               sizeMessage.className = "size-message text-danger";
-               sizeMessage.innerHTML = '<i class="bi bi-exclamation-circle"></i> This item is out of stock.';
-           }
-           return;
-       }
-
-       const quantity = getQuantity();
-
-       if (quantity > maxQty) {
-           if (typeof showToast === "function") {
-               showToast("Requested quantity is greater than available stock.", "warning");
-           }
-           return;
-       }
-
-       // 4. Cart ထဲသို့ ထည့်သွင်းမည်
-       const stockInfo = {
-           stockId: stock.id,
-           productId: DETAIL_PRODUCT.productId,
-           productName: DETAIL_PRODUCT.productName,
-           image: DETAIL_PRODUCT.image,
-           colour: stock.colour,
-           size: stock.size,
-           maxQty: maxQty,
-           price: Number(DETAIL_PRODUCT.price)
-       };
-
-       const result = addToCart(stockInfo, quantity);
-
-       if (typeof showToast === "function") {
-           showToast(result.message, result.success ? "success" : "danger");
-       }
-   }
 
 
 /* =========================================================
