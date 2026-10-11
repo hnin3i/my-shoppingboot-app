@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/public_layout}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop Demo - Checkout</title>
+
+<link rel="stylesheet" href="/css/styles.css" />
+<link rel="stylesheet" th:href="@{/css/app.css}">
+<style>
+:root {
+	--border-color: #e2e8f0;
+	--border-focus: #000000;
+	--card-radius: 12px;
+	--input-radius: 8px;
+}
+
+body {
+	background-color: #f8fafc;
+	color: #0f172a;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+		Helvetica, Arial, sans-serif;
+}
+
+/* Modern Card Containers */
+.checkout-card {
+	background: #ffffff;
+	border: 1px solid var(--border-color);
+	border-radius: var(--card-radius);
+	padding: 24px;
+	margin-bottom: 20px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.section-title {
+	font-size: 1.125rem;
+	font-weight: 700;
+	margin-bottom: 16px;
+	color: #0f172a;
+}
+
+/* Floating Input Styling */
+.form-floating>.form-control, .form-floating>.form-select {
+	border: 1px solid var(--border-color);
+	border-radius: var(--input-radius);
+	font-size: 0.875rem;
+	height: 52px;
+}
+
+.form-floating>label {
+	color: #64748b;
+	font-size: 0.813rem;
+	padding-left: 14px;
+}
+
+.form-floating>.form-control:focus, .form-floating>.form-select:focus {
+	border-color: var(--border-focus);
+	box-shadow: 0 0 0 1px var(--border-focus);
+}
+
+.form-check-input:checked {
+	background-color: #0f172a;
+	border-color: #0f172a;
+}
+
+/* Sticky Order Summary Sidebar on Desktop */
+@media (min-width: 992px) {
+	.sticky-summary {
+		position: sticky;
+		top: 2rem;
+		z-index: 10;
+	}
+}
+
+.order-summary-card {
+	border: 1px solid var(--border-color);
+	border-radius: var(--card-radius);
+	background: #ffffff;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.place-order-btn {
+	background-color: #000000 !important;
+	border-color: #000000 !important;
+	color: #ffffff !important;
+	padding: 14px;
+	font-weight: 600;
+	font-size: 1rem;
+	border-radius: var(--input-radius);
+	width: 100%;
+	transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.place-order-btn:hover,
+.place-order-btn:focus,
+.place-order-btn:active {
+	background-color: #1e293b !important;
+	border-color: #1e293b !important;
+	color: #ffffff !important;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+.border-dashed {
+    border-style: dashed !important;
+}
+.hover-bg-white:hover {
+    background-color: #ffffff !important;
+    border-color: #000000 !important;
+}
+
+.payment-preview-card {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s ease-in-out;
+}
+
+.preview-thumbnail {
+    object-fit: cover;
+    border: 1px solid #e2e8f0;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.border-dashed {
+    border-style: dashed !important;
+}
+
+/* Compact Scrollable Container */
+#order-summary-items {
+    max-height: 195px; /* Shows ~2 items at a time cleanly without being too tall */
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+/* Custom Minimalist Scrollbar */
+#order-summary-items::-webkit-scrollbar {
+    width: 4px;
+}
+
+#order-summary-items::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+#order-summary-items::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 4px;
+}
+
+#order-summary-items::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+</style>
+</head>
+<body>
+<div layout:fragment="content">
+
+<main class="container-xl pb-5 pt-3">
+		<h1 class="h3 fw-bold mb-4">Checkout</h1>
+
+		<!-- Main Responsive Grid Row -->
+		<div class="row g-4">
+			<!-- Left Side: Checkout Forms (8 cols on lg, 7 cols on xl) -->
+			<div class="col-12 col-lg-8 col-xl-7">
+
+				<!-- Contact Section -->
+				<section class="checkout-card">
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<h2 class="section-title mb-0">Contact</h2>
+					</div>
+
+					<div
+						class="p-3 bg-light rounded-3 border d-flex align-items-center justify-content-between mb-3">
+						<div class="text-truncate me-2">
+							<small class="text-muted d-block" style="font-size: 11px;">Account</small>
+							<strong id="user-contact-display" th:text="${user.email}"
+								class="text-dark small text-truncate d-block"> Loading... </strong>
+						</div>
+						<span
+							class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2 py-1 flex-shrink-0"
+							style="font-size: 11px;">✔</span>
+					</div>
+
+					<div class="form-check">
+						<input class="form-check-input" type="checkbox"
+							id="newsletter-check" checked> <label
+							class="form-check-label text-secondary small"
+							for="newsletter-check"> Email me with news and offers </label>
+					</div>
+				</section>
+
+				<!-- Shipping Address Section -->
+				<section class="checkout-card">
+					<h2 class="section-title">Shipping address</h2>
+
+					<div class="row g-3">
+						<div class="col-12">
+							<div class="form-floating">
+								<select class="form-select" id="country-select">
+									<option value="MM" selected>Myanmar (Burma)</option>
+								</select> <label for="country-select">Country/Region</label>
+							</div>
+						</div>
+
+						<div class="col-12 col-sm-6">
+							<div class="form-floating">
+								<input type="text" class="form-control" id="first-name"
+									placeholder="First name (optional)"> <label
+									for="first-name">First name (optional)</label>
+							</div>
+						</div>
+						<div class="col-12 col-sm-6">
+							<div class="form-floating">
+								<input type="text" class="form-control" id="last-name"
+									placeholder="Last name"> <label for="last-name">Last
+									name</label>
+								<div id="last-name-error" class="field-error" hidden></div>
+							</div>
+						</div>
+
+						<div class="col-12">
+							<div class="form-floating">
+								<input type="text" class="form-control" id="address-street"
+									placeholder="Address"> <label for="address-street">Address</label>
+								<div id="address-street-error" class="field-error" hidden></div>
+							</div>
+						</div>
+
+						<div class="col-12">
+							<div class="form-floating">
+								<input type="text" class="form-control" id="address-apartment"
+									placeholder="Apartment, suite, etc. (optional)"> <label
+									for="address-apartment">Apartment, suite, etc.
+									(optional)</label>
+							</div>
+						</div>
+
+						<div class="col-12 col-sm-6">
+							<div class="form-floating">
+								<input type="text" class="form-control" id="address-city"
+									placeholder="City"> <label for="address-city">City</label>
+								<div id="address-city-error" class="field-error" hidden></div>
+							</div>
+						</div>
+						<div class="col-12 col-sm-6">
+							<div class="form-floating">
+								<input type="text" class="form-control" id="address-postal"
+									placeholder="Postal code (optional)"> <label
+									for="address-postal">Postal code (optional)</label>
+							</div>
+						</div>
+
+						<div class="col-12">
+							<div class="form-floating">
+								<input type="tel" class="form-control" id="phone-no"
+									placeholder="Phone"> <label for="phone-no">Phone</label>
+								<div id="phone-no-error" class="field-error" hidden></div>
+							</div>
+						</div>
+
+						<div class="col-12">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox"
+									id="save-info-check"> <label
+									class="form-check-label text-secondary small"
+									for="save-info-check"> Save this information for next
+									time </label>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<!-- Payment Method Section -->
+				<section class="checkout-card">
+					<h2 class="section-title">Payment Method</h2>
+
+					<div class="payment-group-title">PAY ON DELIVERY</div>
+					<div class="payment-option" data-payment="COD">
+						<div class="payment-option-header">
+							<input class="payment-radio" type="radio" name="payment-method"
+								value="COD">
+							<div class="payment-icon">🚚</div>
+							<div class="payment-info">
+								<strong>Cash on Delivery</strong> <span>ငွေချေပြီးမှ
+									ပစ္စည်းလက်ခံယူပါ</span>
+							</div>
+						</div>
+					</div>
+
+					<div class="payment-group-title mt-3">PAY NOW (TRANSFER / SCAN)</div>
+
+					<div class="payment-option" data-payment="KBZ_BANK">
+						<div class="payment-option-header">
+							<input class="payment-radio" type="radio" name="payment-method"
+								value="KBZ_BANK"> <img class="payment-icon"
+								src="/images/bank/kbz.jpg" alt="kbz bank logo">
+							<div class="payment-info">
+								<strong>KBZ Bank</strong> <span>Bank transfer</span>
+							</div>
+						</div>
+						<div class="payment-details-wrapper" hidden></div>
+					</div>
+
+					<div class="payment-option" data-payment="AYA_BANK">
+						<div class="payment-option-header">
+							<input class="payment-radio" type="radio" name="payment-method"
+								value="AYA_BANK"> <img class="payment-icon"
+								src="/images/bank/aya.png" alt="aya bank logo">
+							<div class="payment-info">
+								<strong>AYA Bank</strong> <span>Bank transfer</span>
+							</div>
+						</div>
+						<div class="payment-details-wrapper" hidden></div>
+					</div>
+
+					<div class="payment-option" data-payment="CB_BANK">
+						<div class="payment-option-header">
+							<input class="payment-radio" type="radio" name="payment-method"
+								value="CB_BANK"> <img class="payment-icon"
+								src="/images/bank/cb.jpg" alt="cb bank logo">
+							<div class="payment-info">
+								<strong>CB Bank</strong> <span>Bank transfer</span>
+							</div>
+						</div>
+						<div class="payment-details-wrapper" hidden></div>
+					</div>
+
+					<div class="payment-option" data-payment="MOBILE_PAY">
+						<div class="payment-option-header">
+							<input class="payment-radio" type="radio" name="payment-method"
+								value="MOBILE_PAY"> <img class="payment-icon"
+								src="/images/bank/kpay.png" alt="kpay logo">
+							<div class="payment-info">
+								<strong>K Pay / AYA Pay / CB Pay / Wave Pay</strong> <span>Mobile
+									payment</span>
+							</div>
+						</div>
+						<div class="payment-details-wrapper" hidden></div>
+					</div>
+
+					<div id="payment-method-error" class="field-error" hidden></div>
+				</section>
+
+				<!-- Additional Notes Section -->
+				<section class="checkout-card">
+					<h2 class="section-title">Additional Notes</h2>
+					<div class="form-floating">
+						<textarea id="order-notes" class="form-control"
+							style="height: 100px;" placeholder="Instructions"></textarea>
+						<label for="order-notes">Special instructions for your order...</label>
+					</div>
+				</section>
+
+				<button id="place-order-btn" class="btn place-order-btn d-none d-lg-block mb-4"
+					data-action="place-order">Place Order</button>
+			</div>
+
+			<!-- Right Side: Order Summary (4 cols on lg, 5 cols on xl) -->
+			<div class="col-12 col-lg-4 col-xl-5">
+				<div class="sticky-summary">
+					<div class="card p-4 order-summary-card">
+						<h2 class="section-title">Order Summary</h2>
+
+						<div id="order-summary-items" class="order-summary-items mb-3"></div>
+
+						<hr class="my-3 text-secondary">
+
+						<div class="d-flex justify-content-between mb-2 small">
+							<span class="text-secondary">Subtotal · <span
+								id="order-item-count">0</span> items
+							</span> <span id="order-subtotal" class="fw-semibold">0 MMK</span>
+						</div>
+
+						<div class="d-flex justify-content-between mb-2 small">
+							<span class="text-secondary">Shipping</span> <span
+								id="order-shipping" class="fw-semibold">0 MMK</span>
+						</div>
+
+						<div class="d-flex justify-content-between mb-3 small">
+							<span class="text-secondary">Estimated taxes (5.00%)</span> <span
+								id="order-tax" class="fw-semibold">0 MMK</span>
+						</div>
+
+						<hr class="my-3 text-secondary">
+
+						<div class="d-flex justify-content-between align-items-center mb-4">
+							<strong class="h5 mb-0">Total</strong> <strong
+								id="order-grand-total" class="h5 mb-0 text-dark">0 MMK</strong>
+						</div>
+
+						<!-- Place order button for mobile view positioned inside summary -->
+						<button id="place-order-btn-mobile" class="btn place-order-btn d-lg-none"
+							data-action="place-order">Place Order</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<div id="toast-msg" class="toast align-items-center border-0 position-fixed bottom-0 end-0 m-3"
+		role="alert">
+		<div class="d-flex">
+			<div class="toast-body" id="toast-body"></div>
+			<button type="button" class="btn-close me-2 m-auto"
+				data-bs-dismiss="toast"></button>
+		</div>
+	</div>
+
+	<script src="/js/storage.js"></script>
+	<script src="/js/cart.js"></script>
+	<script src="/js/product.js"></script>
+	<script src="/js/api.js"></script>
+	<script src="/js/checkout.js"></script>
+	<script src="/js/error-handler.js"></script>
+</div>
+</body>
+</html>

@@ -55,6 +55,29 @@ private final JdbcTemplate jdbcTemplate;
         List<OrderHistoryEntity> list = jdbcTemplate.query(sql, new OrderHistoryRowMapper(), userId, orderId);
         return list.isEmpty() ? null : list.get(0);
     }
-	
+	public List<OrderHistoryEntity> findLatestOrdersByUserId(String userId) {
+
+	    String sql = "SELECT o.id AS order_id, o.order_number, u.name AS customer_name, "
+	            + "GROUP_CONCAT(p.name SEPARATOR ', ') AS product_names, "
+	            + "o.total_amount, o.tax_amount, o.shipping_fee, "
+	            + "o.status AS order_status, o.payment_status, o.created_at "
+	            + "FROM orders o "
+	            + "JOIN users u ON o.user_id = u.id "
+	            + "JOIN order_items oi ON o.id = oi.order_id "
+	            + "JOIN stocks s ON oi.stock_id = s.id "
+	            + "JOIN products p ON s.product_id = p.id "
+	            + "WHERE o.user_id = ? "
+	            + "GROUP BY o.id, o.order_number, u.name, o.total_amount, "
+	            + "o.tax_amount, o.shipping_fee, o.status, "
+	            + "o.payment_status, o.created_at "
+	            + "ORDER BY o.created_at DESC "
+	            + "LIMIT 3";
+
+	    return jdbcTemplate.query(
+	            sql,
+	            new OrderHistoryRowMapper(),
+	            userId
+	    );
+	}
 
 }

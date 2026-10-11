@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ai.shoppingapp.model.OrderHistoryDto;
 import ai.shoppingapp.model.OrderDetailsDto;
@@ -15,6 +16,7 @@ import ai.shoppingapp.service.OrderHistoryService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/user")
 public class OrderHistoryController {
 
     private final OrderHistoryService orderService;
@@ -23,7 +25,7 @@ public class OrderHistoryController {
         this.orderService = orderService;
     }
     
-    @GetMapping("/order-history")
+    @GetMapping("/orders")
     public String showOrderHistory(HttpSession session, Model model) {
     	UserModel user = (UserModel) session.getAttribute("loggedInUser");
         if (user == null) {
@@ -33,7 +35,7 @@ public class OrderHistoryController {
         String userId = user.getId();
         List<OrderHistoryDto> orders = orderService.getOrderHistory(userId);
         model.addAttribute("orders", orders);
-        return "OrderHistory/order_history";
+        return "user/order_history";
     }
     
     @PostMapping("/details")
@@ -49,6 +51,7 @@ public class OrderHistoryController {
 
         model.addAttribute("items", items);
         model.addAttribute("summary", summary);
-        return "OrderHistory/order_details";
+        return "user/order_details";
     }
+    //...
 }

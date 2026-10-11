@@ -143,4 +143,20 @@ public class CategoryRepository {
 
 		return count != null && count > 0;
 	}
+	public List<Category> getAllActiveCategories() {
+
+	    String sql = """
+	            SELECT *
+	            FROM categories
+	            WHERE is_active = 1
+	            ORDER BY created_at DESC
+	            """;
+
+	    List<Category> entities =
+	            this.jdbcTemplate.query(sql, new CategoryMapper());
+
+	    return entities;
+	}
+	
+	
 }

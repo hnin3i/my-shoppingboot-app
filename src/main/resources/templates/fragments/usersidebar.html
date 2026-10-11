@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<div th:fragment="usersidebar" class="user-sidebar">
+
+    <p class="menu-title">ACCOUNT</p>
+
+    <a th:href="@{/user/dashboard}"
+       class="account-menu-link">
+        <span>OVERVIEW</span>
+        <i class="bi bi-arrow-right"></i>
+    </a>
+
+    <a th:href="@{/user/profile}"
+       class="account-menu-link">
+        <span>MY PROFILE</span>
+        <i class="bi bi-arrow-right"></i>
+    </a>
+
+    <a th:href="@{/user/orders}"
+       class="account-menu-link">
+        <span>MY ORDERS</span>
+        <i class="bi bi-arrow-right"></i>
+    </a>
+
+    <a th:href="@{/logout}"
+       class="account-menu-link logout-link">
+        <span>LOG OUT</span>
+        <i class="bi bi-box-arrow-right"></i>
+    </a>
+
+</div>
+
+</html>

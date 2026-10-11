@@ -25,7 +25,7 @@
 </head>
 
 <body>
-
+	
 	<!-- Sidebar -->
 	<div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
@@ -33,23 +33,7 @@
 	<!-- Main -->
 	<div class="admin-main">
 
-		<!-- Topbar -->
-		<div class="admin-topbar">
-
-			<!-- Admin Profile -->
-			<div class="admin-profile" style="margin-left: auto;">
-
-				<div class="admin-avatar">A</div>
-
-				<div>
-					<strong>Admin</strong>
-				</div>
-
-			</div>
-
-		</div>
-
-
+		<div th:replace="~{fragments/adminheader :: adminheader}"></div>
 		<!-- Content -->
 		<div class="admin-content">
 

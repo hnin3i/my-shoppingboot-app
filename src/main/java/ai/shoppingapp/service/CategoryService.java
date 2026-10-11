@@ -101,4 +101,12 @@ public class CategoryService {
 
 		return entity;
 	}
+	public List<CategoryModel> getAllActiveCategories() {
+
+		List<Category> entities = this.repo.getAllActiveCategories();
+
+		List<CategoryModel> categories = entities.stream().map(this::toDto).toList();
+
+		return categories;
+	}
 }

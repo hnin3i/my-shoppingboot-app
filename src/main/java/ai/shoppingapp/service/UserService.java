@@ -39,6 +39,9 @@ public class UserService {
 		if (entity == null) return null;
 		return toModel(entity);
 	}
+	public boolean isEmailAlreadyUsed(String email, String id) {
+	    return userRepo.existsByEmailAndIdNot(email, id);
+	}
 	public int editProfile(ChangeProfileModel model) {
 		User entity = this.userRepo.findById(model.getId());
 		if(entity == null) return 0;

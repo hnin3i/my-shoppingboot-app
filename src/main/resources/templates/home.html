@@ -2,11 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/public_layout}">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title layout:title-pattern="$CONTENT_TITLE - BlackJack">
 	BlackJack</title>
+
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
@@ -14,9 +19,18 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 <link rel="stylesheet" th:href="@{/css/app.css}">
+
 </head>
+
 <body>
+
 	<div layout:fragment="content" class="home-page">
+
+
+		<!-- ========================================================= -->
+		<!-- HERO SECTION -->
+		<!-- ========================================================= -->
+
 		<section class="home-hero">
 
 			<img class="hero-background" src="/images/hero-fashion.png"
@@ -25,6 +39,7 @@
 			<div class="hero-overlay"></div>
 
 			<div class="hero-copy">
+
 				<p class="eyebrow">BLACKJACK SALE EVENT</p>
 
 				<h1>
@@ -33,155 +48,366 @@
 
 				<p>Fresh fashion pieces, selected for your everyday look.</p>
 
+				<a class="btn hero-button" th:href="@{/products/list}"> SHOP NOW
+				</a>
 
-				<a class="btn hero-button" th:href="@{/products?category=women}">
-					SHOP NOW </a>
 			</div>
 
 		</section>
-		<section class="home-section featured-section">
+
+
+
+		<!-- ========================================================= -->
+		<!-- NEW ARRIVALS SECTION -->
+		<!-- ========================================================= -->
+
+		<section id="new-in" class="home-section featured-section">
+
 			<div class="section-heading">
+
 				<p class="eyebrow">JUST ARRIVED</p>
+
 				<h2>NEW IN</h2>
+
 			</div>
 
-		
+
+			<!-- NEW ARRIVAL PRODUCTS -->
+
 			<div class="row g-3 g-lg-4"
 				th:if="${newProducts != null and !#lists.isEmpty(newProducts)}">
 
-				<div class="col-6 col-md-3" th:each="product : ${newProducts}">
+				<div class="col-6 col-md-3" th:each="product, stat : ${newProducts}"
+					th:if="${stat.index < 8}">
 
 					<a class="text-decoration-none text-dark d-block"
-						th:href="@{/products/{id}(id=${product.id})}">
+						th:href="@{/products/detail/{id}(id=${product.id})}">
 
 						<article class="product-card">
 
+
+							<!-- PRODUCT IMAGE -->
+
 							<img class="w-100 object-fit-cover mb-3" style="height: 300px;"
-								th:src="@{'/images/product/' + ${product.image}}" th:alt="${product.name}">
+								th:src="@{'/images/product/' + ${product.image}}"
+								th:alt="${product.name}">
+
+
+							<!-- PRODUCT NAME -->
 
 							<h3 th:text="${product.name}">Product name</h3>
 
-							<p th:text="${product.price + ' MMK'}">0 MMK</p>
+
+							<!-- NORMAL PRICE -->
+
+							<div class="product-price" th:if="${product.isDiscount != 1}">
+
+								<span
+									th:text="${#numbers.formatDecimal(
+                                    product.price,
+                                    0,
+                                    'COMMA',
+                                    0,
+                                    'POINT'
+                                ) + ' MMK'}">
+
+									45,000 MMK </span>
+
+							</div>
+
+
+							<!-- DISCOUNT PRICE -->
+
+							<div class="product-price discount-price"
+								th:if="${product.isDiscount == 1}">
+
+								<!-- SALE PRICE -->
+
+								<span class="sale-price"
+									th:text="${#numbers.formatDecimal(
+                                      product.finalPrice,
+                                      0,
+                                      'COMMA',
+                                      0,
+                                      'POINT'
+                                  ) + ' MMK'}">
+
+									45,000 MMK </span>
+
+
+								<!-- ORIGINAL PRICE -->
+
+								<del class="old-price"
+									th:text="${#numbers.formatDecimal(
+                                     product.price,
+                                     0,
+                                     'COMMA',
+                                     0,
+                                     'POINT'
+                                 ) + ' MMK'}">
+
+									50,000 MMK </del>
+
+							</div>
 
 						</article>
 
 					</a>
 
 				</div>
+
 			</div>
 
-			
+
+			<!-- NO NEW PRODUCTS -->
+
+			<div class="text-center py-5"
+				th:if="${newProducts == null or #lists.isEmpty(newProducts)}">
+
+				<p>No new products available.</p>
+
+			</div>
+
+
+			<!-- VIEW ALL NEW ARRIVALS -->
+
 			<div class="text-center mt-4">
-				<a class="btn hero-button" th:href="@{/products}">VIEW ALL</a>
+
+				<a class="btn hero-button"
+					th:href="@{/products/list(newArrivals=true)}"> VIEW ALL </a>
+
 			</div>
+
 		</section>
-		<section class="home-section featured-section">
+
+
+
+		<!-- ========================================================= -->
+		<!-- LIMITED TIME SALE SECTION -->
+		<!-- ========================================================= -->
+
+		<section id="sale" class="home-section featured-section">
+
+
 			<div class="section-heading section-heading-row">
+
 				<div>
+
 					<p class="eyebrow">--LIMITED TIME--</p>
+
 					<h2>Shop the Sale</h2>
+
 				</div>
-				<a class="text-link" th:href="@{/products}">VIEW ALL PRODUCTS</a>
+
+
+				<!-- VIEW ALL SALE -->
+
+				<a class="text-link" th:href="@{/products/list(sale=true)}">
+
+					VIEW ALL SALE PRODUCTS </a>
+
 			</div>
-			<div class="row g-3 g-lg-4">
-				<div class="col-6 col-md-3">
-					<article class="product-card">
-						<div class="product-placeholder product-shirt">
-							<span>T-SHIRT</span>
-						</div>
-						<h3>Essential T-Shirt</h3>
-						<p>
-							<span class="sale-price">25,000 MMK</span>
-							<del>35,000 MMK</del>
-						</p>
-						<small>FINAL SALE</small>
-					</article>
+
+
+
+			<!-- SALE PRODUCTS -->
+
+			<div class="row g-3 g-lg-4"
+				th:if="${saleProducts != null and !#lists.isEmpty(saleProducts)}">
+
+
+				<div class="col-6 col-md-3"
+					th:each="product, stat : ${saleProducts}" th:if="${stat.index < 4}">
+
+
+					<a class="text-decoration-none text-dark d-block"
+						th:href="@{/products/detail/{id}(id=${product.id})}">
+
+
+						<article class="product-card">
+
+
+							<!-- PRODUCT IMAGE -->
+
+							<div class="product-image">
+
+								<img class="w-100" style="height: 300px; object-fit: cover;"
+									th:src="@{'/images/product/' + ${product.image}}"
+									th:alt="${product.name}">
+
+							</div>
+
+
+							<!-- PRODUCT NAME -->
+
+							<h3 th:text="${product.name}">Product Name</h3>
+
+
+							<!-- PRODUCT PRICE -->
+
+							<p>
+
+
+								<!-- SALE PRICE -->
+
+								<span class="sale-price"
+									th:text="${#numbers.formatDecimal(
+                                      product.finalPrice,
+                                      0,
+                                      'COMMA',
+                                      0,
+                                      'POINT'
+                                  ) + ' MMK'}">
+
+									25,000 MMK </span>
+
+
+								<!-- ORIGINAL PRICE -->
+
+								<del th:if="${product.isDiscount == 1}"
+									th:text="${#numbers.formatDecimal(
+                                     product.price,
+                                     0,
+                                     'COMMA',
+                                     0,
+                                     'POINT'
+                                 ) + ' MMK'}">
+
+									35,000 MMK </del>
+
+							</p>
+
+
+						</article>
+
+					</a>
+
 				</div>
-				<div class="col-6 col-md-3">
-					<article class="product-card">
-						<div class="product-placeholder product-bag">
-							<span>BAG</span>
-						</div>
-						<h3>Signature Bag</h3>
-						<p>
-							<span class="sale-price">45,000 MMK</span>
-							<del>60,000 MMK</del>
-						</p>
-						<small>FINAL SALE</small>
-					</article>
-				</div>
-				<div class="col-6 col-md-3">
-					<article class="product-card">
-						<div class="product-placeholder product-shoe">
-							<span>SNEAKERS</span>
-						</div>
-						<h3>Everyday Sneakers</h3>
-						<p>
-							<span class="sale-price">55,000 MMK</span>
-							<del>70,000 MMK</del>
-						</p>
-						<small>FINAL SALE</small>
-					</article>
-				</div>
-				<div class="col-6 col-md-3">
-					<article class="product-card">
-						<div class="product-placeholder product-watch">
-							<span>WATCH</span>
-						</div>
-						<h3>Classic Watch</h3>
-						<p>
-							<span class="sale-price">60,000 MMK</span>
-							<del>80,000 MMK</del>
-						</p>
-						<small>FINAL SALE</small>
-					</article>
-				</div>
+
 			</div>
+
+
+
+			<!-- NO SALE PRODUCTS -->
+
+			<div class="text-center py-5"
+				th:if="${saleProducts == null or #lists.isEmpty(saleProducts)}">
+
+				<p>No sale products available.</p>
+
+			</div>
+
+
 		</section>
+
+
+
+		<!-- ========================================================= -->
+		<!-- MEN'S CAMPAIGN BANNER -->
+		<!-- ========================================================= -->
+
 		<section class="men-sale-banner">
+
 			<div class="men-sale-copy">
+
 				<p class="eyebrow">MEN'S SEASONAL EDIT</p>
+
 				<h2>
-					Modern<br>Essentials
+					Modern<br> Essentials
 				</h2>
+
 				<p>Easy, fresh styles made for every day.</p>
-				<a class="btn hero-button" th:href="@{/products?category=men}">SHOP
-					MEN'S SALE</a>
+
 			</div>
+
+
 			<div class="men-sale-visual">
-				<span>MEN'S CAMPAIGN IMAGE</span>
-				<div></div>
+
+				<img src="/images/MenF.png" alt="Men's campaign"
+					class="men-campaign-image">
+
 			</div>
+
 		</section>
+
+
+
+		<!-- ========================================================= -->
+		<!-- WHY SHOP WITH US -->
+		<!-- ========================================================= -->
+
 		<section class="home-section why-section">
+
 			<div class="section-heading">
+
 				<p class="eyebrow">THE BLACKJACK PROMISE</p>
+
 				<h2>Why Shop With Us</h2>
+
 			</div>
+
+
 			<div class="row g-4">
+
+
+				<!-- BENEFIT 01 -->
+
 				<div class="col-md-4">
+
 					<article class="benefit-card">
-						<span class="benefit-number">01</span>
+
+						<span class="benefit-number"> 01 </span>
+
 						<h3>Curated Style</h3>
+
 						<p>Modern essentials selected to fit your everyday life.</p>
+
 					</article>
+
 				</div>
+
+
+				<!-- BENEFIT 02 -->
+
 				<div class="col-md-4">
+
 					<article class="benefit-card">
-						<span class="benefit-number">02</span>
+
+						<span class="benefit-number"> 02 </span>
+
 						<h3>Secure Shopping</h3>
+
 						<p>Clear order details and payment choice at checkout.</p>
+
 					</article>
+
 				</div>
+
+
+				<!-- BENEFIT 03 -->
+
 				<div class="col-md-4">
+
 					<article class="benefit-card">
-						<span class="benefit-number">03</span>
+
+						<span class="benefit-number"> 03 </span>
+
 						<h3>Order Tracking</h3>
+
 						<p>View your order history and status from your account.</p>
+
 					</article>
+
 				</div>
+
+
 			</div>
+
 		</section>
+
+
 	</div>
+
 </body>
+
 </html>

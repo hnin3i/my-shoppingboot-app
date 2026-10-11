@@ -1,32 +1,60 @@
+
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title layout:title-pattern="$CONTENT_TITLE - BlackJack">
-	BlackJack</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
-<link rel="stylesheet" th:href="@{/css/app.css}">
+    <title layout:title-pattern="$CONTENT_TITLE - BlackJack">
+        BlackJack Admin
+    </title>
 
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- Admin CSS -->
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+
+    <!-- Page-specific CSS can be added by child pages -->
+    <th:block layout:fragment="styles"></th:block>
 </head>
+
 <body>
-	<div th:replace="~{fragments/header::header}"></div>
-	<div th:replace="~{fragments/sidebar :: sidebar}"></div>
-	<!-- Main Content -->
-	<div class="wrapper">
-		<aside class="sidebar bg-light border-end p-3"
-			th:replace="~{fragments/sidebar::sidebar}"></aside>
-		<main class="main-content p-4" layout:fragment="content">
-			<!-- Default or overridden content goes here -->
-		</main>
-	</div>
 
+    <!-- Admin Sidebar -->
+    <div th:replace="~{fragments/sidebar :: sidebar}"></div>
 
-	<div th:replace="~{fragments/footer::footer}"></div>
+    <!-- Main Content -->
+    <main class="admin-main">
 
-	<script th:src="@{/js/bootstrap.min.js}"></script>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Admin Header -->
+        <div th:replace="~{fragments/adminheader :: adminheader}"></div>
+
+        <!-- Page Content -->
+        <section class="admin-content" layout:fragment="content">
+            <!-- Each admin page content goes here -->
+        </section>
+
+    </main>
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Clear cart after successful Admin login -->
+    <script th:if="${clearCartOnLogin == true}">
+        localStorage.removeItem("shopping_cart");
+    </script>
+
+    <!-- Page-specific JavaScript -->
+    <th:block layout:fragment="scripts"></th:block>
+
 </body>
 </html>

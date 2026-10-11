@@ -37,6 +37,20 @@ public class UserRepository {
 		
 		return entites.isEmpty()?null:entites.get(0);
 	}
+	
+	public boolean existsByEmailAndIdNot(String email, String id) {
+
+	    String sql = "SELECT COUNT(*) FROM users WHERE email = ? AND id <> ?";
+
+	    Integer count = jdbcTemplate.queryForObject(
+	            sql,
+	            Integer.class,
+	            email,
+	            id
+	    );
+
+	    return count != null && count > 0;
+	}
 	public int save(User entity) {
 		 String sql = "INSERT INTO users (id,name,email,phone,password,address) "
 		 		+ "VALUES (?, ?,?,?,?,?)";

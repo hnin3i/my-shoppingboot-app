@@ -23,6 +23,16 @@ public class OrderHistoryService {
        return entities.stream().map(this::toOrderDto).toList();
         		
     }
+	public List<OrderHistoryDto> getLatestOrders(String userId) {
+
+	    List<OrderHistoryEntity> entities =
+	    		 repo.findLatestOrdersByUserId(userId);
+
+	    return entities.stream()
+	            .map(this::toOrderDto)
+	            .toList();
+	}
+   
 	public List<OrderDetailsDto> getOrderDetails(String userId,String orderId) {
 		List<OrderDetailsEntity> entities = repo.findOrderItemsByOrderId(userId,orderId);
 	    return entities.stream().map(this::toItemDto).toList();
@@ -35,12 +45,14 @@ public class OrderHistoryService {
         
         BigDecimal calculatedSubtotal = items.stream().map(item -> item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
         		.reduce(BigDecimal.ZERO, BigDecimal::add);
+        //BigDecimal subtotal = order.getSubtotal_amount();
         BigDecimal shippingFee = order.getShipping_fee();
-        BigDecimal taxRate = order.getTax_amount();
-        BigDecimal taxAmount = calculatedSubtotal.multiply(taxRate).divide(BigDecimal.valueOf(100.0));
-        BigDecimal grandTotal = calculatedSubtotal.add(shippingFee).add(taxAmount);
+       // BigDecimal taxRate = order.getTax_amount();
+        BigDecimal taxAmount = order.getTax_amount();
+        
+        BigDecimal grandTotal = order.getTotal_amount();
 
-        return new OrderSummaryDto(calculatedSubtotal, shippingFee, taxRate, grandTotal);
+        return new OrderSummaryDto(calculatedSubtotal, shippingFee, taxAmount, grandTotal);
     }
 	
 	private OrderDetailsDto toItemDto(OrderDetailsEntity entity) {
