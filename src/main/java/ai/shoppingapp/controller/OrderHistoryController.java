@@ -29,7 +29,7 @@ public class OrderHistoryController {
     public String showOrderHistory(HttpSession session, Model model) {
     	UserModel user = (UserModel) session.getAttribute("loggedInUser");
         if (user == null) {
-            return "error";
+            return "redirect:/login";
         }
 
         String userId = user.getId();
@@ -42,7 +42,7 @@ public class OrderHistoryController {
     public String showOrderDetails(@RequestParam("orderId") String orderId, HttpSession session, Model model) {
     	UserModel user = (UserModel) session.getAttribute("loggedInUser");
         if (user == null) {
-            return "error";
+            return "redirect:/login";
         }
 
         String userId = user.getId();
