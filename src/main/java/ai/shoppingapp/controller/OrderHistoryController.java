@@ -25,8 +25,30 @@ public class OrderHistoryController {
         this.orderService = orderService;
     }
     
+    private String checkCustomerAccess(HttpSession session) {
+
+		UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
+
+		if (loggedInUser == null) {
+			return "redirect:/login";
+		}
+		
+		if ("ADMIN".equalsIgnoreCase(String.valueOf(loggedInUser.getRole())) || "SUPER_ADMIN".equalsIgnoreCase(String.valueOf(loggedInUser.getRole()))) {
+
+			return "redirect:/admin/dashboard";
+		}
+
+		return null;
+	}
+    
     @GetMapping("/orders")
     public String showOrderHistory(HttpSession session, Model model) {
+    	
+    	String accessResult = checkCustomerAccess(session);
+        if (accessResult != null) {
+            return accessResult;
+        }
+    	
     	UserModel user = (UserModel) session.getAttribute("loggedInUser");
         if (user == null) {
             return "redirect:/login";
@@ -40,6 +62,12 @@ public class OrderHistoryController {
     
     @PostMapping("/details")
     public String showOrderDetails(@RequestParam("orderId") String orderId, HttpSession session, Model model) {
+    	
+    	String accessResult = checkCustomerAccess(session);
+        if (accessResult != null) {
+            return accessResult;
+        }
+    	
     	UserModel user = (UserModel) session.getAttribute("loggedInUser");
         if (user == null) {
             return "redirect:/login";
