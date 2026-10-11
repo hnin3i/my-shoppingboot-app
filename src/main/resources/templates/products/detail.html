@@ -284,7 +284,8 @@
 
     							th:if="${session.loggedInUser == null
 
-             or #strings.toUpperCase(session.loggedInUser.role) != 'ADMIN'}">
+             or (#strings.toUpperCase(session.loggedInUser.role) != 'ADMIN'
+              and #strings.toUpperCase(session.loggedInUser.role) != 'SUPER_ADMIN')}">
 
     							<button class="add-to-cart-btn" id="addToCartBtn" type="button">
 
@@ -299,7 +300,8 @@
 
     							th:if="${session.loggedInUser != null
 
-             and #strings.toUpperCase(session.loggedInUser.role) == 'ADMIN'}">
+             and (#strings.toUpperCase(session.loggedInUser.role) == 'ADMIN'
+             or #strings.toUpperCase(session.loggedInUser.role) == 'SUPER_ADMIN')}">
 
     							<i class="bi bi-shield-lock"></i>
 

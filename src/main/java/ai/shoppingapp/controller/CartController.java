@@ -30,9 +30,9 @@ public class CartController {
         UserModel loggedInUser =
                 (UserModel) session.getAttribute("loggedInUser");
 
-        if (loggedInUser != null &&
+        if (loggedInUser != null && (
                 "ADMIN".equalsIgnoreCase(
-                        String.valueOf(loggedInUser.getRole()))) {
+                        String.valueOf(loggedInUser.getRole())) || "SUPER_ADMIN".equalsIgnoreCase(String.valueOf(loggedInUser.getRole())))) {
             return "redirect:/";
         }
 
@@ -63,7 +63,7 @@ public class CartController {
 
         // Admin cannot checkout
         if ("ADMIN".equalsIgnoreCase(
-                String.valueOf(loggedInUser.getRole()))) {
+                String.valueOf(loggedInUser.getRole())) || "SUPER_ADMIN".equalsIgnoreCase(String.valueOf(loggedInUser.getRole()))) {
 
             return "redirect:/";
         }
@@ -95,7 +95,7 @@ public class CartController {
 
         // Admin cannot access order success page
         if ("ADMIN".equalsIgnoreCase(
-                String.valueOf(loggedInUser.getRole()))) {
+                String.valueOf(loggedInUser.getRole())) || "SUPER_ADMIN".equalsIgnoreCase(String.valueOf(loggedInUser.getRole()))) {
 
             return "redirect:/";
         }
