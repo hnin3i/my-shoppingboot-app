@@ -6,15 +6,18 @@ import org.springframework.stereotype.Service;
 
 import ai.shoppingapp.model.CategoryModel;
 import ai.shoppingapp.repository.CategoryRepository;
+import ai.shoppingapp.repository.ProductRepository;
 import ai.shoppingapp.repository.entity.Category;
 
 @Service
 public class CategoryService {
 
 	private final CategoryRepository repo;
+	private final ProductRepository productRepo;
 
-	public CategoryService(CategoryRepository repo) {
+	public CategoryService(CategoryRepository repo,ProductRepository productRepo) {
 		this.repo = repo;
+		this.productRepo=productRepo;
 	}
 
 // LIST
@@ -53,6 +56,12 @@ public class CategoryService {
 
 // DELETE
 	public int delete(String id) {
+		
+		boolean hasProducts = productRepo.existsByCategoryId(id);
+		
+		if (hasProducts) {
+			throw new RuntimeException("You can't delete this category because you have products!");
+		}
 
 		return this.repo.delete(id);
 	}
