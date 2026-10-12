@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import ai.shoppingapp.model.CategoryModel;
 import ai.shoppingapp.model.OrderHistoryDto;
 import ai.shoppingapp.model.UserModel;
 import ai.shoppingapp.model.usermanagement.ChangeProfileModel;
+import ai.shoppingapp.service.CategoryService;
 import ai.shoppingapp.service.OrderHistoryService;
 import ai.shoppingapp.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -29,11 +31,13 @@ public class UserController {
 
 	private final UserService userService;
 	private final OrderHistoryService orderHistoryService;
+	private final CategoryService categoryService;
 
-	public UserController(UserService userService, OrderHistoryService orderHistoryService) {
+	public UserController(UserService userService, OrderHistoryService orderHistoryService,CategoryService categoryService) {
 
 		this.userService = userService;
 		this.orderHistoryService = orderHistoryService;
+		this.categoryService=categoryService;
 	}
 
 	// =========================================================
@@ -142,7 +146,7 @@ public class UserController {
 
 				String fileName = System.currentTimeMillis() + "_" + safeFileName;
 
-				String uploadPath = "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
+				String uploadPath = "C:\\Users\\DELL\\git\\my-shoppingboot-app-finalfinal\\src\\main\\resources\\static\\images\\profile\\";
 
 				File uploadDir = new File(uploadPath);
 
@@ -176,7 +180,7 @@ public class UserController {
 
 				String oldFileName = oldProfile.substring("/images/profile/".length());
 
-				String uploadPath = "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
+				String uploadPath = "C:\\Users\\DELL\\git\\my-shoppingboot-app-finalfinal\\src\\main\\resources\\static\\images\\profile\\";
 
 				File oldFile = new File(uploadPath, oldFileName);
 
@@ -223,6 +227,10 @@ public class UserController {
 		if (user == null) {
 			return "redirect:/login";
 		}
+		List<CategoryModel> categories =
+                categoryService.getAllActiveCategories();
+
+        model.addAttribute("categories", categories);
 
 		model.addAttribute("user", user);
 
@@ -250,6 +258,10 @@ public class UserController {
 		String userId = loggedInUser.getId();
 
 		List<OrderHistoryDto> latestOrders = orderHistoryService.getLatestOrders(userId);
+		List<CategoryModel> categories =
+                categoryService.getAllActiveCategories();
+
+        model.addAttribute("categories", categories);
 
 		model.addAttribute("latestOrders", latestOrders);
 
