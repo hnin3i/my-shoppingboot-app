@@ -49,16 +49,22 @@ public class StockController {
 	public String addStock(@ModelAttribute("stock") StockModel stock, Model model) {
 
 		if (stock.getProductId() == null || stock.getProductId().isBlank()) {
+	        model.addAttribute("error", "Please select a product.");
+	        model.addAttribute("products", stockService.getProductOptions());
+	        model.addAttribute("activePage", "stock");
+	        return "admin/stocks/add";
+	    }
 
-			model.addAttribute("error", "Please select a product.");
-			model.addAttribute("products", stockService.getProductOptions());
+	    try {
+	        stockService.add(stock);
+	    } catch (IllegalArgumentException e) {
+	        model.addAttribute("error", e.getMessage());
+	        model.addAttribute("products", stockService.getProductOptions());
+	        model.addAttribute("activePage", "stock");
+	        return "admin/stocks/add";
+	    }
 
-			return "admin/stocks/add";
-		}
-
-		stockService.add(stock);
-
-		return "redirect:/admin/stock";
+	    return "redirect:/admin/stock";
 	}
 
 	// EDIT FORM
@@ -79,16 +85,22 @@ public class StockController {
 	public String editStock(@ModelAttribute("stock") StockModel stock, Model model) {
 
 		if (stock.getProductId() == null || stock.getProductId().isBlank()) {
+	        model.addAttribute("error", "Please select a product.");
+	        model.addAttribute("products", stockService.getProductOptions());
+	        model.addAttribute("activePage", "stock");
+	        return "admin/stocks/edit";
+	    }
 
-			model.addAttribute("error", "Please select a product.");
-			model.addAttribute("products", stockService.getProductOptions());
+	    try {
+	        stockService.edit(stock.getId(), stock);
+	    } catch (IllegalArgumentException e) {
+	        model.addAttribute("error", e.getMessage());
+	        model.addAttribute("products", stockService.getProductOptions());
+	        model.addAttribute("activePage", "stock");
+	        return "admin/stocks/edit";
+	    }
 
-			return "admin/stocks/edit";
-		}
-
-		stockService.edit(stock.getId(), stock);
-
-		return "redirect:/admin/stock";
+	    return "redirect:/admin/stock";
 	}
 
 	// DELETE CONFIRM PAGE

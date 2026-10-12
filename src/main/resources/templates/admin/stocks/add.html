@@ -33,7 +33,7 @@
 				<form th:action="@{/admin/stock/add}" th:object="${stock}" method="post">
 
 					<div th:if="${error}" style="color: red; margin-bottom: 15px;">
-						<strong>Error:</strong> <span th:text="${error}"></span>
+						<i class="bi bi-info-circle"></i>  <span th:text="${error}"></span>
 					</div>
 
 					<!-- Product -->
