@@ -191,4 +191,24 @@ Integer count = this.jdbcTemplate.queryForObject(sql, Integer.class, threshold);
 	    return count != null && count > 0;
 	}
 	
+	// Check if same product, colour, and size already exists (for create)
+	public boolean existsByProductColourAndSize(String productId, String colour, String size) {
+	    String sql = """
+	        SELECT COUNT(*) FROM stocks 
+	        WHERE product_id = ? AND colour = ? AND size = ? AND is_active = 1
+	    """;
+	    Integer count = this.jdbcTemplate.queryForObject(sql, Integer.class, productId, colour, size);
+	    return count != null && count > 0;
+	}
+
+	// Check for duplicates excluding a specific ID (for edit)
+	public boolean existsByProductColourAndSizeExcludingId(String productId, String colour, String size, String id) {
+	    String sql = """
+	        SELECT COUNT(*) FROM stocks 
+	        WHERE product_id = ? AND colour = ? AND size = ? AND id != ? AND is_active = 1
+	    """;
+	    Integer count = this.jdbcTemplate.queryForObject(sql, Integer.class, productId, colour, size, id);
+	    return count != null && count > 0;
+	}
+	
 }
