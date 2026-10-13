@@ -38,20 +38,23 @@ public class StockService {
 		return entity == null ? null : toDto(entity);
 	}
 
-	// CREATE
 	public int add(StockModel dto) {
+	    if (this.repo.existsByProductColourAndSize(dto.getProductId(), dto.getColour(), dto.getSize())) {
+	        throw new IllegalArgumentException("A stock entry with this product, colour, and size already exists!");
+	    }
 
-		Stock entity = toEntity(dto);
-
-		return this.repo.save(entity);
+	    Stock entity = toEntity(dto);
+	    return this.repo.save(entity);
 	}
-
+	
 	// UPDATE
 	public int edit(String id, StockModel dto) {
+	    if (this.repo.existsByProductColourAndSizeExcludingId(dto.getProductId(), dto.getColour(), dto.getSize(), id)) {
+	        throw new IllegalArgumentException("Another stock entry with this product, colour, and size already exists!");
+	    }
 
-		Stock entity = toEntity(dto);
-
-		return this.repo.edit(id, entity);
+	    Stock entity = toEntity(dto);
+	    return this.repo.edit(id, entity);
 	}
 
 	// DELETE

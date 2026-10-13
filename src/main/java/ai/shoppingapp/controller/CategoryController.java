@@ -53,7 +53,7 @@ public class CategoryController {
 	public String addCategory(@ModelAttribute("category") CategoryModel category,HttpSession session, Model model) {
 
 		UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
-		if (currentUser == null || !Role.ADMIN.equals(currentUser.getRole())) {
+		if (currentUser == null || (!Role.ADMIN.equals(currentUser.getRole()) && !Role.SUPER_ADMIN.equals(currentUser.getRole()))) {
 			throw new ResourceNotFoundException("Page not found");
 		}
 		

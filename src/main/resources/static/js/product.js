@@ -109,35 +109,41 @@ function renderColors() {
    COLOR SELECTION
    ========================================================= */
    function handleColorSelection(button) {
-       const color = button.dataset.color;
-       if (!color) return;
+          const color = button.dataset.color;
+          if (!color) return;
 
-       document.querySelectorAll(".color-option").forEach(item => item.classList.remove("active"));
-       button.classList.add("active");
-       selectedColor = color;
+          document.querySelectorAll(".color-option").forEach(item => item.classList.remove("active"));
+          button.classList.add("active");
+          selectedColor = color;
 
-       const selectedColorText = document.getElementById("selectedColor");
-       if (selectedColorText) selectedColorText.textContent = selectedColor;
+          const selectedColorText = document.getElementById("selectedColor");
+          if (selectedColorText) selectedColorText.textContent = selectedColor;
 
-       selectedSize = "";
-       document.querySelectorAll(".size-btn").forEach(item => item.classList.remove("active"));
+          selectedSize = "";
+          document.querySelectorAll(".size-btn").forEach(item => item.classList.remove("active"));
 
-       // Size များကို ပြန်လည် render လုပ်မည်
-       renderSizes();
+          // အရောင်ပြောင်းလျှင် Add to Cart ခလုတ်ကို ပုံမှန်အခြေအနေသို့ ပြန်ပြင်မည်
+          const addToCartBtn = document.getElementById("addToCartBtn");
+          if (addToCartBtn) {
+              addToCartBtn.disabled = false;
+              addToCartBtn.classList.remove("sold-out-mode");
+              addToCartBtn.innerHTML = '<i class="bi bi-bag"></i> <span>ADD TO CART</span>';
+          }
 
-       const quantityInput = document.getElementById("quantity");
-       if (quantityInput) {
-           quantityInput.value = 1;
-           quantityInput.max = 20;
-       }
+          renderSizes();
 
-       // Add to Cart မနှိပ်သေးသရွေ့ Message ကို ကွက်လပ်ထားမည်
-       const sizeMessage = document.getElementById("sizeMessage");
-       if (sizeMessage) {
-           sizeMessage.className = "size-message";
-           sizeMessage.innerHTML = "";
-       }
-   }
+          const quantityInput = document.getElementById("quantity");
+          if (quantityInput) {
+              quantityInput.value = 1;
+              quantityInput.max = 20;
+          }
+
+          const sizeMessage = document.getElementById("sizeMessage");
+          if (sizeMessage) {
+              sizeMessage.className = "size-message";
+              sizeMessage.innerHTML = "";
+          }
+      }
 
 /* =========================================================
    RENDER SIZES (SHOW ALL SIZES WITH STRIKETHROUGH IF OUT OF STOCK)
@@ -179,49 +185,66 @@ function renderColors() {
 /* =========================================================
    SIZE SELECTION (HANDLES BOTH IN-STOCK & OUT-OF-STOCK)
    ========================================================= */
-   function handleSizeSelection(button) {
-       const size = button.dataset.size;
-       if (!size) return;
+   /* =========================================================
+      SIZE SELECTION (HANDLES BOTH IN-STOCK & OUT-OF-STOCK)
+      ========================================================= */
+      function handleSizeSelection(button) {
+          const size = button.dataset.size;
+          if (!size) return;
 
-       const sizeMessage = document.getElementById("sizeMessage");
+          const sizeMessage = document.getElementById("sizeMessage");
+          const addToCartBtn = document.getElementById("addToCartBtn");
 
-       // Stock မရှိသော (Strikethrough) Size ကို နှိပ်ပါက
-       if (button.classList.contains("out-of-stock") || button.getAttribute("data-out-of-stock") === "true") {
-           document.querySelectorAll(".size-btn").forEach(item => item.classList.remove("active"));
-           selectedSize = "";
+          // Stock မရှိသော (Out of Stock) Size ကို နှိပ်ပါက
+          if (button.classList.contains("out-of-stock") || button.getAttribute("data-out-of-stock") === "true") {
+              document.querySelectorAll(".size-btn").forEach(item => item.classList.remove("active"));
+              selectedSize = "";
 
-           if (sizeMessage) {
-               sizeMessage.className = "size-message text-danger";
-               sizeMessage.innerHTML = '<i class="bi bi-exclamation-circle"></i> This item is out of stock.';
-           }
+              if (sizeMessage) {
+                  sizeMessage.className = "size-message text-danger";
+                  sizeMessage.innerHTML = '<i class="bi bi-exclamation-circle"></i> This item is out of stock.';
+              }
 
-           const quantityInput = document.getElementById("quantity");
-           if (quantityInput) quantityInput.value = 1;
-           return;
-       }
+              // Add to Cart ခလုတ်ကို Sold Out အဖြစ်ပြောင်းမည်
+              if (addToCartBtn) {
+                  addToCartBtn.disabled = true;
+                  addToCartBtn.classList.add("sold-out-mode");
+                  addToCartBtn.innerHTML = ' <span>SOLD OUT</span>';
+              }
 
-       // Stock ရှိသော Size ကို နှိပ်ပါက
-       const stock = DETAIL_PRODUCT.stocks.find(item => item.colour === selectedColor && item.size === size);
-       if (!stock) return;
+              const quantityInput = document.getElementById("quantity");
+              if (quantityInput) quantityInput.value = 1;
+              return;
+          }
 
-       const stockQty = Number(stock.stockQty);
+          // Stock ရှိသော Size ကို နှိပ်ပါက
+          const stock = DETAIL_PRODUCT.stocks.find(item => item.colour === selectedColor && item.size === size);
+          if (!stock) return;
 
-       document.querySelectorAll(".size-btn").forEach(item => item.classList.remove("active"));
-       button.classList.add("active");
-       selectedSize = size;
+          const stockQty = Number(stock.stockQty);
 
-       const quantityInput = document.getElementById("quantity");
-       if (quantityInput) {
-           quantityInput.value = 1;
-           quantityInput.max = stockQty;
-       }
+          document.querySelectorAll(".size-btn").forEach(item => item.classList.remove("active"));
+          button.classList.add("active");
+          selectedSize = size;
 
-       // ရွေးချယ်မှု မှန်ကန်ပါက အနက်ရောင်ဖြင့် ပြမည်
-       if (sizeMessage) {
-           sizeMessage.className = "size-message text-dark";
-           sizeMessage.innerHTML = '<i class="bi bi-check-circle"></i> Size selected';
-       }
-   }
+          // Add to Cart ခလုတ်ကို ပုံမှန်အနေအထားသို့ ပြန်ပြောင်းမည်
+          if (addToCartBtn) {
+              addToCartBtn.disabled = false;
+              addToCartBtn.classList.remove("sold-out-mode");
+              addToCartBtn.innerHTML = '<i class="bi bi-bag"></i> <span>ADD TO CART</span>';
+          }
+
+          const quantityInput = document.getElementById("quantity");
+          if (quantityInput) {
+              quantityInput.value = 1;
+              quantityInput.max = stockQty;
+          }
+
+          if (sizeMessage) {
+              sizeMessage.className = "size-message text-dark";
+              sizeMessage.innerHTML = '<i class="bi bi-check-circle"></i> Size selected';
+          }
+      }
    
    /* =========================================================
       ADD TO CART

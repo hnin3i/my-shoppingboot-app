@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ai.shoppingapp.model.OrderHistoryDto;
+import ai.shoppingapp.model.CategoryModel;
 import ai.shoppingapp.model.OrderDetailsDto;
 import ai.shoppingapp.model.OrderSummaryDto;
 import ai.shoppingapp.model.UserModel;
+import ai.shoppingapp.service.CategoryService;
 import ai.shoppingapp.service.OrderHistoryService;
 import jakarta.servlet.http.HttpSession;
 
@@ -20,29 +22,63 @@ import jakarta.servlet.http.HttpSession;
 public class OrderHistoryController {
 
     private final OrderHistoryService orderService;
+    private final CategoryService categoryService;
 
-    public OrderHistoryController(OrderHistoryService orderService) {
+    public OrderHistoryController(OrderHistoryService orderService,CategoryService categoryService) {
         this.orderService = orderService;
+        this.categoryService = categoryService;
     }
+    
+    private String checkCustomerAccess(HttpSession session) {
+
+		UserModel loggedInUser = (UserModel) session.getAttribute("loggedInUser");
+
+		if (loggedInUser == null) {
+			return "redirect:/login";
+		}
+		
+		if ("ADMIN".equalsIgnoreCase(String.valueOf(loggedInUser.getRole())) || "SUPER_ADMIN".equalsIgnoreCase(String.valueOf(loggedInUser.getRole()))) {
+
+			return "redirect:/admin/dashboard";
+		}
+
+		return null;
+	}
     
     @GetMapping("/orders")
     public String showOrderHistory(HttpSession session, Model model) {
+    	
+    	String accessResult = checkCustomerAccess(session);
+        if (accessResult != null) {
+            return accessResult;
+        }
+    	
     	UserModel user = (UserModel) session.getAttribute("loggedInUser");
         if (user == null) {
-            return "error";
+            return "redirect:/login";
         }
 
         String userId = user.getId();
         List<OrderHistoryDto> orders = orderService.getOrderHistory(userId);
         model.addAttribute("orders", orders);
+        List<CategoryModel> categories =
+                categoryService.getAllActiveCategories();
+
+        model.addAttribute("categories", categories);
         return "user/order_history";
     }
     
     @PostMapping("/details")
     public String showOrderDetails(@RequestParam("orderId") String orderId, HttpSession session, Model model) {
+    	
+    	String accessResult = checkCustomerAccess(session);
+        if (accessResult != null) {
+            return accessResult;
+        }
+    	
     	UserModel user = (UserModel) session.getAttribute("loggedInUser");
         if (user == null) {
-            return "error";
+            return "redirect:/login";
         }
 
         String userId = user.getId();

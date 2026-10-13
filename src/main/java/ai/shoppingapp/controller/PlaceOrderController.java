@@ -57,7 +57,7 @@ public class PlaceOrderController {
 
         // ADMIN CANNOT PLACE ORDERS
         if ("ADMIN".equalsIgnoreCase(
-                String.valueOf(loggedInUser.getRole()))) {
+                String.valueOf(loggedInUser.getRole())) || "SUPER_ADMIN".equalsIgnoreCase(String.valueOf(loggedInUser.getRole()))) {
 
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)

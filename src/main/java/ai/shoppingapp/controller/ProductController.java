@@ -57,7 +57,12 @@ public class ProductController {
 	}
 
 @GetMapping("/admin/products/add")
-	public String addProduct(Model model) {
+	public String addProduct(HttpSession session,Model model) {
+	
+	UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
+	if (currentUser == null || (!Role.ADMIN.equals(currentUser.getRole()) && !Role.SUPER_ADMIN.equals(currentUser.getRole()))) {
+		return "redirect:/login";
+	}
 
 		ProductModel newProduct = new ProductModel();
 
@@ -76,7 +81,12 @@ public class ProductController {
 @PostMapping("/admin/products/add")
 	public String addProduct(@ModelAttribute("product") ProductModel product,
 			@RequestParam(value = "imageFile", required = false) MultipartFile imageFile,HttpSession session) throws IOException {
+	
 	UserModel currentUser = (UserModel) session.getAttribute("loggedInUser");
+	if (currentUser == null || (!Role.ADMIN.equals(currentUser.getRole()) && !Role.SUPER_ADMIN.equals(currentUser.getRole()))) {
+		throw new ResourceNotFoundException("Access Denied");
+	}
+	
 	if (imageFile != null && !imageFile.isEmpty()) {
 
 			String fileName = imageFile.getOriginalFilename();
@@ -177,9 +187,6 @@ public class ProductController {
 			String fileName = imageFile.getOriginalFilename();
 
 			String uploadPath = "E:\\BlackJack_shop\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\product\\";
-
-
-
 
 			File uploadDir = new File(uploadPath);
 

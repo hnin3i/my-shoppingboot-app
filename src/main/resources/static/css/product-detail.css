@@ -278,6 +278,19 @@ main.product-detail-page #quantity[type="number"] { -moz-appearance: textfield !
     z-index: 5 !important; pointer-events: none !important;
 }
 
+/* Sold Out Button Styling */
+.add-to-cart-btn.sold-out-mode {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: #ffffff !important;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.add-to-cart-btn.sold-out-mode:hover {
+    background-color: #5a6268 !important;
+}
+
 /* RESPONSIVE */
 @media (max-width: 991px) {
     .product-information { padding-left: 15px; margin-top: 40px; }

@@ -171,7 +171,8 @@ public class AdminController {
 
 					String oldFileName = oldProfile.substring("/images/profile/".length());
 
-					String uploadPath = "C:\\Users\\DELL\\git\\my-shopingboot-app-finalfinal\\src\\main\\resources\\static\\images\\profile\\";
+					String uploadPath = "C:\\JWD-69\\FinalProject\\shopping_app\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\";
+
 
 
 					File oldFile = new File(uploadPath + oldFileName);

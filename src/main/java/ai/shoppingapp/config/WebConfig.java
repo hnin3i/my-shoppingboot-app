@@ -53,14 +53,16 @@ public class WebConfig implements WebMvcConfigurer {
                     "/reset-password",
                     
                     //Order History
-                    "/order-history",                  
+                    //"/user/orders",
+                    //"/user/details",
+                    //"/order-history",                  
                     "/api/orders/place",
                     "/cart",
                     "/cart/checkout",
-                    "/order-success",
+                    //"/order-success",
                     "/index",
-
-                    "/products/**",
+                    
+                    //"/products/**",
                     "/details"
 
                     
@@ -86,6 +88,7 @@ public class WebConfig implements WebMvcConfigurer {
 
 		registry.addResourceHandler("/images/profile/**")
 				.addResourceLocations("file:///E:\\BlackJack_shop\\my-shoppingboot-app\\src\\main\\resources\\static\\images\\profile\\");
+
 
 
 
