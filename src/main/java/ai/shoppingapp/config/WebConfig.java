@@ -53,16 +53,16 @@ public class WebConfig implements WebMvcConfigurer {
                     "/reset-password",
                     
                     //Order History
-                    "/user/orders",
-                    "/user/details",
-                    "/order-history",                  
+                    //"/user/orders",
+                    //"/user/details",
+                    //"/order-history",                  
                     "/api/orders/place",
                     "/cart",
                     "/cart/checkout",
-                    "/order-success",
+                    //"/order-success",
                     "/index",
                     
-                    "/products/**",
+                    //"/products/**",
                     "/details"
 
                     
