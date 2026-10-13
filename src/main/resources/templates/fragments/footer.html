@@ -5,9 +5,9 @@
         <div class="row g-5 footer-links">
             <section class="col-12 col-sm-6 col-lg-3">
                 <h2>Shop</h2>
-                <a th:href="@{/products}">All Products</a>
-                <a th:href="@{/categories}">Categories</a>
-                <a th:href="@{/products?new=true}">New Arrivals</a>
+                <a th:href="@{/products/list}">All Products</a>
+                <a th:href="@{/products/list?newArrivals=true}">New Arrivals</a>
+               	<a th:href="@{/products/list?sale=true}">Sale Products</a>
                 <a th:href="@{/cart}">Shopping Cart</a>
             </section>
 
@@ -15,8 +15,8 @@
                 <h2>My Account</h2>
                 <a th:href="@{/login}">Sign In</a>
                 <a th:href="@{/register}">Create Account</a>
-                <a th:href="@{/orders}">My Orders</a>
-                <a th:href="@{/profile}">My Profile</a>
+                <a th:href="@{/user/orders}">My Orders</a>
+                <a th:href="@{/user/profile}">My Profile</a>
             </section>
 
             <section class="col-12 col-sm-6 col-lg-3">
@@ -43,13 +43,20 @@
             </div>
             <div class="col-lg-6">
                 <h2 class="footer-payment-title">Payments</h2>
-                <div class="payment-badges" aria-label="Payment options">
-                    <span class="payment-badge payment-cod">COD</span>
-                    <span class="payment-badge payment-visa">VISA</span>
-                    <span class="payment-badge payment-mastercard"><i></i><i></i></span>
-                    <span class="payment-badge payment-paypal">PayPal</span>
-                    <span class="payment-badge payment-kpay">KPay</span>
-                </div>
+                <div class="payment-badges" aria-label="Available payment methods">
+				<span class="payment-badge payment-cod"> 🚚 </span> 
+					<span
+						class="payment-badge payment-logo"> <img
+						th:src="@{/images/bank/kbz.jpg}" alt="KBZ Bank">
+					</span> <span class="payment-badge payment-logo"> <img
+						th:src="@{/images/bank/aya.png}" alt="AYA Bank">
+					</span> <span class="payment-badge payment-logo"> <img
+						th:src="@{/images/bank/cb.jpg}" alt="CB Bank">
+					</span> <span class="payment-badge payment-logo"> <img
+						th:src="@{/images/bank/kpay.png}" alt="Mobile Payment">
+					</span>
+
+				</div>
                 <small>Choose your available payment method securely during checkout.</small>
             </div>
         </div>
