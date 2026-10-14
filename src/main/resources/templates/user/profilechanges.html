@@ -366,7 +366,8 @@ textarea.form-control {
 							</label> <input type="file" id="profile" name="profilePhoto"
 								accept="image/*" hidden> <span class="upload-text">
 								Choose a new image for your profile. </span>
-
+							<div id="photoError" class="alert alert-danger mt-3" role="alert"
+							style="display: none;">Please select a valid image file.</div>
 						</div>
 
 					</div>
@@ -471,25 +472,34 @@ textarea.form-control {
 
 	<script>
 
-    const profilePhoto =
-        document.getElementById("profile");
+	const profilePhoto = document.getElementById("profilePhoto");
+	const profilePreview = document.getElementById("profilePreview");
+	const photoError = document.getElementById("photoError");
 
-    const profilePreview =
-        document.getElementById("profilePreview");
+	profilePhoto.addEventListener("change", function() {
+		const file = this.files[0];
 
+		// Hide the previous error
+		photoError.style.display = "none";
 
-    profilePhoto.addEventListener("change", function () {
+		if (!file) {
+			return;
+		}
 
-        const file = this.files[0];
+		if (!file.type.startsWith("image/")) {
+			photoError.style.display = "block";
+			this.value = "";
+			return;
+		}
 
-        if (file) {
+		const reader = new FileReader();
 
-            profilePreview.src =
-                URL.createObjectURL(file);
+		reader.onload = function(event) {
+			profilePreview.src = event.target.result;
+		};
 
-        }
-
-    });
+		reader.readAsDataURL(file);
+	});
 
 </script>
 
